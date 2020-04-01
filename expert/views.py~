@@ -22,7 +22,10 @@ class KitCreateView(CreateView):
 
     def get_initial(self, *args, **kwargs):
         initial = super().get_initial(*args, **kwargs)
-        n = max([i.number for i in Kit.objects.all()])+1
+        if Kit.objects.all().empty():
+            n = 1
+        else:
+            n = max([i.number for i in Kit.objects.all()])+1
         initial['number'] = str(n)
         return initial
 
