@@ -22,7 +22,7 @@ class KitCreateView(CreateView):
 
     def get_initial(self, *args, **kwargs):
         initial = super().get_initial(*args, **kwargs)
-        if Kit.objects.all().empty():
+        if Kit.objects.all().exists():
             n = 1
         else:
             n = max([i.number for i in Kit.objects.all()])+1
