@@ -1,0 +1,39 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<a href="{% url 'expert:index' %}" class="btn btn-primary">Home</a>
+<div class="container mt-3">
+	<center class="my-4 h2">{{ day }}</center>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Worker</th>
+				<th>Size completed</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for worker in worker_list %}
+			<tr>
+				<td>{{ worker.name }}</td>
+				<td>{{ worker.daily_work }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<ul>
+		{% for product in object_list %}
+		<li>{{ product.completeddate|date:"F j, Y" }}: {{ product.order_number }}</li>
+		{% endfor %}
+	</ul>
+	<p>
+		{% if previous_day %}
+		Previous Day: {{ previous_day }}
+		{% endif %}
+		{% if previous_day and next_day %}--{% endif %}
+		{% if next_day %}
+		Next Day: {{ next_day }}
+		{% endif %}
+	</p>
+</div>
+{% endblock %}

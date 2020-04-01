@@ -1,0 +1,42 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container">
+	<center class="mt-4 h2">Overview of Worker{# - {{ worker.get_fullname }}#}</center>
+	<div class="row py-4">
+		<div class="col-6">
+			<div class="image_container">
+				<img class="img-fluid" alt="worker photo" src="{{ worker.photo.url }}">
+			</div>
+		</div>
+		<div class="col-6">
+			<span class="h3">{{ worker.get_fullname }}</span>
+			<br>
+			<small>Joined since - {{ worker.joined }}</small>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			Contributions for the day
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% comment %}
+{% block main_content %}
+<div class="container">
+	<center class="mt-4 h2">Overview of Worker - {{ worker.get_fullname }}</center>
+	<table class="table">
+		{% for product in worker.products_completed.all %}
+		<tr>
+			<td>{{ product.order_number }}</td>
+			<td>{{ product.completeddate }}</td>
+			<td>{{ product.size }}</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+{% endblock %}
+{% endcomment %}

@@ -1,0 +1,15 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<a href="{% url 'expert:index' %}" class="btn btn-primary">Home</a>
+<div class="container mt-3">
+	<center class="my-4 h2">List of KITS</center>
+	<ul>
+		{% for kit in kit_list %}
+		<li><a href="{{ kit.get_absolute_url }}">{{ kit.number }} ({{ kit.get_total_size }} Sq.Ft.)</a></li>
+		{% endfor %}
+	</ul>
+	<a href="{% url 'expert:kit-create' %}" class="btn btn-info">Add New</a>
+</div>
+{% endblock %}

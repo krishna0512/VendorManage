@@ -1,0 +1,87 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container">
+	<center class="mt-4 h2">Overview of KIT - {{ kit.number }}</center>
+	<center class="mt-2 h5">{{ kit.date_received }} --> {% if kit.date_sent %}{{ kit.date_sent }}{% endif %}</center>
+	<table class="table table-sm table-bordered my-4">
+		<thead>
+			<tr>
+				<th>Order Number</th>
+				<th>Quantity</th>
+				<th>Total Size</th>
+				<th>Fabric</th>
+				<th>Color</th>
+				<th>Assigned To</th>
+				<th>Completed By</th>
+				<th>Completion Date</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for product in kit.products.all %}
+			<tr>
+				<td>{{ product.order_number.upper }}</td>
+				<td>{{ product.quantity }}</td>
+				<td>{{ product.size }}</td>
+				<td>{{ product.get_fabric_display }}</td>
+				<td>{{ product.get_color_display }}</td>
+				<td><a href="{{ product.assignedto.get_absolute_url }}">{{ product.assignedto.get_fullname }}</a></td>
+				<td>{{ product.completedby.get_fullname }}</td>
+				<td>{{ product.completeddate }}</td>
+				<td>
+					<a href="{% url 'expert:product-update' product.id %}" class="btn btn-secondary">Edit</a>
+					{% if product.completedby %}
+					<a href="" class="btn btn-success disabled" title="Product already completed">Complete</a>
+					{% elif not product.assignedto %}
+					<a href="" class="btn btn-success disabled" title="Product is not assigned to any worker">Complete</a>
+					{% else %}
+					<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-success">Complete</a>
+					{% endif %}
+				</td>
+
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<a href="{% url 'expert:kit-list' %}" class="btn btn-primary">Back</a>
+	<a href="{% url 'expert:product-create' %}" class="btn btn-success">Add New</a>
+	<div class="my-3 py-4"></div>
+	<table class="table">
+		<tr>
+			<td>Original kit summary</td>
+			{% if kit.original_kit_summary %}
+			<td><img src="{{ kit.original_kit_summary.url }}" alt="Original KIT Summary Image" width="200" height="200"></td>
+			{% else %}
+			<td>Image Not Uploaded</td>
+			{% endif %}
+		</tr>
+		<tr>
+			<td>Jobwork Challan</td>
+			{% if kit.jobwork_challan %}
+			<td><img src="{{ kit.jobwork_challan.url }}" alt="Jobwork Challan" width="200" height="200"></td>
+			{% else %}
+			<td>Image Not Uploaded</td>
+			{% endif %}
+		</tr>
+		<tr>
+			<td>Jobwork GatePass</td>
+			{% if kit.jobwork_gatepass %}
+			<td><img src="{{ kit.jobwork_gatepass.url }}" alt="Jobwork GatePass" width="200" height="200"></td>
+			{% else %}
+			<td>Image Not Uploaded</td>
+			{% endif %}
+		</tr>
+		<tr>
+			<td>E-Way Bill</td>
+			{% if kit.ewaybill %}
+			<td><img src="{{ kit.ewaybill.url }}" alt="E-Way Bill" width="200" height="200"></td>
+			{% else %}
+			<td>Image Not Uploaded</td>
+			{% endif %}
+		</tr>
+	</table>
+	<a href="{% url 'expert:kit-update' kit.id %}" class="btn btn-primary">Edit</a>
+</div>
+{% endblock %}

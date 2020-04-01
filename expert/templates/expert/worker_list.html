@@ -1,0 +1,24 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container mt-3">
+	<center class="h2 my-3">Monthly worker report</center>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Worker</th>
+				<th>Total Contribution</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for worker in worker_list %}
+			<tr>
+				<td><a href="{{ worker.get_absolute_url }}">{{ worker.get_fullname }}</a></td>
+				<td>{{ worker.get_total_contribution }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

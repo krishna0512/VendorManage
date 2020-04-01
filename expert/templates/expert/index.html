@@ -1,0 +1,10 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container">
+	<h1>Expert Traders</h1>
+	<a href="{% url 'expert:kit-list' %}">KITS</a><br>
+	<a href="{% url 'expert:worker-list' %}">Workers</a>
+</div>
+{% endblock %}
