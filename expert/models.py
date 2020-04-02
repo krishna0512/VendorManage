@@ -229,6 +229,12 @@ class Worker(models.Model):
     def get_total_contribution(self):
         return 0.0
 
+    def get_products_completed_on_date(self, date):
+        """Returns all the products completed by this worker on
+        a prticular date given.
+        """
+        return self.products_completed.all().filter(date_completed=date)
+
     def __repr__(self):
         return '<Worker: {}>'.format(self.first_name.lower())
 

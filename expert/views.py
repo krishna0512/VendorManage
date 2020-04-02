@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
@@ -74,6 +74,38 @@ class ProductDayArchiveView(DayArchiveView):
                 ret['daily_work'] = 0.0
             worker_list.append(ret)
         context['worker_list'] = worker_list
+        return context
+
+class ProductMonthArchiveView(MonthArchiveView):
+    model = Product
+    date_field = 'date_completed'
+    allow_empty = True
+    template_name_suffix = '_report_month'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        print(context['month'])
+        print(context['next_month'])
+        start_date = context['month']
+        end_date = context['next_month'] - timedelta(days=1)
+        ret = []
+        x = []
+        x.append('Day')
+        x += [i.get_fullname() for i in Worker.objects.all()]
+        ret.append(x)
+        dd = start_date
+        while dd <= end_date:
+            x = [dd]
+            for worker in Worker.objects.all():
+                r = worker.get_products_completed_on_date(dd)
+                if not r.exists():
+                    x.append(0)
+                else:
+                    r = sum([i.size for i in r])
+                    x.append(r)
+            ret.append(x)
+            dd += timedelta(days=1)
+        context['data'] = ret
         return context
 
 class WorkerListView(ListView):
