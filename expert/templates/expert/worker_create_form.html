@@ -1,0 +1,15 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container">
+	<center class="mt-4 h2">Create a new Worker</center>
+	<form method="post" novalidate>
+		{% csrf_token %}
+		<table class="table">
+			{{ form.as_table }}
+		</table>
+		<button type="submit" class="btn btn-success">Save</button>
+	</form>
+</div>
+{% endblock %}

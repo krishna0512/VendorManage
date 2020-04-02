@@ -18,5 +18,6 @@ urlpatterns = [
     path('report/<int:year>/<str:month>/<int:day>/', views.ProductDayArchiveView.as_view(), name='report-daily'),
 
     path('worker/', views.WorkerListView.as_view(), name='worker-list'),
+    path('worker/create/', views.WorkerCreateView.as_view(), name='worker-create'),
     path('worker/<int:pk>/view/', views.WorkerDetailView.as_view(), name='worker-detail'),
 ]

@@ -75,8 +75,13 @@ class ProductDayArchiveView(DayArchiveView):
         context['worker_list'] = worker_list
         return context
 
-class WorkerDetailView(DetailView):
+class WorkerListView(ListView):
     model = Worker
 
-class WorkerListView(ListView):
+class WorkerCreateView(CreateView):
+    model = Worker
+    fields = '__all__'
+    template_name_suffix = '_create_form'
+
+class WorkerDetailView(DetailView):
     model = Worker
