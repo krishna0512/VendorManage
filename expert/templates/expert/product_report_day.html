@@ -23,7 +23,7 @@
 	</table>
 	<ul>
 		{% for product in object_list %}
-		<li>{{ product.completeddate|date:"F j, Y" }}: {{ product.order_number }}</li>
+		<li>{{ product.date_completed|date:"F j, Y" }}: {{ product.order_number }}</li>
 		{% endfor %}
 	</ul>
 	<p>

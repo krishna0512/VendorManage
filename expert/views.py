@@ -49,22 +49,23 @@ class ProductCreateView(CreateView):
     template_name_suffix = '_create_form'
 
 def product_complete(request, pk):
+    #TODO: change the p to product
     p = Product.objects.get(id=pk)
     p.completedby = p.assignedto
-    p.completeddate = datetime.now()
+    p.date_completed = datetime.now()
     p.save()
     return redirect(p.kit.get_absolute_url())
 
 class ProductDayArchiveView(DayArchiveView):
     model = Product
-    date_field = 'completeddate'
+    date_field = 'date_completed'
     template_name_suffix = '_report_day'
 
     def get_context_data(self, *args, **kwargs):
         worker_list = []
         context = super().get_context_data(*args, **kwargs)
         for worker in Worker.objects.all():
-            p = Product.objects.filter(completedby=worker).filter(completeddate=context['day'])
+            p = Product.objects.filter(completedby=worker).filter(date_completed=context['day'])
             ret = {}
             ret['name'] = worker.get_fullname()
             if p.exists():

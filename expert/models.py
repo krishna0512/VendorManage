@@ -77,7 +77,7 @@ class Product(models.Model):
         help_text=_('worker that completed this product'),
     )
     # TODO: add validators so that this date is always >= kit start date
-    completeddate = models.DateField(
+    date_completed = models.DateField(
         null=True,
         blank=True,
         verbose_name=_('Date of Completion'),
@@ -207,7 +207,7 @@ class Worker(models.Model):
         blank=True,
         help_text=_('Full Address of the worker.'),
     )
-    joined = models.DateField(
+    date_joined = models.DateField(
         null=True,
         blank=False,
         verbose_name=_('Joined since'),
