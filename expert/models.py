@@ -205,6 +205,12 @@ class Kit(models.Model):
     def cleanup(self):
         if self.original_kit_summary:
             self.original_kit_summary.delete(False)
+        if self.jobwork_challan:
+            self.jobwork_challan.delete(False)
+        if self.jobwork_gatepass:
+            self.jobwork_gatepass.delete(False)
+        if self.ewaybill:
+            self.ewaybill.delete(False)
 
 
 def worker_image_path(instance, filename):
