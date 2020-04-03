@@ -58,6 +58,11 @@ class KitDetailView(DetailView):
     model = Kit
     slug_field = 'number'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['worker_list'] = Worker.objects.all()
+        return context
+
 class KitDeleteView(DeleteView):
     model = Kit
     slug_field = 'number'
@@ -77,12 +82,22 @@ class ProductCreateView(CreateView):
     template_name_suffix = '_create_form'
 
 def product_complete(request, pk):
-    #TODO: change the p to product
+    #TODO: change the p to product and convert to Class based view
     p = Product.objects.get(id=pk)
     p.completedby = p.assignedto
+    p.status = 'completed'
     p.date_completed = datetime.now()
     p.save()
     return redirect(p.kit.get_absolute_url())
+
+def product_assign(request, product_pk, worker_pk):
+    # Convert to class based RedirectView 
+    product = Product.objects.get(id=product_pk)
+    worker = Worker.objects.get(id=worker_pk)
+    product.assignedto = worker
+    product.status = 'assigned'
+    product.save()
+    return redirect(product.kit.get_absolute_url())
 
 class ProductDeleteView(DeleteView):
     model = Product

@@ -21,13 +21,28 @@
 		</thead>
 		<tbody>
 			{% for product in kit.products.all %}
-			<tr>
+			<tr class="{% if product.status == 'assigned' %}bg-warning{% elif product.status == 'completed' %}bg-success{% endif %}">
 				<td>{{ product.order_number.upper }}</td>
 				<td>{{ product.quantity }}</td>
 				<td>{{ product.size }}</td>
 				<td>{{ product.get_fabric_display }}</td>
 				<td>{{ product.get_color_display }}</td>
-				<td><a href="{{ product.assignedto.get_absolute_url }}">{{ product.assignedto.get_fullname }}</a></td>
+				<td>
+					<div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ product.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							{% if product.status == 'pending' %}
+							Assign To
+							{% else %}
+							{{ product.assignedto.get_fullname }}
+							{% endif %}
+						</button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{ product.id }}">
+							{% for worker in worker_list %}
+							<a class="dropdown-item" href="{% url 'expert:product-assign' product_pk=product.id worker_pk=worker.id %}">{{ worker.get_fullname }}</a>
+							{% endfor %}
+						</div>
+					</div>
+				</td>
 				<td>{{ product.completedby.get_fullname }}</td>
 				<td>{{ product.completeddate }}</td>
 				<td>
