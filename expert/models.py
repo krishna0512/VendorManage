@@ -9,7 +9,8 @@ from django.utils.translation import ugettext_lazy as _
 class Product(models.Model):
     COLOR_CHOICES = [
         ('black','Black'),
-        ('biege','Biege'),
+        ('beige','Beige'),
+        ('blue','Blue'),
         ('white','White'),
         ('brown','Brown'),
         ('gray','Gray'),
@@ -24,7 +25,7 @@ class Product(models.Model):
         default='',
         blank=False,
         verbose_name=_('Order Number'),
-        help_text=_('Unique number of order e.g. COV27622'),
+        help_text=_('Number of order e.g. COV27622'),
     )
     quantity = models.PositiveSmallIntegerField(
         default=1,
@@ -136,6 +137,12 @@ class Kit(models.Model):
         blank=True,
         verbose_name=_('Date dispatched'),
         help_text=_('Date at which KIT is completed and dispatched in format (YYYY-MM-DD).'),
+    )
+    data = models.TextField(
+        blank=True,
+        default='',
+        verbose_name=_('Excel Data'),
+        help_text=_('Copy paste the excel rows containing the product data'),
     )
     original_kit_summary = models.ImageField(
         upload_to=kit_image_path,

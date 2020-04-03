@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.dates import MonthArchiveView, DayArchiveView
 
 from expert.models import Kit, Product, Worker
@@ -29,6 +29,26 @@ class KitCreateView(CreateView):
         initial['number'] = str(n)
         return initial
 
+    def process_excel_data(self, data):
+        data = data.strip().split('\n')
+        for row in data:
+            r = row.strip().split('\t')
+            r = [i.strip() for i in r]
+            Product.objects.create(
+                order_number=r[0],
+                quantity=int(r[1]),
+                size=float(r[2]),
+                fabric=r[3].split()[1].lower(),
+                color=r[4].lower(),
+                kit=self.object,
+            )
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if self.object.data:
+            self.process_excel_data(self.object.data)
+        return response
+
 class KitUpdateView(UpdateView):
     model = Kit
     fields = '__all__'
@@ -37,6 +57,14 @@ class KitUpdateView(UpdateView):
 class KitDetailView(DetailView):
     model = Kit
     slug_field = 'number'
+
+class KitDeleteView(DeleteView):
+    model = Kit
+    slug_field = 'number'
+    success_url = reverse_lazy('expert:kit-list')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
 
 class ProductUpdateView(UpdateView):
     model = Product

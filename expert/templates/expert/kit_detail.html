@@ -9,8 +9,8 @@
 		<thead>
 			<tr>
 				<th>Order Number</th>
-				<th>Quantity</th>
-				<th>Total Size</th>
+				<th>Quantity (Pcs)</th>
+				<th>Size (Sq.Ft.)</th>
 				<th>Fabric</th>
 				<th>Color</th>
 				<th>Assigned To</th>
@@ -47,6 +47,7 @@
 	</table>
 	<a href="{% url 'expert:kit-list' %}" class="btn btn-primary">Back</a>
 	<a href="{% url 'expert:product-create' %}" class="btn btn-success">Add New</a>
+	<a href="{% url 'expert:kit-delete' kit.number %}" class="btn btn-warning">Delete</a>
 	<div class="my-3 py-4"></div>
 	<table class="table">
 		<tr>
