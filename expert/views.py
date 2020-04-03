@@ -84,6 +84,19 @@ def product_complete(request, pk):
     p.save()
     return redirect(p.kit.get_absolute_url())
 
+class ProductDeleteView(DeleteView):
+    model = Product
+
+    def delete(self, request, *args, **kwargs):
+        self.kit_number = self.get_object().kit.number
+        return super().delete(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return Kit.objects.filter(number=self.kit_number).first().get_absolute_url()
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
+
 class ProductDayArchiveView(DayArchiveView):
     model = Product
     date_field = 'date_completed'

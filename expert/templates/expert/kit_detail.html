@@ -39,6 +39,7 @@
 					{% else %}
 					<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-success">Complete</a>
 					{% endif %}
+					<a href="{% url 'expert:product-delete' product.id %}" class="btn btn-danger">Delete</a>
 				</td>
 
 			</tr>
