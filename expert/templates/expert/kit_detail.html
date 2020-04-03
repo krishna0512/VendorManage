@@ -45,6 +45,19 @@
 			</tr>
 			{% endfor %}
 		</tbody>
+		<tfoot>
+			<tr>
+				<th></th>
+				<th>{{ kit.get_total_quantity }}</th>
+				<th>{{ kit.get_total_size }} SqFt.</th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+				<th></th>
+			</tr>
+		</tfoot>
 	</table>
 	<a href="{% url 'expert:kit-list' %}" class="btn btn-primary">Back</a>
 	<a href="{% url 'expert:product-create' %}" class="btn btn-success">Add New</a>

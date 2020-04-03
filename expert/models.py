@@ -202,6 +202,9 @@ class Kit(models.Model):
     def get_total_size(self):
         return str(round(sum([i.size for i in self.products.all()]),2))
 
+    def get_total_quantity(self):
+        return sum([i.quantity for i in self.products.all()])
+
     def cleanup(self):
         if self.original_kit_summary:
             self.original_kit_summary.delete(False)
