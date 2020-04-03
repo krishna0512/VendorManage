@@ -19,6 +19,11 @@ class Product(models.Model):
         ('max','Cover MAX'),
         ('tuff','Cover TUFF'),
     ]
+    STATUS_CHOICES = [
+        ('pending','Pending'),
+        ('assigned','Assigned'),
+        ('completed','Completed'),
+    ]
 
     order_number = models.CharField(
         max_length=50,
@@ -50,6 +55,13 @@ class Product(models.Model):
         default='black',
         verbose_name=_('Color'),
         help_text=_('Color of the lot.'),
+    )
+    status = models.CharField(
+        max_length=50,
+        choices=STATUS_CHOICES,
+        default='pending',
+        verbose_name=_('Status'),
+        help_text=_('Status of the Product'),
     )
     kit = models.ForeignKey(
         'Kit',
