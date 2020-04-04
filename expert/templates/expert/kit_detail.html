@@ -46,10 +46,12 @@
 				<td>{{ product.completedby.get_fullname }}</td>
 				<td>{{ product.completeddate }}</td>
 				<td>
+					{% comment %}
 					<a href="{% url 'expert:product-update' product.id %}" class="btn btn-secondary">Edit</a>
-					{% if product.completedby %}
+					{% endcomment %}
+					{% if product.status == 'completed' %}
 					<a href="" class="btn btn-success disabled" title="Product already completed">Complete</a>
-					{% elif not product.assignedto %}
+					{% elif product.status == 'pending' %}
 					<a href="" class="btn btn-success disabled" title="Product is not assigned to any worker">Complete</a>
 					{% else %}
 					<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-success">Complete</a>

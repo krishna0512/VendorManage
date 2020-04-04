@@ -27,6 +27,7 @@ class KitCreateView(CreateView):
         else:
             n = 1
         initial['number'] = str(n)
+        initial['date_received'] = datetime.now()
         return initial
 
     def process_excel_data(self, data):
@@ -136,6 +137,7 @@ class ProductMonthArchiveView(MonthArchiveView):
     model = Product
     date_field = 'date_completed'
     allow_empty = True
+    allow_future = True
     template_name_suffix = '_report_month'
 
     def get_context_data(self, *args, **kwargs):

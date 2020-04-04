@@ -13,6 +13,12 @@ class Product(models.Model):
         ('blue','Blue'),
         ('white','White'),
         ('brown','Brown'),
+        ('green','Green'),
+        ('olive green','Olive Green'),
+        ('light','Light'),
+        ('coffee brown','Coffee Brown'),
+        ('sand','Sand'),
+        ('burgundy','Burgundy'),
         ('gray','Gray'),
     ]
     FABRIC_CHOICES = [
@@ -140,7 +146,9 @@ class Kit(models.Model):
         help_text=_('Status of the Kit'),
     )
     date_received = models.DateField(
-        auto_now_add=True,
+        # auto_now_add=True,
+        null=True,
+        blank=True,
         verbose_name=_('Date Received'),
         help_text=_('Date at which KIT is received in format (YYYY-MM-DD).'),
     )
