@@ -24,4 +24,5 @@ urlpatterns = [
     path('worker/', views.WorkerListView.as_view(), name='worker-list'),
     path('worker/create/', views.WorkerCreateView.as_view(), name='worker-create'),
     path('worker/<int:pk>/view/', views.WorkerDetailView.as_view(), name='worker-detail'),
+    path('worker/<int:pk>/delete/', views.WorkerDeleteView.as_view(), name='worker-delete'),
 ]

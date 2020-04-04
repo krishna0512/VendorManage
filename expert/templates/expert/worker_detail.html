@@ -25,5 +25,9 @@
 			Contributions for the day
 		</div>
 	</div>
+	<div class="mt-4">
+		<a href="{% url 'expert:worker-list' %}" class="btn btn-primary">Back</a>
+		<a href="{% url 'expert:worker-delete' pk=worker.id %}" class="btn btn-danger">Delete</a>
+	</div>
 </div>
 {% endblock %}

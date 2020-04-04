@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
@@ -99,7 +100,7 @@ class KitDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['worker_list'] = Worker.objects.all()
+        context['worker_list'] = Worker.objects.filter(active=True)
         return context
 
 class KitDeleteView(DeleteView):
@@ -205,12 +206,34 @@ class ProductMonthArchiveView(MonthArchiveView):
         return context
 
 class WorkerListView(ListView):
-    model = Worker
+    queryset = Worker.objects.filter(active=True)
 
 class WorkerCreateView(CreateView):
     model = Worker
-    fields = '__all__'
+    fields = [
+        'first_name','last_name','address',
+        'date_joined','photo',
+    ]
     template_name_suffix = '_create_form'
 
 class WorkerDetailView(DetailView):
     model = Worker
+
+class WorkerDeleteView(DeleteView):
+    model = Worker
+    success_url = reverse_lazy('expert:worker-list')
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Overwriting the delete method because once a worker is created
+        it should not be deleted.
+        only it should be rendered inactive.
+        """
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.active = False
+        self.object.save()
+        return HttpResponseRedirect(success_url)
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)

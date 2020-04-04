@@ -265,6 +265,12 @@ class Worker(models.Model):
         blank=True,
         help_text=_('Passport size profile picture for worker.'),
     )
+    active = models.BooleanField(
+        default=True,
+        blank=False,
+        verbose_name=_('Is Active?'),
+        help_text=_('Is the Worker Active?'),
+    )
 
     def get_fullname(self):
         if self.last_name:
