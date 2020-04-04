@@ -9,21 +9,31 @@ from django.utils.translation import ugettext_lazy as _
 class Product(models.Model):
     COLOR_CHOICES = [
         ('black','Black'),
+        # account for biege
         ('beige','Beige'),
         ('blue','Blue'),
         ('white','White'),
         ('brown','Brown'),
         ('green','Green'),
-        ('olive green','Olive Green'),
-        ('light','Light'),
-        ('coffee brown','Coffee Brown'),
         ('sand','Sand'),
+        # account for burgandy
         ('burgundy','Burgundy'),
+        # account for gray, grey
         ('gray','Gray'),
+        ('clear','Clear'),
+
+        ('olive_green','Olive Green'),
+        ('light_sand','Light Sand'),
+        # account for light gray, grey
+        ('light_gray','Light Gray'),
+        # account for coffee
+        ('coffee_brown','Coffee Brown'),
     ]
     FABRIC_CHOICES = [
         ('max','Cover MAX'),
         ('tuff','Cover TUFF'),
+        ('fab', 'Cover Fab'),
+        ('clear', 'Cover Clear'),
     ]
     STATUS_CHOICES = [
         ('pending','Pending'),

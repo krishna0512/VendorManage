@@ -31,16 +31,54 @@ class KitCreateView(CreateView):
         return initial
 
     def process_excel_data(self, data):
+        def _select_fabric(fab):
+            """Internal Function to correctly select the fabric"""
+            fab = fab.lower()
+            if fab in ['max','cover max','covermax']:
+                return 'max'
+            elif fab in ['tuff','cover tuff','covertuff','tuf','cover tuf']:
+                return 'tuff'
+            elif fab in ['fab','cover fab','coverfab']:
+                return 'fab'
+            elif fab in ['clear','cover clear','coverclear']:
+                return 'clear'
+            else:
+                # return default max if none matches
+                return 'max'
+        def _select_color(col):
+            """Internal Function to correctly select the color from data"""
+            col = col.lower()
+            if ' ' in col:
+                if 'gray' in col or 'grey' in col:
+                    return 'light_gray'
+                else:
+                    return col.replace(' ','_')
+            else:
+                if col in ['beige','biege']:
+                    return 'beige'
+                elif col in ['gray','grey']:
+                    return 'gray'
+                elif col in ['burgundy','burgandy']:
+                    return 'burgundy'
+                elif col in ['coffee','cofee','coffe','cofe']:
+                    return 'coffee_brown'
+                elif col == 'olive':
+                    return 'olive_green'
+                else:
+                    return col
+
         data = data.strip().split('\n')
         for row in data:
             r = row.strip().split('\t')
             r = [i.strip() for i in r]
             Product.objects.create(
-                order_number=r[0],
+                order_number=r[0].upper(),
                 quantity=int(r[1]),
                 size=float(r[2]),
-                fabric=r[3].split()[1].lower(),
-                color=r[4].lower(),
+                fabric=_select_fabric(r[3]),
+                color=_select_color(r[4]),
+                # fabric=r[3].split()[1].lower(),
+                # color=r[4].lower(),
                 kit=self.object,
             )
 
