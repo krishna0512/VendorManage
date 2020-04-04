@@ -39,6 +39,8 @@ class Product(models.Model):
         ('pending','Pending'),
         ('assigned','Assigned'),
         ('completed','Completed'),
+        # This status is for when product is added to challan and dispatched.
+        ('dispatched','Dispatched'),
     ]
 
     order_number = models.CharField(
@@ -85,6 +87,14 @@ class Product(models.Model):
         related_name='products',
         help_text=_('Kit that this product belongs to.'),
     )
+    challan = models.ForeignKey(
+        'Challan',
+        null=True,
+        default=None,
+        on_delete=models.CASCADE,
+        related_name='products',
+        help_text=_('Challan that this product is dispatched through')
+    )
     assignedto = models.ForeignKey(
         'Worker',
         on_delete=models.CASCADE,
@@ -126,6 +136,33 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return self.kit.get_absolute_url()
+
+class Challan(models.Model):
+    """Container for model that represents Delivery Challan"""
+    number = models.IntegerField(
+        blank=False,
+        unique=True,
+        verbose_name=_('Challan Number'),
+        help_text=_('Unique number of each delivery challan'),
+    )
+    date_sent = models.DateField(
+        null=True,
+        blank=False,
+        verbose_name=_('Date of Dispatch'),
+        help_text=_('Date at which this challan is dispatched')
+    )
+
+    def get_total_quantity(self):
+        return sum([i.quantity for i in self.products.all()])
+
+    def get_total_size(self):
+        # BUG: exclude the returned products from sum
+        return str(round(sum([i.size for i in self.products.all()]),2))
+
+    def get_absolute_url(self):
+        return reverse(
+            'expert:challan-detail', kwargs={'slug': self.number}
+        )
 
 
 def kit_image_path(instance, filename):

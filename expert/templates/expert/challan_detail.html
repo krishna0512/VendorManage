@@ -1,0 +1,15 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container">
+    <center class="mt-4 h2">Overview of Challan - {{ challan.number }}</center>
+    <ul>
+        {% for product in challan.products.all %}
+        <li>{{ product.order_number }} - {{ product.size }} (By {{ product.completedby.get_fullname }})</li>
+        {% endfor %}
+    </ul>
+    <br><br>
+    <a href="{% url 'expert:challan-printable' slug=challan.number %}" class="btn btn-info">Get Printable</a>
+</div>
+{% endblock %}

@@ -6,7 +6,7 @@ from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.dates import MonthArchiveView, DayArchiveView
 
-from expert.models import Kit, Product, Worker
+from expert.models import Kit, Product, Worker, Challan
 
 # Create your views here.
 
@@ -139,6 +139,25 @@ def product_assign(request, product_pk, worker_pk):
     product.save()
     return redirect(product.kit.get_absolute_url())
 
+def challan_init(request, pk):
+    def _get_challan_number():
+        if not Challan.objects.all().exists():
+            return 1
+        else:
+            return Challan.objects.all().order_by('-number').first().number + 1
+    kit = Kit.objects.get(id=pk)
+    challan = Challan.objects.create(
+        date_sent=datetime.now(),
+        number=_get_challan_number(),
+    )
+    products = kit.products.filter(status='completed')
+    for product in products:
+        product.challan = challan
+        product.status = 'dispatched'
+        product.save()
+    return redirect(kit.get_absolute_url())
+    print('Challan created successfully')
+
 class ProductDeleteView(DeleteView):
     model = Product
 
@@ -237,3 +256,15 @@ class WorkerDeleteView(DeleteView):
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
+
+class ChallanListView(ListView):
+    model = Challan
+
+class ChallanDetailView(DetailView):
+    model = Challan
+    slug_field = 'number'
+
+class ChallanPrintableView(DetailView):
+    model = Challan
+    slug_field = 'number'
+    template_name_suffix = '_detail_printable'

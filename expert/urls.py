@@ -21,6 +21,11 @@ urlpatterns = [
     path('report/<int:year>/<str:month>/<int:day>/', views.ProductDayArchiveView.as_view(), name='report-daily'),
     path('report/<int:year>/<str:month>/', views.ProductMonthArchiveView.as_view(), name='report-montly'),
 
+    path('challan/<int:pk>/init/', views.challan_init, name='challan-init'),
+    path('challan/', views.ChallanListView.as_view(), name='challan-list'),
+    path('challan/<slug:slug>/view/', views.ChallanDetailView.as_view(), name='challan-detail'),
+    path('challan/<slug:slug>/view/printable/', views.ChallanPrintableView.as_view(), name='challan-printable'),
+
     path('worker/', views.WorkerListView.as_view(), name='worker-list'),
     path('worker/create/', views.WorkerCreateView.as_view(), name='worker-create'),
     path('worker/<int:pk>/view/', views.WorkerDetailView.as_view(), name='worker-detail'),

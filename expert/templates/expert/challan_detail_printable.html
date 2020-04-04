@@ -1,0 +1,184 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container border">
+    <div class="row">
+        <div class="col-10">
+            <center class="h3">Expert Traders</center>
+            <center class="small">J-142, 1st Floor, Sumel-6, Dhudheshwar, Ahmedabad-380004</center>
+            <center class="small"><u>expertcovers2020@gmail.com</u> <b>9839085886</b>, 9660589909</center>
+            <center class="small">GSTN: AAPPTR3833RKKRHJ</center>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-10 mt-2">
+            <center class="h3">Delivery Challan</center>
+        </div>
+        <div class="col-2">
+            <table class="table table-bordered table-sm">
+                <tr>
+                    <td>Original</td>
+                    <td>Duplicate</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center">18.03.2020</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-7">
+            <div class="border">
+                Challan No. 71/19-20
+            </div>
+            <div class="border">STATE CODE - 24 GUJ.</div>
+            <div class="border">
+                To, Caterpillar Signs PVT LTD (100% EOU)<br>
+                C-10, Electronics Estate, Sector - 25, GANDHINAGAR 382024 (Guj)<br>
+                GSTN No. 24AAECC4258M1ZH ; IEC : 0811008479
+            </div>
+            <div class="border">
+                FOR REF. No. 313/14.03.2020
+            </div>
+        </div>
+        <div class="col-5">
+            <table class="table table-bordered table-sm">
+                <tr>
+                    <td>Despatched through</td>
+                    <td>Tempo</td>
+                </tr>
+                <tr>
+                    <td>Vehicle No.</td>
+                    <td>GJ-18-AU-4157</td>
+                </tr>
+                <tr>
+                    <td>Date/Time</td>
+                    <td>18.03.2020</td>
+                </tr>
+                <tr>
+                    <td>Destination No.</td>
+                    <td>Gandhinagar</td>
+                </tr>
+                <tr>
+                    <td>Invoice No.</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead>
+                    <tr class="text-center">
+                        <th>SL</th>
+                        <th>Order No.</th>
+                        <th>Kit No.</th>
+                        <th>Sub Kit</th>
+                        <th>Qty</th>
+                        <th>Sq.Ft</th>
+                        <th>Fabric</th>
+                        <th>Color</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in challan.products.all %}
+                    <tr class="text-center">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ product.order_number }}</td>
+                        <td>{{ product.kit.number }}</td>
+                        <td></td>
+                        <td>{{ product.quantity }}</td>
+                        <td>{{ product.size }}</td>
+                        <td>{{ product.get_fabric_display }}</td>
+                        <td>{{ product.get_color_display }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th class="border text-center"><b>{{ challan.get_total_quantity }}</b></th>
+                        <th class="border text-center"><b>{{ challan.get_total_size }}</b></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col text-center">
+            <table class="table table-bordered table-sm">
+                <tr>
+                    <th>Max</th>
+                    <td>35</td>
+                    <td>1089.15</td>
+                </tr>
+                <tr>
+                    <th>Tuff</th>
+                    <td>35</td>
+                    <td>1089.15</td>
+                </tr>
+                <tr>
+                    <th>Fab</th>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Total</th>
+                    <th>30</th>
+                    <th>2232.1</th>
+                </tr>
+            </table>
+        </div>
+        <div class="col"></div>
+    </div>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col text-center">
+            <span>Kit returned due to unstiched/unprocessed/partially processed goods/cutting mistake</span>
+            <table class="table table-sm table-bordered">
+                <tr>
+                    <td>COV73517</td>
+                    <td>1</td>
+                    <td>36.4</td>
+                    <td>tuff</td>
+                    <td>gray</td>
+                </tr>
+                <tr>
+                    <td>COV73517</td>
+                    <td>1</td>
+                    <td>36.4</td>
+                    <td>tuff</td>
+                    <td>gray</td>
+                </tr>
+                <tr>
+                    <td>COV73517</td>
+                    <td>1</td>
+                    <td>36.4</td>
+                    <td>tuff</td>
+                    <td>gray</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-2"></div>
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col">
+            <center class="border">Receivers sign and stamp</center>
+        </div>
+        <div class="col"></div>
+        <div class="col">
+            <center class="border">Expert Traders</center>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock %}
