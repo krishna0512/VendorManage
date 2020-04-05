@@ -14,9 +14,11 @@ urlpatterns = [
 
     path('product/<int:pk>/update/', views.ProductUpdateView.as_view(), name='product-update'),
     path('product/create/', views.ProductCreateView.as_view(), name='product-create'),
-    path('product/<int:pk>/complete/', views.product_complete, name='product-complete'),
     path('product/<int:pk>/delete/', views.ProductDeleteView.as_view(), name='product-delete'),
+    path('product/<int:pk>/view/', views.ProductDetailView.as_view(), name='product-detail'),
+
     path('product/<int:product_pk>/assignto/<int:worker_pk>/', views.product_assign, name='product-assign'),
+    path('product/<int:pk>/complete/', views.product_complete, name='product-complete'),
 
     path('report/<int:year>/<str:month>/<int:day>/', views.ProductDayArchiveView.as_view(), name='report-daily'),
     path('report/<int:year>/<str:month>/', views.ProductMonthArchiveView.as_view(), name='report-montly'),

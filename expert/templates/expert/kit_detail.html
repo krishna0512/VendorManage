@@ -23,7 +23,7 @@
 		<tbody>
 			{% for product in kit.products.all %}
 			<tr class="{% if product.status == 'assigned' %}bg-warning{% elif product.status == 'completed' %}bg-success{% endif %}">
-				<td>{{ product.order_number.upper }}</td>
+				<td><a href="{{ product.get_absolute_url }}">{{ product.order_number }}</a></td>
 				<td>{{ product.quantity }}</td>
 				<td>{{ product.size }}</td>
 				<td>{{ product.get_fabric_display }}</td>
@@ -45,7 +45,7 @@
 					</div>
 				</td>
 				<td>{{ product.completedby.get_fullname }}</td>
-				<td>{{ product.completeddate }}</td>
+				<td>{{ product.date_completed }}</td>
 				<td>{{ product.status }}</td>
 				<td>
 					{% comment %}
@@ -55,6 +55,8 @@
 					<a href="" class="btn btn-success disabled" title="Product already completed">Complete</a>
 					{% elif product.status == 'pending' %}
 					<a href="" class="btn btn-success disabled" title="Product is not assigned to any worker">Complete</a>
+					{% elif product.status == 'dispatched' %}
+					<a href="" class="btn btn-success disabled" title="Product is already dispatched">Complete</a>
 					{% else %}
 					<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-success">Complete</a>
 					{% endif %}

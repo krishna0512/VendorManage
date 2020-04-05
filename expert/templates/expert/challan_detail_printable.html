@@ -22,7 +22,7 @@
                     <td>Duplicate</td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="text-center">18.03.2020</td>
+                    <td colspan="2" class="text-center">{{ challan.date_sent |date:"d.m.Y" }}</td>
                 </tr>
             </table>
         </div>
@@ -39,7 +39,7 @@
                 GSTN No. 24AAECC4258M1ZH ; IEC : 0811008479
             </div>
             <div class="border">
-                FOR REF. No. 313/14.03.2020
+                FOR REF. No. {{ challan.products.first.kit.number }}/{{ challan.date_sent | date:"d.m.Y" }}
             </div>
         </div>
         <div class="col-5">
@@ -54,7 +54,7 @@
                 </tr>
                 <tr>
                     <td>Date/Time</td>
-                    <td>18.03.2020</td>
+                    <td>{{ challan.date_sent | date:"d.m.Y" }}</td>
                 </tr>
                 <tr>
                     <td>Destination No.</td>

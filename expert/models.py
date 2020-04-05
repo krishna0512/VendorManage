@@ -135,7 +135,9 @@ class Product(models.Model):
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return self.kit.get_absolute_url()
+        return reverse(
+            'expert:product-detail', kwargs={'pk':self.id}
+        )
 
 class Challan(models.Model):
     """Container for model that represents Delivery Challan"""

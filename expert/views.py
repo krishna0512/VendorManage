@@ -224,6 +224,9 @@ class ProductMonthArchiveView(MonthArchiveView):
         context['data'] = ret
         return context
 
+class ProductDetailView(DetailView):
+    model = Product
+
 class WorkerListView(ListView):
     queryset = Worker.objects.filter(active=True)
 

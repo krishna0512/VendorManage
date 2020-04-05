@@ -1,0 +1,33 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container">
+    <center class="mt-4 h4">Overview of Product</center>
+    <div class="row">
+        <div class="col"><a href="{{ product.kit.get_absolute_url }}" class="btn btn-primary">Back</a></div>
+    </div>
+    <div class="row my-4">
+        <div class="col">
+            <table class="table">
+                <tr>
+                    <td>Product Number</td>
+                    <td>{{ product.order_number }}</td>
+                </tr>
+                <tr>
+                    <td>Product Quantity</td>
+                    <td>{{ product.quantity }}</td>
+                </tr>
+                <tr>
+                    <td>Product Size</td>
+                    <td>{{ product.size }}</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td>{{ product.get_status_display }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
