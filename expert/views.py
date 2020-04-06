@@ -293,3 +293,32 @@ class ChallanPrintableView(DetailView):
             }
         context['groupby_fabric'] = ret
         return context
+
+class ChallanDeleteView(DeleteView):
+    model = Challan
+    slug_field = 'number'
+    success_url = reverse_lazy('expert:challan-list')
+
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Overwriting the delete method because once a worker is created
+        it should not be deleted.
+        only it should be rendered inactive.
+        """
+        self.object = self.get_object()
+        for product in self.object.products.all():
+            # TODO: I shouldnt have to reset the challan foreign key
+            # it should be done automatically but todo that we have to most probably change
+            # the on_delete attrib of challan in Product to somethingelse instead of CASCADE
+            product.challan = None
+            if product.status == 'dispatched':
+                product.status = 'completed'
+            product.save()
+        return super().delete(request, *args, **kwargs)
+        # success_url = self.get_success_url()
+        # self.object.active = False
+        # self.object.save()
+        # return HttpResponseRedirect(success_url)

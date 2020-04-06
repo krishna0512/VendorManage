@@ -41,6 +41,7 @@ class Product(models.Model):
         ('completed','Completed'),
         # This status is for when product is added to challan and dispatched.
         ('dispatched','Dispatched'),
+        ('returned','Returned'),
     ]
     RETURN_REMARK_CHOICES = [
         ('', ''),
@@ -146,6 +147,8 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         self.order_number = self.order_number.upper()
+        if self.return_remark:
+            self.status = 'returned'
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):

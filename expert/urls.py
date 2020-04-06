@@ -27,6 +27,7 @@ urlpatterns = [
     path('challan/', views.ChallanListView.as_view(), name='challan-list'),
     path('challan/<slug:slug>/view/', views.ChallanDetailView.as_view(), name='challan-detail'),
     path('challan/<slug:slug>/view/printable/', views.ChallanPrintableView.as_view(), name='challan-printable'),
+    path('challan/<slug:slug>/delete/', views.ChallanDeleteView.as_view(), name='challan-delete'),
 
     path('worker/', views.WorkerListView.as_view(), name='worker-list'),
     path('worker/create/', views.WorkerCreateView.as_view(), name='worker-create'),

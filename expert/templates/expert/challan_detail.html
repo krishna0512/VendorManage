@@ -11,6 +11,7 @@
     </ul>
     <br><br>
     <a href="{% url 'expert:challan-list' %}" class="btn btn-primary">Back</a>
+    <a href="{% url 'expert:challan-delete' slug=challan.number %}" class="btn btn-warning">Cancel</a>
     <a href="{% url 'expert:challan-printable' slug=challan.number %}" class="btn btn-info">Get Printable</a>
 </div>
 {% endblock %}
