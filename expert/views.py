@@ -150,7 +150,7 @@ def challan_init(request, pk):
         date_sent=datetime.now(),
         number=_get_challan_number(),
     )
-    products = kit.products.filter(status='completed')
+    products = kit.products.filter(status='completed') | kit.products.filter(status='returned')
     for product in products:
         product.challan = challan
         product.status = 'dispatched'

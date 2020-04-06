@@ -22,7 +22,7 @@
 		</thead>
 		<tbody>
 			{% for product in kit.products.all %}
-			<tr class="{% if product.status == 'assigned' %}bg-warning{% elif product.status == 'completed' %}bg-success{% endif %}">
+			<tr class="{% if product.status == 'assigned' %}bg-warning{% elif product.status == 'completed' %}bg-success{% elif product.status == 'returned' %}bg-danger{% elif product.status == 'dispatched' %}bg-secondary{% endif %}">
 				<td><a href="{{ product.get_absolute_url }}">{{ product.order_number }}</a></td>
 				<td>{{ product.quantity }}</td>
 				<td>{{ product.size }}</td>
