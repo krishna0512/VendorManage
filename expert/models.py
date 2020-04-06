@@ -201,12 +201,6 @@ class Kit(models.Model):
         verbose_name=_('Date Received'),
         help_text=_('Date at which KIT is received in format (YYYY-MM-DD).'),
     )
-    date_sent = models.DateField(
-        null=True,
-        blank=True,
-        verbose_name=_('Date dispatched'),
-        help_text=_('Date at which KIT is completed and dispatched in format (YYYY-MM-DD).'),
-    )
     data = models.TextField(
         blank=True,
         default='',
