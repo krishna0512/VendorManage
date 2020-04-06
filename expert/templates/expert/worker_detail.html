@@ -8,9 +8,9 @@
 		<div class="col-6">
 			<div class="image_container">
 				{% if worker.photo %}
-				<img class="img-fluid" alt="worker photo" src="{{ worker.photo.url }}">
+				<img class="img-fluid" alt="worker photo" src="{{ worker.photo.url }}" width="200" height="200">
 				{% else %}
-				<img class="img-fluid" src="{% static 'expert/images/default_user_image.jpg' %}">
+				<img class="img-fluid" src="{% static 'expert/images/default_user_image.jpg' %}" width="200" height="200">
 				{% endif %}
 			</div>
 		</div>
