@@ -3,13 +3,13 @@
 
 {% block main_content %}
 <div class="container">
-	<center class="mt-4 h2">Create a new Worker</center>
-	<form method="post" novalidate>
+	<center class="mt-4 h2">Update a Worker</center>
+	<form method="post" enctype="multipart/form-data">
 		{% csrf_token %}
 		<table class="table">
 			{{ form.as_table }}
 		</table>
-		<a href="{% url 'expert:worker-list' %}" class="btn btn-info">Back</a>
+		<a href="{{ worker.get_absolute_url }}" class="btn btn-secondary">Back</a>
 		<button type="submit" class="btn btn-success">Save</button>
 	</form>
 </div>

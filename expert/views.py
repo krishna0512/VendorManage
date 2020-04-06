@@ -243,6 +243,11 @@ class WorkerCreateView(CreateView):
 class WorkerDetailView(DetailView):
     model = Worker
 
+class WorkerUpdateView(UpdateView):
+    model = Worker
+    fields = '__all__'
+    template_name_suffix = '_update_form'
+
 class WorkerDeleteView(DeleteView):
     model = Worker
     success_url = reverse_lazy('expert:worker-list')
@@ -283,8 +288,8 @@ class ChallanPrintableView(DetailView):
         ret['clear'] = {}
         for fabric in ret:
             ret[fabric] = {
-                'quantity': sum([i.quantity for i in self.object.products.filter(fabric=fabric)]),
-                'size': round(sum([i.size for i in self.object.products.filter(fabric=fabric)]),2)
+                'quantity': sum([i.quantity for i in self.object.products.filter(fabric=fabric, return_remark='')]),
+                'size': round(sum([i.size for i in self.object.products.filter(fabric=fabric, return_remark='')]),2)
             }
         context['groupby_fabric'] = ret
         return context
