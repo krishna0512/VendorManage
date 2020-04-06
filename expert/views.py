@@ -15,6 +15,7 @@ class IndexTemplateView(TemplateView):
 
 class KitListView(ListView):
     model = Kit
+    ordering = ['-number']
 
 class KitCreateView(CreateView):
     model = Kit

@@ -3,7 +3,7 @@
 <html lang="en">
 	<head>
 		{% include "expert/head_content.html" %}
-		<title>Expert</title>
+		<title>{% block title %}Expert Traders{% endblock %}</title>
 		<script>
 			$(function() {
 				$("[id^=id_date]").datepicker({
