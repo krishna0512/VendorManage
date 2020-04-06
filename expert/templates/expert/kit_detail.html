@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block main_content %}
-<div class="container">
+<div class="container-fluid">
 	<center class="mt-4 h2">Overview of KIT - {{ kit.number }}</center>
-	center class="mt-2 h5">{{ kit.date_received }}</center>
+	<center class="mt-2 h5">{{ kit.date_received }}</center>
 	<table class="table table-sm table-bordered my-4 table-striped">
 		<thead>
 			<tr>
@@ -46,7 +46,7 @@
 				</td>
 				<td>{{ product.completedby.get_fullname }}</td>
 				<td>{{ product.date_completed }}</td>
-				<td>{{ product.status }}</td>
+				<td>{{ product.get_status_display }}</td>
 				<td>
 					{% comment %}
 					<a href="{% url 'expert:product-update' product.id %}" class="btn btn-secondary">Edit</a>

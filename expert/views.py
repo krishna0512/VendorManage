@@ -177,18 +177,20 @@ class ProductDayArchiveView(DayArchiveView):
     template_name_suffix = '_report_day'
 
     def get_context_data(self, *args, **kwargs):
-        worker_list = []
         context = super().get_context_data(*args, **kwargs)
-        for worker in Worker.objects.all():
-            p = Product.objects.filter(completedby=worker).filter(date_completed=context['day'])
-            ret = {}
-            ret['name'] = worker.get_fullname()
-            if p.exists():
-                ret['daily_work'] = sum([i.size for i in p])
-            else:
-                ret['daily_work'] = 0.0
-            worker_list.append(ret)
-        context['worker_list'] = worker_list
+        # worker_list = []
+        # for worker in Worker.objects.all():
+        #     p = Product.objects.filter(completedby=worker).filter(date_completed=context['day'])
+        #     ret = {}
+        #     ret['name'] = worker.get_fullname()
+        #     if p.exists():
+        #         ret['daily_work'] = sum([i.size for i in p])
+        #     else:
+        #         ret['daily_work'] = 0.0
+        #     worker_list.append(ret)
+        # context['worker_list'] = worker_list
+        #TODO: Improve the worker_list to exclude the inactive worker somehow.
+        context['worker_list'] = Worker.objects.all()
         return context
 
 class ProductMonthArchiveView(MonthArchiveView):
@@ -271,3 +273,18 @@ class ChallanPrintableView(DetailView):
     model = Challan
     slug_field = 'number'
     template_name_suffix = '_detail_printable'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        ret = {}
+        ret['max'] = {}
+        ret['fab'] = {}
+        ret['tuff'] = {}
+        ret['clear'] = {}
+        for fabric in ret:
+            ret[fabric] = {
+                'quantity': sum([i.quantity for i in self.object.products.filter(fabric=fabric)]),
+                'size': round(sum([i.size for i in self.object.products.filter(fabric=fabric)]),2)
+            }
+        context['groupby_fabric'] = ret
+        return context

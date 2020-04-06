@@ -8,24 +8,27 @@
 	<table class="table table-bordered">
 		<thead>
 			<tr>
-				<th>Worker</th>
-				<th>Size completed</th>
+				<th>Order Number</th>
+				{% for worker in worker_list %}
+				<th class="text-center">{{ worker.get_fullname }}</th>
+				{% endfor %}
 			</tr>
 		</thead>
 		<tbody>
-			{% for worker in worker_list %}
+			{% for product in object_list %}
 			<tr>
-				<td>{{ worker.name }}</td>
-				<td>{{ worker.daily_work }}</td>
+				<td><a href="{{ product.get_absolute_url }}">{{ product.order_number }}</a></td>
+				{% for worker in worker_list %}
+				{% if worker == product.completedby %}
+				<td class="bg-success text-center">{{ product.size }}</td>
+				{% else %}
+				<td></td>
+				{% endif %}
+				{% endfor %}
 			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
-	<ul>
-		{% for product in object_list %}
-		<li>{{ product.date_completed|date:"F j, Y" }}: {{ product.order_number }}</li>
-		{% endfor %}
-	</ul>
 	<p>
 		{% if previous_day %}
 		Previous Day: {{ previous_day }}

@@ -30,7 +30,7 @@
     <div class="row">
         <div class="col-7">
             <div class="border">
-                Challan No. 71/19-20
+                Challan No. {{ challan.number }}/19-20
             </div>
             <div class="border">STATE CODE - 24 GUJ.</div>
             <div class="border">
@@ -117,23 +117,28 @@
             <table class="table table-bordered table-sm">
                 <tr>
                     <th>Max</th>
-                    <td>35</td>
-                    <td>1089.15</td>
+                    <td>{{ groupby_fabric.max.quantity }}</td>
+                    <td>{{ groupby_fabric.max.size }}</td>
                 </tr>
                 <tr>
                     <th>Tuff</th>
-                    <td>35</td>
-                    <td>1089.15</td>
+                    <td>{{ groupby_fabric.tuff.quantity }}</td>
+                    <td>{{ groupby_fabric.tuff.size }}</td>
                 </tr>
                 <tr>
                     <th>Fab</th>
-                    <td></td>
-                    <td></td>
+                    <td>{{ groupby_fabric.fab.quantity }}</td>
+                    <td>{{ groupby_fabric.fab.size }}</td>
+                </tr>
+                <tr>
+                    <th>Clear</th>
+                    <td>{{ groupby_fabric.clear.quantity }}</td>
+                    <td>{{ groupby_fabric.clear.size }}</td>
                 </tr>
                 <tr>
                     <th>Total</th>
-                    <th>30</th>
-                    <th>2232.1</th>
+                    <td>{{ challan.get_total_quantity }}</td>
+                    <td>{{ challan.get_total_size }}</td>
                 </tr>
             </table>
         </div>
@@ -144,27 +149,6 @@
         <div class="col text-center">
             <span>Kit returned due to unstiched/unprocessed/partially processed goods/cutting mistake</span>
             <table class="table table-sm table-bordered">
-                <tr>
-                    <td>COV73517</td>
-                    <td>1</td>
-                    <td>36.4</td>
-                    <td>tuff</td>
-                    <td>gray</td>
-                </tr>
-                <tr>
-                    <td>COV73517</td>
-                    <td>1</td>
-                    <td>36.4</td>
-                    <td>tuff</td>
-                    <td>gray</td>
-                </tr>
-                <tr>
-                    <td>COV73517</td>
-                    <td>1</td>
-                    <td>36.4</td>
-                    <td>tuff</td>
-                    <td>gray</td>
-                </tr>
             </table>
         </div>
         <div class="col-2"></div>
