@@ -133,6 +133,7 @@ class Product(models.Model):
     return_remark = models.CharField(
         max_length=200,
         choices=RETURN_REMARK_CHOICES,
+        blank=True,
         default='',
         verbose_name=_('Return Remarks'),
         help_text=_('Select the appropriate remark for returned products'),
