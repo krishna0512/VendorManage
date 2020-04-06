@@ -82,7 +82,7 @@
 		</tfoot>
 	</table>
 	<a href="{% url 'expert:kit-list' %}" class="btn btn-primary">Back</a>
-	<a href="{% url 'expert:product-create' %}" class="btn btn-success">Add New</a>
+	<a href="{% url 'expert:product-create' kit_number=kit.number %}" class="btn btn-success">Add New</a>
 	<a href="{% url 'expert:kit-delete' kit.number %}" class="btn btn-warning">Delete</a>
 	{# TODO: check if this kit has non zero number of completed products #}
 	<a href="{% url 'expert:challan-init' pk=kit.id %}" class="btn btn-primary">Make Delivery Challan</a>

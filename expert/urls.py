@@ -13,7 +13,7 @@ urlpatterns = [
     path('kit/<slug:slug>/delete/', views.KitDeleteView.as_view(), name='kit-delete'),
 
     path('product/<int:pk>/update/', views.ProductUpdateView.as_view(), name='product-update'),
-    path('product/create/', views.ProductCreateView.as_view(), name='product-create'),
+    path('product/create/<int:kit_number>/', views.ProductCreateView.as_view(), name='product-create'),
     path('product/<int:pk>/delete/', views.ProductDeleteView.as_view(), name='product-delete'),
     path('product/<int:pk>/view/', views.ProductDetailView.as_view(), name='product-detail'),
 

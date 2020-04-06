@@ -123,8 +123,29 @@ class ProductUpdateView(UpdateView):
 
 class ProductCreateView(CreateView):
     model = Product
-    fields = '__all__'
+    fields = [
+        'order_number','quantity','size',
+        'fabric','color','status','assignedto',
+        'completedby','date_completed','return_remark'
+    ]
     template_name_suffix = '_create_form'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['kit_number'] = self.kwargs['kit_number']
+        return context
+
+    def get_initial(self, *args, **kwargs):
+        initial = super().get_initial(*args, **kwargs)
+        initial['kit'] = Kit.objects.filter(number=self.kwargs['kit_number']).first()
+        return initial
+
+    def get_success_url(self):
+        return self.object.kit.get_absolute_url()
+
+    def form_valid(self, form):
+        form.instance.kit = Kit.objects.filter(number=self.kwargs['kit_number']).first()
+        return super().form_valid(form)
 
 def product_complete(request, pk):
     #TODO: change the p to product and convert to Class based view
