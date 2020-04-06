@@ -42,6 +42,12 @@ class Product(models.Model):
         # This status is for when product is added to challan and dispatched.
         ('dispatched','Dispatched'),
     ]
+    RETURN_REMARK_CHOICES = [
+        ('', ''),
+        ('unprocessed', 'UnProcessed'),
+        ('semiprocessed', 'Semi-Processed'),
+        ('mistake', 'Cutting Mistake'),
+    ]
 
     order_number = models.CharField(
         max_length=50,
@@ -122,6 +128,14 @@ class Product(models.Model):
         verbose_name=_('Date of Completion'),
         help_text=_('Date at which worker completed with this product in format (YYYY-MM-DD)'),
     )
+    #TODO: change the status of the product if return_remark is changed in updateView?
+    return_remark = models.CharField(
+        max_length=200,
+        choices=RETURN_REMARK_CHOICES,
+        default='',
+        verbose_name=_('Return Remarks'),
+        help_text=_('Select the appropriate remark for returned products'),
+    )
 
     def __repr__(self):
         return '<Product: {}>'.format(self.order_number)
@@ -155,11 +169,18 @@ class Challan(models.Model):
     )
 
     def get_total_quantity(self):
-        return sum([i.quantity for i in self.products.all()])
+        return sum([i.quantity for i in self.products.filter(return_remark='')])
 
     def get_total_size(self):
-        # BUG: exclude the returned products from sum
-        return str(round(sum([i.size for i in self.products.all()]),2))
+        # BUG: exclude the returned products from sum DONE
+        return str(round(sum([i.size for i in self.products.filter(return_remark='')]),2))
+
+    def get_return_quantity(self):
+        return sum([i.quantity for i in self.products.exclude(return_remark='')])
+
+    def get_return_size(self):
+        # BUG: exclude the returned products from sum DONE
+        return str(round(sum([i.size for i in self.products.exclude(return_remark='')]),2))
 
     def get_absolute_url(self):
         return reverse(

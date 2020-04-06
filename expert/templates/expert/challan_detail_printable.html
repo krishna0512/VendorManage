@@ -84,6 +84,7 @@
                 </thead>
                 <tbody>
                     {% for product in challan.products.all %}
+                    {% if not product.return_remark %}
                     <tr class="text-center">
                         <td>{{ forloop.counter }}</td>
                         <td>{{ product.order_number }}</td>
@@ -94,6 +95,7 @@
                         <td>{{ product.get_fabric_display }}</td>
                         <td>{{ product.get_color_display }}</td>
                     </tr>
+                    {% endif %}
                     {% endfor %}
                 </tbody>
                 <tfoot>
@@ -144,11 +146,33 @@
         </div>
         <div class="col"></div>
     </div>
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-2"></div>
         <div class="col text-center">
-            <span>Kit returned due to unstiched/unprocessed/partially processed goods/cutting mistake</span>
-            <table class="table table-sm table-bordered">
+            <span>Kit returned due to UnProcessed / Semi-Processed / Cutting Mistake</span>
+            <table class="table table-sm table-bordered mt-2">
+                {% for product in challan.products.all %}
+                {% if product.return_remark %}
+                <tr>
+                    <td>{{ product.order_number }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.size }}</td>
+                    <td>{{ product.get_fabric_display }}</td>
+                    <td>{{ product.get_color_display }}</td>
+                    <td>{{ product.get_return_remark_display }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <th>{{ challan.get_return_quantity }}</th>
+                        <th>{{ challan.get_return_size }}</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
         <div class="col-2"></div>

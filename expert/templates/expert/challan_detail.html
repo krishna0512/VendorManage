@@ -6,10 +6,11 @@
     <center class="mt-4 h2">Overview of Challan - {{ challan.number }}</center>
     <ul>
         {% for product in challan.products.all %}
-        <li>{{ product.order_number }} - {{ product.size }} (By {{ product.completedby.get_fullname }})</li>
+        <li class="{% if product.return_remark %}bg-warning{% endif %}"><a href="{{ product.get_absolute_url }}">{{ product.order_number }}</a> - {{ product.size }} (By {{ product.completedby.get_fullname }})</li>
         {% endfor %}
     </ul>
     <br><br>
+    <a href="{% url 'expert:challan-list' %}" class="btn btn-primary">Back</a>
     <a href="{% url 'expert:challan-printable' slug=challan.number %}" class="btn btn-info">Get Printable</a>
 </div>
 {% endblock %}
