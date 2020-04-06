@@ -333,7 +333,7 @@ class Worker(models.Model):
             return self.first_name
 
     def get_total_contribution(self):
-        return 0.0
+        return round(sum([i.size for i in self.products_completed.all()]),2)
 
     def get_products_completed_on_date(self, date):
         """Returns all the products completed by this worker on
