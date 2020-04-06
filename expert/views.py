@@ -166,6 +166,16 @@ def product_assign(request, product_pk, worker_pk):
     product.save()
     return redirect(product.kit.get_absolute_url())
 
+def product_return(request, pk):
+    product =  Product.objects.get(id=pk)
+    rr = request.GET.get('rr', None)
+    if rr in ['unprocessed','semiprocessed','mistake']:
+        product.return_remark = str(rr)
+        product.status = 'returned'
+        product.save()
+    return redirect(product.get_absolute_url())
+
+
 def challan_init(request, pk):
     def _get_challan_number():
         if not Challan.objects.all().exists():

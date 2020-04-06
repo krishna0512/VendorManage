@@ -19,6 +19,7 @@ urlpatterns = [
 
     path('product/<int:product_pk>/assignto/<int:worker_pk>/', views.product_assign, name='product-assign'),
     path('product/<int:pk>/complete/', views.product_complete, name='product-complete'),
+    path('product/<int:pk>/return/', views.product_return, name='product-return'),
 
     path('report/<int:year>/<str:month>/<int:day>/', views.ProductDayArchiveView.as_view(), name='report-daily'),
     path('report/<int:year>/<str:month>/', views.ProductMonthArchiveView.as_view(), name='report-montly'),
