@@ -98,6 +98,7 @@ class Product(models.Model):
         'Challan',
         null=True,
         default=None,
+        blank=True,
         on_delete=models.CASCADE,
         related_name='products',
         help_text=_('Challan that this product is dispatched through')
