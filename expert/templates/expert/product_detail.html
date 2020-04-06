@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col"><a href="{{ product.kit.get_absolute_url }}" class="btn btn-primary">Back</a></div>
     </div>
-    <div class="row my-4">
+    <div class="row my-2">
         <div class="col">
             <table class="table">
                 <tr>
@@ -27,6 +27,11 @@
                     <td>{{ product.get_status_display }}</td>
                 </tr>
             </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <a href="{% url 'expert:product-update' pk=product.id %}" class="btn btn-info">Edit</a>
         </div>
     </div>
 </div>
