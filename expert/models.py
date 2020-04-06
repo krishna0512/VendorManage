@@ -148,8 +148,8 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         self.order_number = self.order_number.upper()
         # BUG: This should be removed and added to the views.py in appropriate form.
-        if self.return_remark:
-            self.status = 'returned'
+        # if self.return_remark:
+        #     self.status = 'returned'
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):

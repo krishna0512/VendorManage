@@ -116,6 +116,11 @@ class ProductUpdateView(UpdateView):
     fields = '__all__'
     template_name_suffix = '_update_form'
 
+    def form_valid(self, form):
+        if form.instance.return_remark:
+            form.instance.status = 'returned'
+        return super().form_valid(form)
+
 class ProductCreateView(CreateView):
     model = Product
     fields = '__all__'
@@ -303,11 +308,6 @@ class ChallanDeleteView(DeleteView):
         return self.post(*args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        """
-        Overwriting the delete method because once a worker is created
-        it should not be deleted.
-        only it should be rendered inactive.
-        """
         self.object = self.get_object()
         for product in self.object.products.all():
             # TODO: I shouldnt have to reset the challan foreign key
@@ -315,7 +315,7 @@ class ChallanDeleteView(DeleteView):
             # the on_delete attrib of challan in Product to somethingelse instead of CASCADE
             product.challan = None
             if product.status == 'dispatched':
-                product.status = 'completed'
+                product.status = 'returned' if product.return_remark else 'completed'
             product.save()
         return super().delete(request, *args, **kwargs)
         # success_url = self.get_success_url()
