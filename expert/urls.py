@@ -8,7 +8,7 @@ urlpatterns = [
     path('', views.IndexTemplateView.as_view(), name='index'),
     path('kit/', views.KitListView.as_view(), name='kit-list'),
     path('kit/create/', views.KitCreateView.as_view(), name='kit-create'),
-    path('kit/<int:pk>/update/', views.KitUpdateView.as_view(), name='kit-update'),
+    path('kit/<slug:slug>/update/', views.KitUpdateView.as_view(), name='kit-update'),
     path('kit/<slug:slug>/view/', views.KitDetailView.as_view(), name='kit-detail'),
     path('kit/<slug:slug>/delete/', views.KitDeleteView.as_view(), name='kit-delete'),
 

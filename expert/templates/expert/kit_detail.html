@@ -45,6 +45,9 @@ $(document).ready(function() {
 <div class="container-fluid">
 	<center class="mt-4 h2">Overview of KIT - {{ kit.number }}</center>
 	<center class="mt-2 h5">{{ kit.date_received }}</center>
+	<div class="text-right">
+		<small class="text-right">Product Completion Date - <b>{% if kit.date_product_completion %}{{ kit.date_product_completion|date:"N j, Y" }}{% else %}{% now "N j, Y" %}{% endif %}</b></small>
+	</div>
 	<table class="table table-sm table-bordered my-4 table-striped" id="main_product_table">
 		<thead>
 			<tr>
@@ -115,6 +118,7 @@ $(document).ready(function() {
 		</tfoot>
 	</table>
 	<a href="{% url 'expert:kit-list' %}" class="btn btn-primary">Back</a>
+	<a href="{% url 'expert:kit-update' slug=kit.number %}" class="btn btn-secondary">Edit</a>
 	<a href="{% url 'expert:product-create' kit_number=kit.number %}" class="btn btn-success">Add New</a>
 	<a href="{% url 'expert:kit-delete' kit.number %}" class="btn btn-warning">Delete</a>
 	{# TODO: check if this kit has non zero number of completed products #}

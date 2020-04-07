@@ -93,7 +93,10 @@ class KitCreateView(CreateView):
 
 class KitUpdateView(UpdateView):
     model = Kit
-    fields = '__all__'
+    slug_field = 'number'
+    fields = [
+        'number','date_product_completion'
+    ]
     template_name_suffix = '_update_form'
 
 class KitDetailView(DetailView):
@@ -157,11 +160,14 @@ class ProductCreateView(CreateView):
 @csrf_exempt
 def product_complete(request, pk):
     #TODO: change the p to product and convert to Class based view
-    p = Product.objects.get(id=pk)
-    p.completedby = p.assignedto
-    p.status = 'completed'
-    p.date_completed = datetime.now()
-    p.save()
+    product = Product.objects.get(id=pk)
+    product.completedby = product.assignedto
+    if product.kit.date_product_completion:
+        product.date_completed = product.kit.date_product_completion
+    else:
+        product.date_completed = datetime.now()
+    product.status = 'completed'
+    product.save()
     return JsonResponse({'saved': True})
 
 @csrf_exempt

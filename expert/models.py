@@ -230,6 +230,13 @@ class Kit(models.Model):
         verbose_name=_('Date Received'),
         help_text=_('Date at which KIT is received in format (YYYY-MM-DD).'),
     )
+    date_product_completion = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name=_('Product Completion Date'),
+        help_text=_('Manual Date which can be set so that all the products \
+            in this kit will be completed on this date')
+    )
     data = models.TextField(
         blank=True,
         default='',
