@@ -103,6 +103,7 @@ class KitDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['worker_list'] = Worker.objects.filter(active=True)
+        context['product_list'] = self.object.products.all().order_by('creation_timestamp')
         return context
 
 class KitDeleteView(DeleteView):
@@ -158,7 +159,6 @@ def product_complete(request, pk):
     p.date_completed = datetime.now()
     p.save()
     return JsonResponse({'saved': True})
-    # return redirect(p.kit.get_absolute_url())
 
 @csrf_exempt
 def product_assign(request, product_pk, worker_pk):
@@ -168,7 +168,6 @@ def product_assign(request, product_pk, worker_pk):
     product.assignedto = worker
     product.status = 'assigned'
     product.save()
-    # return redirect(product.kit.get_absolute_url())
     return JsonResponse({'assignedto': worker.get_fullname()})
 
 def product_return(request, pk):

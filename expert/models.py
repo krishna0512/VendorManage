@@ -139,19 +139,20 @@ class Product(models.Model):
         verbose_name=_('Return Remarks'),
         help_text=_('Select the appropriate remark for returned products'),
     )
+    creation_timestamp = models.DateTimeField(
+        auto_now_add=True,
+    )
 
     def __repr__(self):
-        return '<Product: {}>'.format(self.order_number)
+        return '<Product: {} ({})>'.format(self.order_number, self.id)
 
     # TODO: update the str and repr definations
     def __str__(self):
         return str(self.order_number)
 
     def save(self, *args, **kwargs):
-        self.order_number = self.order_number.upper()
         # BUG: This should be removed and added to the views.py in appropriate form.
-        # if self.return_remark:
-        #     self.status = 'returned'
+        self.order_number = self.order_number.upper()
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
