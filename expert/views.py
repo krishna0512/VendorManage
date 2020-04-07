@@ -103,7 +103,7 @@ class KitDetailView(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['worker_list'] = Worker.objects.filter(active=True)
-        context['product_list'] = self.object.products.all().order_by('creation_timestamp')
+        context['product_list'] = self.object.products.all().order_by('id')
         return context
 
 class KitDeleteView(DeleteView):
