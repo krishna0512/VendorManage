@@ -141,10 +141,14 @@ class ProductCreateView(CreateView):
     def get_initial(self, *args, **kwargs):
         initial = super().get_initial(*args, **kwargs)
         initial['kit'] = Kit.objects.filter(number=self.kwargs['kit_number']).first()
+        initial['fabric'] = 'max'
         return initial
 
     def get_success_url(self):
-        return self.object.kit.get_absolute_url()
+        if 'save_add_another' in self.request.POST:
+            return reverse_lazy('expert:product-create', kwargs={'kit_number': self.kwargs['kit_number']})
+        else:
+            return self.object.kit.get_absolute_url()
 
     def form_valid(self, form):
         form.instance.kit = Kit.objects.filter(number=self.kwargs['kit_number']).first()
