@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.dates import MonthArchiveView, DayArchiveView
+from django.views.decorators.csrf import csrf_exempt
 
 from expert.models import Kit, Product, Worker, Challan
 
@@ -148,6 +149,7 @@ class ProductCreateView(CreateView):
         form.instance.kit = Kit.objects.filter(number=self.kwargs['kit_number']).first()
         return super().form_valid(form)
 
+@csrf_exempt
 def product_complete(request, pk):
     #TODO: change the p to product and convert to Class based view
     p = Product.objects.get(id=pk)
@@ -155,7 +157,8 @@ def product_complete(request, pk):
     p.status = 'completed'
     p.date_completed = datetime.now()
     p.save()
-    return redirect(p.kit.get_absolute_url())
+    return JsonResponse({'saved': True})
+    # return redirect(p.kit.get_absolute_url())
 
 def product_assign(request, product_pk, worker_pk):
     # Convert to class based RedirectView 

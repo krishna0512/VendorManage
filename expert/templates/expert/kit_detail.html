@@ -1,6 +1,29 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_js %}
+<script>
+$(document).ready(function() {
+	$('a.js-btn-product-complete').on('click', function(e) {
+		e.preventDefault();
+		let $this = $(this);
+		$.ajax({
+			type: "POST",
+			url: $(this).attr('href'),
+			async: true,
+			data: {},
+			success: function(result) {
+				$this.closest('tr').removeClass('bg-warning');
+				$this.closest('tr').addClass('bg-success');
+				$this.closest('td').prev().html('Complete');
+				$this.addClass('disabled');
+			}
+		});
+	});
+});
+</script>
+{% endblock %}
+
 {% block main_content %}
 <div class="container-fluid">
 	<center class="mt-4 h2">Overview of KIT - {{ kit.number }}</center>
@@ -46,19 +69,12 @@
 				</td>
 				<td>{{ product.completedby.get_fullname }}</td>
 				<td>{{ product.date_completed }}</td>
-				<td>{{ product.get_status_display }}</td>
+				<td class="js-td-status">{{ product.get_status_display }}</td>
 				<td>
-					{% comment %}
-					<a href="{% url 'expert:product-update' product.id %}" class="btn btn-secondary">Edit</a>
-					{% endcomment %}
-					{% if product.status == 'completed' %}
-					<a href="" class="btn btn-success disabled" title="Product already completed">Complete</a>
-					{% elif product.status == 'pending' %}
-					<a href="" class="btn btn-success disabled" title="Product is not assigned to any worker">Complete</a>
-					{% elif product.status == 'dispatched' %}
-					<a href="" class="btn btn-success disabled" title="Product is already dispatched">Complete</a>
+					{% if product.status == 'assigned' %}
+					<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-success js-btn-product-complete">Complete</a>
 					{% else %}
-					<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-success">Complete</a>
+					<a href="" class="btn btn-success disabled">Complete</a>
 					{% endif %}
 					<a href="{% url 'expert:product-delete' product.id %}" class="btn btn-danger">Delete</a>
 				</td>
