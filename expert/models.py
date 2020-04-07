@@ -153,6 +153,7 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         # BUG: This should be removed and added to the views.py in appropriate form.
         self.order_number = self.order_number.upper()
+        self.size = round(self.size, 2)
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
