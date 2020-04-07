@@ -160,6 +160,7 @@ def product_complete(request, pk):
     return JsonResponse({'saved': True})
     # return redirect(p.kit.get_absolute_url())
 
+@csrf_exempt
 def product_assign(request, product_pk, worker_pk):
     # Convert to class based RedirectView 
     product = Product.objects.get(id=product_pk)
@@ -167,7 +168,8 @@ def product_assign(request, product_pk, worker_pk):
     product.assignedto = worker
     product.status = 'assigned'
     product.save()
-    return redirect(product.kit.get_absolute_url())
+    # return redirect(product.kit.get_absolute_url())
+    return JsonResponse({'assignedto': worker.get_fullname()})
 
 def product_return(request, pk):
     product =  Product.objects.get(id=pk)

@@ -20,6 +20,23 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+	$('a.js-btn-product-assign').on('click', function(e) {
+		e.preventDefault();
+		let $this = $(this);
+		$.ajax({
+			type: "POST",
+			url: $(this).attr('href'),
+			async: true,
+			data: {},
+			success: function(result) {
+				$this.closest('tr').addClass('bg-warning');
+				$this.closest('tr').children('.js-td-status').html('Assigned');
+				$this.closest('tr').find('a.js-btn-product-complete').removeClass('disabled');
+				$this.closest('div.dropdown').children('button').html(result['assignedto'])
+			}
+		})
+	})
 });
 </script>
 {% endblock %}
@@ -62,7 +79,7 @@ $(document).ready(function() {
 						</button>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{ product.id }}">
 							{% for worker in worker_list %}
-							<a class="dropdown-item" href="{% url 'expert:product-assign' product_pk=product.id worker_pk=worker.id %}">{{ worker.get_fullname }}</a>
+							<a class="dropdown-item js-btn-product-assign" href="{% url 'expert:product-assign' product_pk=product.id worker_pk=worker.id %}">{{ worker.get_fullname }}</a>
 							{% endfor %}
 						</div>
 					</div>
@@ -74,7 +91,7 @@ $(document).ready(function() {
 					{% if product.status == 'assigned' %}
 					<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-success js-btn-product-complete">Complete</a>
 					{% else %}
-					<a href="" class="btn btn-success disabled">Complete</a>
+					<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-success js-btn-product-complete disabled">Complete</a>
 					{% endif %}
 					<a href="{% url 'expert:product-delete' product.id %}" class="btn btn-danger">Delete</a>
 				</td>
