@@ -307,11 +307,13 @@ class WorkerDetailView(DetailView):
         ret = []
         worker = self.object
         kit_number_list = list(set([i.kit.number for i in worker.products_completed.all()]))
-        kit_list = [Kit.objects.get(number=i) for i in kit_number_list]
+        kit_list = Kit.objects.filter(number__in=kit_number_list).order_by('-date_received')
+        # kit_list = [Kit.objects.get(number=i) for i in kit_number_list]
         for i in kit_list:
             ret.append(
                 {
                     'object': i,
+                    'total_kit_contribution': sum([j.size for j in i.products.filter(completedby=worker)]),
                     'products_attached': i.products.filter(completedby=worker)
                 }
             )
