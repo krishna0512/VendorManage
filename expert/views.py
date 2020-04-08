@@ -237,6 +237,9 @@ class ProductDeleteView(DeleteView):
 class ProductDayArchiveView(DayArchiveView):
     model = Product
     date_field = 'date_completed'
+    # TODO: check if allow_empty should be allowed or not
+    allow_empty = True
+    allow_future = True
     template_name_suffix = '_report_day'
 
     def get_context_data(self, *args, **kwargs):
@@ -265,28 +268,21 @@ class ProductMonthArchiveView(MonthArchiveView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        print(context['month'])
-        print(context['next_month'])
+        context['worker_list'] = Worker.objects.all()
         start_date = context['month']
         end_date = context['next_month'] - timedelta(days=1)
-        ret = []
-        x = []
-        x.append('Day')
-        x += [i.get_fullname() for i in Worker.objects.all()]
-        ret.append(x)
+        data = []
         dd = start_date
         while dd <= end_date:
-            x = [dd]
-            for worker in Worker.objects.all():
-                r = worker.get_products_completed_on_date(dd)
-                if not r.exists():
-                    x.append(0)
-                else:
-                    r = sum([i.size for i in r])
-                    x.append(r)
-            ret.append(x)
+            data.append(
+                {
+                    'date': dd,
+                    'contributions': [sum([i.size for i in worker.get_products_completed_on_date(dd)]) for worker in Worker.objects.all()]
+                }
+            )
+            data[-1]['contributions'].append(sum(data[-1]['contributions']))
             dd += timedelta(days=1)
-        context['data'] = ret
+        context['date_list'] = data
         return context
 
 class ProductDetailView(DetailView):

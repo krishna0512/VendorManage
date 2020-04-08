@@ -5,12 +5,21 @@
 <a href="{% url 'expert:index' %}" class="btn btn-primary">Home</a>
 <div class="container mt-3">
 	<center class="my-4 h2">{{ day }}</center>
+	{# TODO: Add the if condition for previous_month and next_month #}
+	<div class="row my-2">
+		<div class="col text-left">
+			<a href="{% url 'expert:report-daily' previous_day|date:'Y' previous_day|date:'M' previous_day|date:'j' %}" class="btn btn-sm btn-outline-info"><< {{ previous_day|date:"F j, Y" }}</a>
+		</div>
+		<div class="col text-right">
+			<a href="{% url 'expert:report-daily' next_day|date:'Y' next_day|date:'M' next_day|date:'j' %}" class="btn btn-sm btn-outline-info">{{ next_day|date:"F j, Y" }} >></a>
+		</div>
+	</div>
 	<table class="table table-bordered">
 		<thead>
 			<tr>
 				<th>Order Number</th>
 				{% for worker in worker_list %}
-				<th class="text-center">{{ worker.get_fullname }}</th>
+				<th class="text-center"><a href="{{ worker.get_absolute_url }}">{{ worker.get_fullname }}</a></th>
 				{% endfor %}
 			</tr>
 		</thead>
@@ -30,13 +39,7 @@
 		</tbody>
 	</table>
 	<p>
-		{% if previous_day %}
-		Previous Day: {{ previous_day }}
-		{% endif %}
-		{% if previous_day and next_day %}--{% endif %}
-		{% if next_day %}
-		Next Day: {{ next_day }}
-		{% endif %}
+		<a href="{% url 'expert:report-monthly' day|date:'Y' day|date:'M' %}" class="btn btn-outline-primary">Monthly Report - {{ day|date:"F Y" }}</a>
 	</p>
 </div>
 {% endblock %}

@@ -23,7 +23,7 @@ urlpatterns = [
     path('kit/<int:pk>/uncomplete/', views.kit_uncomplete, name='kit-uncomplete'),
 
     path('report/<int:year>/<str:month>/<int:day>/', views.ProductDayArchiveView.as_view(), name='report-daily'),
-    path('report/<int:year>/<str:month>/', views.ProductMonthArchiveView.as_view(), name='report-montly'),
+    path('report/<int:year>/<str:month>/', views.ProductMonthArchiveView.as_view(), name='report-monthly'),
 
     path('challan/<int:pk>/init/', views.challan_init, name='challan-init'),
     path('challan/', views.ChallanListView.as_view(), name='challan-list'),
