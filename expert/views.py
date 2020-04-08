@@ -294,6 +294,22 @@ class WorkerCreateView(CreateView):
 class WorkerDetailView(DetailView):
     model = Worker
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        ret = []
+        worker = self.object
+        kit_number_list = list(set([i.kit.number for i in worker.products_completed.all()]))
+        kit_list = [Kit.objects.get(number=i) for i in kit_number_list]
+        for i in kit_list:
+            ret.append(
+                {
+                    'object': i,
+                    'products_attached': i.products.filter(completedby=worker)
+                }
+            )
+        context['data'] = ret
+        return context
+
 class WorkerUpdateView(UpdateView):
     model = Worker
     fields = '__all__'
