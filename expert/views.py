@@ -193,7 +193,7 @@ def product_return(request, pk):
 def challan_init(request, pk):
     def _get_challan_number():
         if not Challan.objects.all().exists():
-            return 1
+            return 51
         else:
             return Challan.objects.all().order_by('-number').first().number + 1
     kit = Kit.objects.get(id=pk)
