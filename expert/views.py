@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.dates import MonthArchiveView, DayArchiveView
 from django.views.decorators.csrf import csrf_exempt
 
-from expert.models import Kit, Product, Worker, Challan
+from expert.models import Kit, Product, Worker, Challan, Invoice
 
 # Create your views here.
 
@@ -394,3 +394,8 @@ class ChallanDeleteView(DeleteView):
         # self.object.active = False
         # self.object.save()
         # return HttpResponseRedirect(success_url)
+
+class InvoiceCreateView(CreateView):
+    model = Invoice
+    fields = '__all__'
+    template_name_suffix = '_create_form'

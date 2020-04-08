@@ -1,0 +1,16 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container">
+	<center class="mt-4 h2">Create a new Invoice</center>
+	<form method="post" novalidate>
+		{% csrf_token %}
+		<table class="table">
+			{{ form.as_table }}
+		</table>
+		<button type="submit" class="btn btn-success">Save</button>
+    </form>
+    <a href="{% url 'expert:index' %}" class="btn btn-primary">Back</a>
+</div>
+{% endblock %}

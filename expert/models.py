@@ -175,6 +175,15 @@ class Challan(models.Model):
         verbose_name=_('Date of Dispatch'),
         help_text=_('Date at which this challan is dispatched')
     )
+    invoice = models.ForeignKey(
+        'Invoice',
+        null=True,
+        default=None,
+        blank=True,
+        related_name='challans',
+        on_delete=models.CASCADE,
+        help_text=_('The Invoice to which this challan belongs to')
+    )
 
     def get_total_quantity(self):
         return sum([i.quantity for i in self.products.filter(return_remark='')])
@@ -194,6 +203,20 @@ class Challan(models.Model):
         return reverse(
             'expert:challan-detail', kwargs={'slug': self.number}
         )
+
+class Invoice(models.Model):
+    number = models.IntegerField(
+        blank=False,
+        unique=True,
+        verbose_name=_('Invoice Number'),
+        help_text=_('Unique number of each delivery invoice'),
+    )
+    date_sent = models.DateField(
+        null=True,
+        blank=False,
+        verbose_name=_('Date of Dispatch'),
+        help_text=_('Date at which this invoice was created and dispatched')
+    )
 
 
 def kit_image_path(instance, filename):

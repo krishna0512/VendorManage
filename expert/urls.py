@@ -1,5 +1,6 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
+from django.views.generic import TemplateView
 
 from expert import views
 
@@ -30,6 +31,9 @@ urlpatterns = [
     path('challan/<slug:slug>/view/', views.ChallanDetailView.as_view(), name='challan-detail'),
     path('challan/<slug:slug>/view/printable/', views.ChallanPrintableView.as_view(), name='challan-printable'),
     path('challan/<slug:slug>/delete/', views.ChallanDeleteView.as_view(), name='challan-delete'),
+
+    path('invoice/create/', views.InvoiceCreateView.as_view(), name='invoice-create'),
+    path('invoice/printable', TemplateView.as_view(template_name='expert/invoice_detail_printable.html'), name='invoice-printable'),
 
     path('worker/', views.WorkerListView.as_view(), name='worker-list'),
     path('worker/create/', views.WorkerCreateView.as_view(), name='worker-create'),
