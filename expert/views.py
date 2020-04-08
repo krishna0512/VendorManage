@@ -217,8 +217,9 @@ def challan_init(request, pk):
         product.challan = challan
         product.status = 'dispatched'
         product.save()
+    challan.date_sent = max([i.date_completed for i in challan.products.all() if i.date_completed])
+    challan.save()
     return redirect(kit.get_absolute_url())
-    print('Challan created successfully')
 
 class ProductDeleteView(DeleteView):
     model = Product
