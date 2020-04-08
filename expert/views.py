@@ -189,6 +189,17 @@ def product_return(request, pk):
         product.save()
     return redirect(product.get_absolute_url())
 
+# TODO: add a function in product model for completeing and uncompleting the product
+def kit_uncomplete(request, pk):
+    kit = Kit.objects.get(id=pk)
+    products = kit.products.filter(status='completed')
+    for product in products:
+        product.completedby = None
+        product.date_completed = None
+        product.status = 'assigned'
+        product.save()
+    return redirect(kit.get_absolute_url())
+
 
 def challan_init(request, pk):
     def _get_challan_number():
