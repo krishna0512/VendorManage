@@ -5,6 +5,9 @@
 <div class="container">
     <center class="mt-4 h2">Overview of Invoice - {{ invoice.number }}</center>
     <div>
+        <a href="{% url 'expert:invoice-list' %}" class="btn btn-info">Back</a> 
+    </div>
+    <div>
         Date Sent -- {{ invoice.date_sent }}
     </div>
     <div class="my-4">
