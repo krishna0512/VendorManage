@@ -399,3 +399,49 @@ class InvoiceCreateView(CreateView):
     model = Invoice
     fields = '__all__'
     template_name_suffix = '_create_form'
+
+    def get_initial(self, *args, **kwargs):
+        initial = super().get_initial(*args, **kwargs)
+        if Invoice.objects.all().exists():
+            initial['number'] = Invoice.objects.all().order_by('-number').first().number + 1
+        else:
+            initial['number'] = 1
+        initial['date_sent'] = datetime.now()
+        return initial
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+class InvoiceListView(ListView):
+    model = Invoice
+
+class InvoiceDetailView(DetailView):
+    model = Invoice
+    slug_field = 'number'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['challan_list'] = Challan.objects.filter(invoice=None).order_by('-number')
+        return context
+    
+
+def invoice_add_challan(request, invoice_pk, challan_pk):
+    invoice = Invoice.objects.get(id=invoice_pk)
+    invoice.add_challan(challan_pk)
+    return redirect(invoice.get_absolute_url())
+
+def invoice_remove_challan(request, invoice_pk, challan_pk):
+    invoice = Invoice.objects.get(id=invoice_pk)
+    invoice.remove_challan(challan_pk)
+    print('removed the challan from invoice')
+    return redirect(invoice.get_absolute_url())
+
+class InvoicePrintableView(DetailView):
+    model = Invoice
+    slug_field = 'number'
+    template_name_suffix = '_detail_printable'
+
+    def get_context_date(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['challan_list'] = self.object.challans.order_by('number')
+        return context

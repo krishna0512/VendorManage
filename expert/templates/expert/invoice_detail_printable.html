@@ -22,11 +22,11 @@
             <table class="table table-bordered table-sm">
                 <tr>
                     <td>Invoice No.</td>
-                    <td>8</td>
+                    <td>{{ invoice.number }}</td>
                 </tr>
                 <tr>
                     <td>Date</td>
-                    <td>15.03.20</td>
+                    <td>{{ invoice.date_sent|date:"M j, Y" }}</td>
                 </tr>
                 <tr>
                     <td>Dispatched Through</td>
@@ -95,18 +95,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>60</td>
-                        <td>11.09.20</td>
-                        <td>99822</td>
-                        <td>14</td>
-                        <td>337.1</td>
-                        <td>636.74</td>
-                        <td></td>
-                        <td>973.84</td>
-                        <td>3.5</td>
-                        <td>3406.44</td>
-                    </tr>
+                    
+                    {% for challan in invoice.challans.all %}
+                        <tr>
+                            <td>{{ challan.number }}</td>
+                            <td>{{ challan.date_sent|date:"d.m.y" }}</td>
+                            <td>99822</td>
+                            <td>{{ challan.get_total_quantity }}</td>
+                            <td>{{ challan.get_total_size_by_fabric.max }}</td>
+                            <td>{{ challan.get_total_size_by_fabric.tuff }}</td>
+                            <td>{{ challan.get_total_size_by_fabric.fab }}</td>
+                            <td>{{ challan.get_total_size }}</td>
+                            <td>3.5</td>
+                            <td>{{ challan.get_total_value }}</td>
+                        </tr>
+                    {% endfor %}
                     <tr>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
@@ -125,13 +128,13 @@
                         <td></td>
                         <td>Total</td>
                         <td></td>
-                        <td>105</td>
-                        <td>2543.85</td>
-                        <td>3330.95</td>
-                        <td>0</td>
-                        <td>5874.8</td>
+                        <td>{{ invoice.get_total_quantity }}</td>
+                        <td>{{ invoice.get_total_size_by_fabric.max }}</td>
+                        <td>{{ invoice.get_total_size_by_fabric.tuff }}</td>
+                        <td>{{ invoice.get_total_size_by_fabric.fab }}</td>
+                        <td>{{ invoice.get_total_size }}</td>
                         <td></td>
-                        <td>20561.80</td>
+                        <td>{{ invoice.get_total_value }}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -141,7 +144,7 @@
                         <td></td>
                         <td colspan="3">Add: CGST</td>
                         <td>6%</td>
-                        <td>1239.71</td>
+                        <td>{{ invoice.get_total_tax.cgst }}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -151,7 +154,7 @@
                         <td></td>
                         <td colspan="3">Add: SGST</td>
                         <td>6%</td>
-                        <td>1239.71</td>
+                        <td>{{ invoice.get_total_tax.sgst }}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -161,14 +164,14 @@
                         <td></td>
                         <td colspan="3">Add: Round off</td>
                         <td></td>
-                        <td>0.71</td>
+                        <td>{{ invoice.get_total_tax.roundoff }}</td>
                     </tr>
                     <tr>
                         <td colspan="9">
                             Amount Chargeble (in words)<br>
-                            One sssdf sf asfe fes fd asfae se es
+                            {{ invoice.get_total_amount.words }}
                         </td>
-                        <td>22622.75</td>
+                        <td>{{ invoice.get_total_amount.amount }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -193,23 +196,26 @@
                 </tr>
                 <tr>
                     <td>998822</td>
-                    <td>20561.80</td>
+                    <td>{{ invoice.get_total_value }}</td>
                     <td>6%</td>
-                    <td>1233.71</td>
+                    <td>{{ invoice.get_total_tax.cgst }}</td>
                     <td>6%</td>
-                    <td>1233.71</td>
-                    <td rowspan="2">2467.42</td>
+                    <td>{{ invoice.get_total_tax.sgst }}</td>
+                    <td rowspan="2">{{ invoice.get_total_tax.total }}</td>
                 </tr>
                 <tr>
                     <td>Total</td>
-                    <td>20561.80</td>
+                    <td>{{ invoice.get_total_value }}</td>
                     <td></td>
-                    <td>1233.71</td>
+                    <td>{{ invoice.get_total_tax.cgst }}</td>
                     <td></td>
-                    <td>1233.71</td>
+                    <td>{{ invoice.get_total_tax.sgst }}</td>
                 </tr>
                 <tr>
-                    <td colspan="7">Tax Amount (in workds)<br>INR two thusand four hundred and seven</td>
+                    <td colspan="7">
+                        Tax Amount (in words)<br>
+                        INR {{ invoice.get_total_tax.total_words }}
+                    </td>
                 </tr>
             </table>
         </div>

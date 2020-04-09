@@ -190,7 +190,18 @@ class Challan(models.Model):
 
     def get_total_size(self):
         # BUG: exclude the returned products from sum DONE
-        return str(round(sum([i.size for i in self.products.filter(return_remark='')]),2))
+        return round(sum([i.size for i in self.products.filter(return_remark='')]),2)
+
+    def get_total_size_by_fabric(self):
+        ret = {}
+        ret['max'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='max')]),2)
+        ret['tuff'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='tuff')]),2)
+        ret['fab'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='fab')]),2)
+        ret['clear'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='clear')]),2)
+        return ret
+
+    def get_total_value(self):
+        return round(self.get_total_size() * 3.5, 2)
 
     def get_return_quantity(self):
         return sum([i.quantity for i in self.products.exclude(return_remark='')])
@@ -203,6 +214,9 @@ class Challan(models.Model):
         return reverse(
             'expert:challan-detail', kwargs={'slug': self.number}
         )
+
+    def __str__(self):
+        return '{} ({})'.format(self.number, self.date_sent)
 
 class Invoice(models.Model):
     number = models.IntegerField(
@@ -218,6 +232,70 @@ class Invoice(models.Model):
         help_text=_('Date at which this invoice was created and dispatched')
     )
 
+    def add_challan(self, challan_pk):
+        """ function to add a challan to self invoice and perform various calculations.
+        """
+        challan = Challan.objects.get(id=challan_pk)
+        challan.invoice = self
+        challan.save()
+        self.save()
+
+    def remove_challan(self, challan_pk):
+        """ function to remove the given challan from invoice 
+        return False if challan is not present in this invoice.
+        """
+        challan = Challan.objects.get(id=challan_pk)
+        challan.invoice = None
+        challan.save()
+        self.save()
+
+    def get_total_quantity(self):
+        return sum([i.get_total_quantity() for i in self.challans.all()])
+
+    def get_total_size(self):
+        return round(sum([i.get_total_size() for i in self.challans.all()]),2)
+
+    def get_total_value(self):
+        return round(self.get_total_size() * 3.5,2)
+
+    def get_total_tax(self):
+        ret = {}
+        ret['cgst'] = round(self.get_total_value() * 0.06, 2)
+        ret['sgst'] = ret['cgst']
+        ret['total'] = ret['cgst'] + ret['sgst']
+        t = ret['total'] + self.get_total_value()
+        x = t*100//1%100
+        if x<50:
+            x = round(x/100, 2)
+            x = -x
+        else:
+            x = 100 - x
+            x = round(x/100, 2)
+        ret['roundoff'] = x
+        ret['total_words'] = 'xxxxxxxxxxxxxxxxxxxxxxx'
+        return ret
+
+    def get_total_amount(self):
+        ret = {}
+        ret['amount'] = int(self.get_total_tax()['total'] + self.get_total_tax()['roundoff'] + self.get_total_value())
+        ret['words'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+        return ret
+
+    def get_total_size_by_fabric(self):
+        ret = {'max':0, 'tuff':0, 'fab':0, 'clear':0}
+        for c in self.challans.all():
+            for i in c.get_total_size_by_fabric():
+                ret[i] += c.get_total_size_by_fabric()[i]
+        return ret
+
+    def get_absolute_url(self):
+        return reverse('expert:invoice-detail', kwargs={'slug': self.number})
+
+    def __str__(self):
+        return self.number
+
+    def __repr__(self):
+        return '<Invoice: {}>'.format(self.number)
 
 def kit_image_path(instance, filename):
     # return 'Kit_{}/Images/{}'.format(instance.number, filename)
@@ -310,7 +388,7 @@ class Kit(models.Model):
         )
 
     def get_total_size(self):
-        return str(round(sum([i.size for i in self.products.all()]),2))
+        return round(sum([i.size for i in self.products.all()]),2)
 
     def get_total_quantity(self):
         return sum([i.quantity for i in self.products.all()])

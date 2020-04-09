@@ -32,8 +32,13 @@ urlpatterns = [
     path('challan/<slug:slug>/view/printable/', views.ChallanPrintableView.as_view(), name='challan-printable'),
     path('challan/<slug:slug>/delete/', views.ChallanDeleteView.as_view(), name='challan-delete'),
 
+    path('invoice/', views.InvoiceListView.as_view(), name='invoice-list'),
     path('invoice/create/', views.InvoiceCreateView.as_view(), name='invoice-create'),
-    path('invoice/printable', TemplateView.as_view(template_name='expert/invoice_detail_printable.html'), name='invoice-printable'),
+    path('invoice/<slug:slug>/view/printable/', views.InvoicePrintableView.as_view(), name='invoice-printable'),
+    path('invoice/<slug:slug>/view/', views.InvoiceDetailView.as_view(), name='invoice-detail'),
+
+    path('invoice/<int:invoice_pk>/add/<int:challan_pk>/', views.invoice_add_challan, name='invoice-add-challan'),
+    path('invoice/<int:invoice_pk>/remove/<int:challan_pk>/', views.invoice_remove_challan, name='invoice-remove-challan'),
 
     path('worker/', views.WorkerListView.as_view(), name='worker-list'),
     path('worker/create/', views.WorkerCreateView.as_view(), name='worker-create'),

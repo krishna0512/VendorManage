@@ -1,0 +1,34 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container">
+    <center class="mt-4 h2">Overview of Invoice - {{ invoice.number }}</center>
+    <div>
+        Date Sent -- {{ invoice.date_sent }}
+    </div>
+    <div class="my-4">
+        {% for challan in invoice.challans.all %}
+        {{ challan.number }} -- <a href="{% url 'expert:invoice-remove-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="btn btn-danger btn-sm">Delete</a><br>
+        {% empty %}
+            No Challan to display
+        {% endfor %}
+    </div>
+    <div class="my-4">
+        Add new Challan
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Add New Challan
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdown1">
+                {% for challan in challan_list %}
+                    <a href="{% url 'expert:invoice-add-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="dropdown-item">{{ challan.number }} ({{ challan.date_sent }})</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div>
+        <a href="{% url 'expert:invoice-printable' slug=invoice.number %}" class="btn btn-primary">Get Printable</a>
+    </div>
+</div>
+{% endblock %}
