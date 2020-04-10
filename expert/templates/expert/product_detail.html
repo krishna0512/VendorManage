@@ -1,6 +1,12 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_navbar %}
+<div class="navbar-nav">
+	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:product-update' pk=product.id %}"><i class="fa fa-pencil"></i> Edit</a>
+</div>
+{% endblock %}
+
 {% block main_content %}
 <div class="container">
     <center class="mt-4 h4">Overview of Product</center>
@@ -50,7 +56,6 @@
     {# TODO: Change the dropdown so that if product is already returned then it displays change the return remark #}
     <div class="row">
         <div class="col">
-            <a href="{% url 'expert:product-update' pk=product.id %}" class="btn btn-info mb-2">Edit</a>
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="returndropdownbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Return Product

@@ -22,12 +22,13 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarMarkup">
-				<div class="navbar-nav">
+				<div class="navbar-nav mr-auto">
 					<a class="nav-item nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Kit</a>
 					<a class="nav-item nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{% url 'expert:worker-list' %}">Worker</a>
 					<a class="nav-item nav-link {% if view.navigation == 'challan' %}active{% endif %}" href="{% url 'expert:challan-list' %}">Challan</a>
 					<a class="nav-item nav-link {% if view.navigation == 'invoice' %}active{% endif %}" href="{% url 'expert:invoice-list' %}">Invoice</a>
 				</div>
+				{% block custom_navbar %}{% endblock %}
 			</div>
 		</nav>
 		{% endblock %}

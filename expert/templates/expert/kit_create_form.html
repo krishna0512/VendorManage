@@ -1,6 +1,12 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_navbar %}
+<div class="navbar-nav">
+	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{% url 'expert:kit-list' %}"><i class="fa fa-arrow-left"></i> Back</a>
+</div>
+{% endblock %}
+
 {% block main_content %}
 <div class="container">
 	<center class="mt-4 h2">Create a new Kit</center>
@@ -9,7 +15,6 @@
 		<table class="table">
 			{{ form.as_table }}
 		</table>
-		<a href="{% url 'expert:kit-list' %}" class="btn btn-secondary">Back</a>
 		<button type="submit" class="btn btn-success">Save</button>
 	</form>
 </div>

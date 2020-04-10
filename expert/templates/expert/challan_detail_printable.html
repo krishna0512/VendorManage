@@ -1,6 +1,24 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_navbar %}
+<div class="navbar-nav">
+	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="javascript:window.print();"><i class="fa fa-print"></i> Print</a>
+	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ challan.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
+</div>
+{% endblock %}
+
+{% comment %}
+TODO: Determine weather the print dialog should be opened on page load or not?
+{% block custom_js %}
+<script>
+    $(document).ready(function() {
+        window.print();
+    });
+</script>
+{% endblock %}
+{% endcomment %}
+
 {% block main_content %}
 <div class="container border">
     <div class="row">

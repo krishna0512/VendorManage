@@ -1,6 +1,13 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_navbar %}
+<div class="navbar-nav">
+	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:challan-printable' slug=challan.number %}"><i class="fa fa-print"></i> Get Printable</a>
+	<a class="btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:challan-delete' slug=challan.number %}"><i class="fa fa-ban"></i> Cancel</a>
+</div>
+{% endblock %}
+
 {% block main_content %}
 <div class="container">
     <center class="mt-4 h2">Overview of Challan - {{ challan.number }}</center>
@@ -10,8 +17,5 @@
         {% endfor %}
     </ul>
     <br><br>
-    <a href="{% url 'expert:challan-list' %}" class="btn btn-primary">Back</a>
-    <a href="{% url 'expert:challan-delete' slug=challan.number %}" class="btn btn-warning">Cancel</a>
-    <a href="{% url 'expert:challan-printable' slug=challan.number %}" class="btn btn-info">Get Printable</a>
 </div>
 {% endblock %}

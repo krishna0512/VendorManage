@@ -1,6 +1,12 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_navbar %}
+<div class="navbar-nav">
+	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{% url 'expert:invoice-list' %}"><i class="fa fa-arrow-left"></i> Back</a>
+</div>
+{% endblock %}
+
 {% block main_content %}
 <div class="container">
 	<center class="mt-4 h2">Create a new Invoice</center>
@@ -11,6 +17,5 @@
 		</table>
 		<button type="submit" class="btn btn-success">Save</button>
     </form>
-    <a href="{% url 'expert:index' %}" class="btn btn-primary">Back</a>
 </div>
 {% endblock %}

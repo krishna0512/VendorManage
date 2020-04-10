@@ -1,12 +1,15 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_navbar %}
+<div class="navbar-nav">
+	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:invoice-printable' slug=invoice.number %}"><i class="fa fa-print"></i> Get Printable</a>
+</div>
+{% endblock %}
+
 {% block main_content %}
 <div class="container">
     <center class="mt-4 h2">Overview of Invoice - {{ invoice.number }}</center>
-    <div>
-        <a href="{% url 'expert:invoice-list' %}" class="btn btn-info">Back</a> 
-    </div>
     <div>
         Date Sent -- {{ invoice.date_sent }}
     </div>
@@ -29,9 +32,6 @@
                 {% endfor %}
             </div>
         </div>
-    </div>
-    <div>
-        <a href="{% url 'expert:invoice-printable' slug=invoice.number %}" class="btn btn-primary">Get Printable</a>
     </div>
 </div>
 {% endblock %}

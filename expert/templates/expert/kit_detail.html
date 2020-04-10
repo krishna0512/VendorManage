@@ -41,6 +41,16 @@ $(document).ready(function() {
 </script>
 {% endblock %}
 
+{% block custom_navbar %}
+<div class="navbar-nav">
+	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:kit-update' slug=kit.number %}"><i class="fa fa-pencil"></i> Edit</a>
+	<a class="btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:kit-delete' kit.number %}"><i class="fa fa-trash"></i> Delete</a>
+	<a class="btn btn-outline-info btn-sm mr-1" type="button" href="{% url 'expert:product-create' kit_number=kit.number %}">Add New</a>
+	<a class="btn btn-outline-success btn-sm mr-1" type="button" href="{% url 'expert:challan-init' pk=kit.id %}">Make Challan</a>
+	<a class="btn btn-outline-warning btn-sm" {% if kit.get_completed_quantity == 0 %}disbaled{% endif %} type="button" href="{% url 'expert:kit-uncomplete' pk=kit.id %}"><i class="fa fa-ban"></i> Cancel Complete</a>
+</div>
+{% endblock %}
+
 {% block main_content %}
 <div class="container-fluid">
 	<center class="mt-4 h2">Overview of KIT - {{ kit.number }}</center>
@@ -117,6 +127,7 @@ $(document).ready(function() {
 			</tr>
 		</tfoot>
 	</table>
+	{% comment %}
 	<a href="{% url 'expert:kit-list' %}" class="btn btn-primary">Back</a>
 	<a href="{% url 'expert:kit-update' slug=kit.number %}" class="btn btn-secondary">Edit</a>
 	<a href="{% url 'expert:product-create' kit_number=kit.number %}" class="btn btn-success">Add New</a>
@@ -124,6 +135,7 @@ $(document).ready(function() {
 	{# TODO: check if this kit has non zero number of completed products #}
 	<a href="{% url 'expert:challan-init' pk=kit.id %}" class="btn btn-primary">Make Delivery Challan</a>
 	<a href="{% url 'expert:kit-uncomplete' pk=kit.id %}" class="btn btn-warning">Cancel Complete</a>
+	{% endcomment %}
 	<div class="my-3 py-4"></div>
 	<table class="table">
 		<tr>

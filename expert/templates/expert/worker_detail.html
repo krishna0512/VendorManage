@@ -1,6 +1,13 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_navbar %}
+<div class="navbar-nav">
+	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:worker-update' pk=worker.id %}"><i class="fa fa-pencil"></i> Edit</a>
+	<a class="btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:worker-delete' pk=worker.id %}"><i class="fa fa-trash"></i> Delete</a>
+</div>
+{% endblock %}
+
 {% block main_content %}
 <div class="container">
 	<center class="mt-4 h2">Overview of Worker{# - {{ worker.get_fullname }}#}</center>
@@ -47,11 +54,6 @@
 				{% endfor %}
 			</div>
 		</div>
-	</div>
-	<div class="mt-4">
-		<a href="{% url 'expert:worker-list' %}" class="btn btn-primary">Back</a>
-		<a href="{% url 'expert:worker-update' pk=worker.id %}" class="btn btn-info">Edit</a>
-		<a href="{% url 'expert:worker-delete' pk=worker.id %}" class="btn btn-danger">Delete</a>
 	</div>
 </div>
 {% endblock %}

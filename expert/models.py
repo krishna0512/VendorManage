@@ -396,6 +396,12 @@ class Kit(models.Model):
     def get_pending_quantity(self):
         return sum([i.quantity for i in self.products.filter(status='pending')])
 
+    def get_assigned_quantity(self):
+        return sum([i.quantity for i in self.products.filter(status='assigned')])
+
+    def get_completed_quantity(self):
+        return sum([i.quantity for i in self.products.filter(status='completed')])
+
     def cleanup(self):
         if self.original_kit_summary:
             self.original_kit_summary.delete(False)
