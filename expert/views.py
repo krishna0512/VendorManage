@@ -140,7 +140,7 @@ class ProductCreateView(CreateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['kit_number'] = self.kwargs['kit_number']
+        context['kit'] = Kit.objects.get(number=self.kwargs['kit_number'])
         return context
 
     def get_initial(self, *args, **kwargs):
