@@ -7,14 +7,14 @@
 		List of Workers
 	</div>
 	<div class="row mt-3">
-		<div class="list-group w-50 mx-auto">
+		<div class="list-group w-50 mx-auto font-italic">
 			{% for worker in worker_list %}
 				<a href="{{ worker.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" title="">
-					{{ worker.get_fullname }}
+					<span class="font-weight-bold">{{ worker.get_fullname }}</span>
 					<span class="badge badge-success badge-pill">{{ worker.get_approx_contribution_badge }}</span>
 				</a>
 			{% endfor %}
-			<a href="{% url 'expert:worker-create' %}" class="list-group-item list-group-item-action text-center list-group-item-info">Add New</a>
+			<a href="{% url 'expert:worker-create' %}" class="list-group-item list-group-item-action text-center list-group-item-info"><i class="fa fa-plus fa-lg"></i> Add New</a>
 		</div>
 	</div>
 </div>

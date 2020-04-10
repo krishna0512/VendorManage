@@ -8,13 +8,14 @@
 		List of Invoices
 	</div>
 	<div class="row mt-3">
-		<div class="list-group w-50 mx-auto">
+		<div class="list-group w-50 mx-auto font-italic">
 			{% for invoice in invoice_list %}
 				<a href="{{ invoice.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" title="">
-					{{ invoice.number }} <span class="small text-secondary">{{ invoice.date_sent|naturalday|title }}</span>
+					<span class="font-weight-bold">{{ invoice.number }}</span>
+					<span class="small text-secondary">{{ invoice.date_sent|naturalday|title }}</span>
 				</a>
 			{% endfor %}
-			<a href="{% url 'expert:invoice-create' %}" class="list-group-item list-group-item-action text-center list-group-item-info">Add New</a>
+			<a href="{% url 'expert:invoice-create' %}" class="list-group-item list-group-item-action text-center list-group-item-info"><i class="fa fa-plus fa-lg"></i> Add New</a>
 		</div>
 	</div>
 </div>
