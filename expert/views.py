@@ -16,6 +16,7 @@ class IndexTemplateView(TemplateView):
 
 class KitListView(ListView):
     model = Kit
+    # for navigation active display
     navigation = 'kit'
     ordering = ['-number']
 
@@ -349,6 +350,7 @@ class WorkerDeleteView(DeleteView):
 class ChallanListView(ListView):
     model = Challan
     navigation = 'challan'
+    ordering = ['-number']
 
 class ChallanDetailView(DetailView):
     model = Challan
@@ -418,6 +420,7 @@ class InvoiceCreateView(CreateView):
 class InvoiceListView(ListView):
     model = Invoice
     navigation = 'invoice'
+    ordering = ['-number']
 
 class InvoiceDetailView(DetailView):
     model = Invoice
