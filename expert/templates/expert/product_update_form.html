@@ -1,16 +1,46 @@
 {% extends 'expert/base.html' %}
 {% load static %}
+{% load add_attr %}
+
+{% block custom_js %}
+<script>
+	$(document).ready(function() {
+		$('#btn-update').on('click', function(e) {
+			e.preventDefault();
+			$('#btn-submit').click();
+		});
+	});
+</script>
+{% endblock %}
+
+{% block custom_navbar %}
+<div class="navbar-nav">
+	<a class="btn btn-success btn-sm mr-1" type="button" href="" id="btn-update">Update</a>
+	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ product.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
+</div>
+{% endblock %}
 
 {% block main_content %}
-<div class="container">
-	<center class="mt-4 h2">Update Product - {{ product.order_number }}</center>
-	<form method="post" novalidate>
-		{% csrf_token %}
-		<table class="table">
-			{{ form.as_table }}
-		</table>
-		<a href="{% url 'expert:kit-detail' product.kit.number %}" class="btn btn-secondary">Back</a>
-		<button type="submit" class="btn btn-success">Save</button>
-	</form>
+<div class="container d-flex justify-content-center">
+	<div class="w-75">
+		<div class="heading text-center my-4 h3">Update Product - {{ product.order_number }}</div>
+		<form method="post">
+			{% csrf_token %}
+			{% for field in form %}
+			<div class="form-group row">
+				<label for="{{ field.id_for_label }}" class="col-4 col-form-label">{{ field.label }}</label>
+				<div class="col-8">
+					{{ field|add_attr:"form-control" }}
+					{% if field.help_text %}
+					<small class="form-text text-muted">{{ field.help_text }}</small>
+					{% endif %}
+				</div>
+			</div>
+			{% endfor %}
+			<div class="form-group row d-flex justify-content-center">
+				<button type="submit" class="btn btn-outline-success w-50 d-none" id="btn-submit">Update</button>
+			</div>
+		</form>
+	</div>
 </div>
 {% endblock %}

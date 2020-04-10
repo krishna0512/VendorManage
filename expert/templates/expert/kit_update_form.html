@@ -1,21 +1,50 @@
 {% extends 'expert/base.html' %}
 {% load static %}
+{% load add_attr %}
+
+{% block custom_js %}
+<script>
+	$(document).ready(function() {
+		$('#btn-update').on('click', function(e) {
+			e.preventDefault();
+			$('#btn-submit').click();
+		});
+	});
+</script>
+{% endblock %}
 
 {% block custom_navbar %}
 <div class="navbar-nav">
+	<a class="btn btn-success btn-sm mr-1" type="button" href="" id="btn-update">Update</a>
 	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ kit.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
 </div>
 {% endblock %}
 
 {% block main_content %}
-<div class="container">
-	<center class="mt-4 h2">Update a Kit</center>
-	<form method="post" enctype="multipart/form-data">
-		{% csrf_token %}
-		<table class="table">
-			{{ form.as_table }}
-		</table>
-		<button type="submit" class="btn btn-success">Save</button>
-	</form>
+<div class="container d-flex justify-content-center">
+	<div class="card w-75 mt-3 border-primary">
+		<div class="card-header text-center border-primary">
+			Kit Update
+		</div>
+		<form method="post" enctype="multipart/form-data">
+			<div class="card-body pb-0">
+				{% csrf_token %}
+				{% for field in form %}
+				<div class="form-group row">
+					<label for="{{ field.id_for_label }}" class="col-4 col-form-label">{{ field.label }}</label>
+					<div class="col-8">
+						{{ field|add_attr:"form-control" }}
+						{% if field.help_text %}
+						<small class="form-text text-muted">{{ field.help_text }}</small>
+						{% endif %}
+					</div>
+				</div>
+				{% endfor %}
+				<div class="form-group row d-flex justify-content-center">
+					<button type="submit" class="btn btn-outline-success w-50 d-none" id="btn-submit">Update</button>
+				</div>
+			</div>
+		</form>
+	</div>
 </div>
 {% endblock %}
