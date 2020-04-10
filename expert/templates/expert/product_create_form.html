@@ -1,17 +1,52 @@
 {% extends 'expert/base.html' %}
 {% load static %}
+{% load add_attr %}
+
+{% block custom_js %}
+<script>
+	$(document).ready(function() {
+		$('#btn-save').on('click', function(e) {
+			e.preventDefault();
+			$('#btn-submit').click();
+		});
+		$('#btn-save-another').on('click', function(e) {
+			e.preventDefault();
+			$('#btn-submit-another').click();
+		});
+	});
+</script>
+{% endblock %}
+
+{% block custom_navbar %}
+<div class="navbar-nav">
+	<a class="btn btn-success btn-sm mr-1" type="button" href="" id="btn-save">Save</a>
+	<a class="btn btn-primary btn-sm mr-1" type="button" href="" id="btn-save-another">Save & Add Another</a>
+	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ kit.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
+</div>
+{% endblock %}
 
 {% block main_content %}
-<div class="container">
-	<center class="mt-4 h2">Create a new Product</center>
-	<form method="post" novalidate>
-		{% csrf_token %}
-		<table class="table">
-			{{ form.as_table }}
-		</table>
-		<button type="submit" class="btn btn-success">Save</button>
-		<button type="submit" class="btn btn-info" name="save_add_another">Save and Add Another</button>
-	</form>
-	<a href="{% url 'expert:kit-detail' slug=kit_number %}" class="btn btn-info">Back</a>
+<div class="container d-flex justify-content-center">
+	<div class="w-75">
+		<div class="heading text-center my-4 h3">Create New Product</div>
+		<form method="post">
+			{% csrf_token %}
+			{% for field in form %}
+			<div class="form-group row">
+				<label for="{{ field.id_for_label }}" class="col-4 col-form-label">{{ field.label }}</label>
+				<div class="col-8">
+					{{ field|add_attr:"form-control" }}
+					{% if field.help_text %}
+					<small class="form-text text-muted">{{ field.help_text }}</small>
+					{% endif %}
+				</div>
+			</div>
+			{% endfor %}
+			<div class="form-group row d-flex justify-content-center">
+				<button type="submit" class="btn btn-outline-success w-50 d-none" id="btn-submit">Update</button>
+				<button type="submit" class="btn btn-outline-success w-50 d-none" name="save_add_another" id="btn-submit-another">Save and Add Another</button>
+			</div>
+		</form>
+	</div>
 </div>
 {% endblock %}
