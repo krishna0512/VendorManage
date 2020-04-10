@@ -1,5 +1,6 @@
 {% extends 'expert/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block main_content %}
 <div class="container p-0">
@@ -10,7 +11,7 @@
         <div class="list-group w-50 mx-auto">
             {% for challan in challan_list %}
                 <a href="{{ challan.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" title="">
-                    {{ challan.number }} <span class="small text-secondary">{{ challan.date_sent|date:"d M Y" }}</span>
+                    {{ challan.number }} <span class="small text-secondary">{{ challan.date_sent|naturalday|title }}</span>
                 </a>
             {% endfor %}
             {# <a href="" class="list-group-item list-group-item-action text-center list-group-item-info">Add New</a> #}

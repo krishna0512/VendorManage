@@ -454,6 +454,17 @@ class Worker(models.Model):
     def get_total_contribution(self):
         return round(sum([i.size for i in self.products_completed.all()]),2)
 
+    def get_approx_contribution_badge(self):
+        x = self.get_total_contribution()
+        if x == 0:
+            return 'nil'
+        elif x>0 and x<100:
+            return '{}+'.format(str(int(x/10)*10))
+        elif x>=100 and x<1000:
+            return '{}+'.format(str(int(x/100)*100))
+        elif x>=1000:
+            return '{}+'.format(str(int(x/1000)*1000))
+
     def get_products_completed_on_date(self, date):
         """Returns all the products completed by this worker on
         a prticular date given.

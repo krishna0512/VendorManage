@@ -11,7 +11,7 @@
 			{% for worker in worker_list %}
 				<a href="{{ worker.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" title="">
 					{{ worker.get_fullname }}
-					<span class="badge badge-primary badge-pill">{{ worker.get_total_contribution }}</span>
+					<span class="badge badge-success badge-pill">{{ worker.get_approx_contribution_badge }}</span>
 				</a>
 			{% endfor %}
 			<a href="{% url 'expert:worker-create' %}" class="list-group-item list-group-item-action text-center list-group-item-info">Add New</a>
