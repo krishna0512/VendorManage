@@ -16,6 +16,7 @@ class IndexTemplateView(TemplateView):
 
 class KitListView(ListView):
     model = Kit
+    navigation = 'kit'
     ordering = ['-number']
 
 class KitCreateView(CreateView):
@@ -290,6 +291,7 @@ class ProductDetailView(DetailView):
 
 class WorkerListView(ListView):
     queryset = Worker.objects.filter(active=True)
+    navigation = 'worker'
 
 class WorkerCreateView(CreateView):
     model = Worker
@@ -346,6 +348,7 @@ class WorkerDeleteView(DeleteView):
 
 class ChallanListView(ListView):
     model = Challan
+    navigation = 'challan'
 
 class ChallanDetailView(DetailView):
     model = Challan
@@ -414,6 +417,7 @@ class InvoiceCreateView(CreateView):
 
 class InvoiceListView(ListView):
     model = Invoice
+    navigation = 'invoice'
 
 class InvoiceDetailView(DetailView):
     model = Invoice

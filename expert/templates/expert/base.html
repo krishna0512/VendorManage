@@ -15,6 +15,22 @@
 		{% block custom_js %}{% endblock %}
 	</head>
 	<body>
+		{% block navbar %}
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand" href="{% url 'expert:index' %}">Expert Traders</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMarkup" aria-controls="navbarMarkup" aria-expanded="false" aria-label="Toggle Navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarMarkup">
+				<div class="navbar-nav">
+					<a class="nav-item nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Kit</a>
+					<a class="nav-item nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{% url 'expert:worker-list' %}">Worker</a>
+					<a class="nav-item nav-link {% if view.navigation == 'challan' %}active{% endif %}" href="{% url 'expert:challan-list' %}">Challan</a>
+					<a class="nav-item nav-link {% if view.navigation == 'invoice' %}active{% endif %}" href="{% url 'expert:invoice-list' %}">Invoice</a>
+				</div>
+			</div>
+		</nav>
+		{% endblock %}
 		<main>
 		{% block main_content %}{% endblock %}
 		</main>
