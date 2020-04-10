@@ -1,5 +1,6 @@
 {% extends 'expert/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block main_content %}
 <div class="container p-0">
@@ -10,7 +11,7 @@
 		<div class="list-group w-50 mx-auto">
 			{% for kit in kit_list %}
 				<a href="{{ kit.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" title="{{ kit.get_total_size }} Sq.Ft.">
-					{{ kit.number }} <span class="small text-secondary">{{ kit.date_received|date:"d M Y" }}</span>
+					{{ kit.number }} <span class="small text-secondary">{{ kit.date_received|naturalday|title }}</span>
 					<span class="badge badge-warning badge-pill">{{ kit.get_pending_quantity }}</span>
 				</a>
 			{% endfor %}

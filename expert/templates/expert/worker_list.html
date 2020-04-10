@@ -2,26 +2,20 @@
 {% load static %}
 
 {% block main_content %}
-<div class="container mt-3">
-	<center class="h2 my-3">Worker List</center>
-	<table class="table table-bordered">
-		<thead>
-			<tr>
-				<th>Worker</th>
-				<th>Total Contribution</th>
-			</tr>
-		</thead>
-		<tbody>
+<div class="container p-0">
+	<div class="p-3 h2 text-center m-0">
+		List of Workers
+	</div>
+	<div class="row mt-3">
+		<div class="list-group w-50 mx-auto">
 			{% for worker in worker_list %}
-			<tr>
-				<td><a href="{{ worker.get_absolute_url }}">{{ worker.get_fullname }}</a></td>
-				<td>{{ worker.get_total_contribution }}</td>
-			</tr>
+				<a href="{{ worker.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" title="">
+					{{ worker.get_fullname }}
+					<span class="badge badge-primary badge-pill">{{ worker.get_total_contribution }}</span>
+				</a>
 			{% endfor %}
-		</tbody>
-	</table>
-	<br><br>
-	<a href="{% url 'expert:index' %}" class="btn btn-primary">Back</a>
-	<a class="btn btn-info" href="{% url 'expert:worker-create' %}">Add New</a>
+			<a href="{% url 'expert:worker-create' %}" class="list-group-item list-group-item-action text-center list-group-item-info">Add New</a>
+		</div>
+	</div>
 </div>
 {% endblock %}
