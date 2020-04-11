@@ -291,7 +291,7 @@ class ProductDetailView(DetailView):
     model = Product
 
 class WorkerListView(ListView):
-    queryset = Worker.objects.filter(active=True)
+    queryset = Worker.objects.filter(active=True).order_by('first_name')
     navigation = 'worker'
 
 class WorkerCreateView(CreateView):
