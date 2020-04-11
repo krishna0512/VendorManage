@@ -178,6 +178,7 @@ def product_assign(request, product_pk, worker_pk):
     product = Product.objects.get(id=product_pk)
     worker = Worker.objects.get(id=worker_pk)
     product.assignedto = worker
+    product.return_remark = ''
     product.status = 'assigned'
     product.save()
     return JsonResponse({'assignedto': worker.get_fullname()})
@@ -285,6 +286,11 @@ class ProductMonthArchiveView(MonthArchiveView):
             data[-1]['contributions'].append(sum(data[-1]['contributions']))
             dd += timedelta(days=1)
         context['date_list'] = data
+        x = [0]*len(data[0]['contributions'])
+        from operator import add
+        for i in data:
+            x = list(map(add, x, i['contributions']))
+        context['worker_total'] = x
         return context
 
 class ProductDetailView(DetailView):
@@ -292,7 +298,7 @@ class ProductDetailView(DetailView):
 
 class WorkerListView(ListView):
     queryset = Worker.objects.filter(active=True).order_by('first_name')
-    navigation = 'worker'
+    navigation = ''
 
 class WorkerCreateView(CreateView):
     model = Worker

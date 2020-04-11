@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block main_content %}
-<div class="container mt-3">
+<div class="container-fluid mt-3">
 	<center class="my-4 h2">{{ month|date:"F Y" }}</center>
 	{# TODO: Add the if condition for previous_month and next_month #}
 	<div class="row my-2">
@@ -26,19 +26,32 @@
 		<tbody>
 			{% for date_object in date_list %}
 			<tr>
-				<!-- <th>{{ date_object.date }}</th> -->
 				<th><a href="{% url 'expert:report-daily' month|date:'Y' month|date:'M' date_object.date.day %}">{{ date_object.date }}</a></th>
 				{% for wc in date_object.contributions %}
-				<td class="text-center">{{ wc|floatformat:2 }}</td>
+				{% if wc %}
+				<td class="text-center {% if forloop.last %}bg-dark text-light{% endif %}">{{ wc|floatformat:2 }}</td>
+				{% else %}
+				<td class="text-muted small text-center">0</td>
+				{% endif %}
 				{% endfor %}
 			</tr>
 			{% endfor %}
 		</tbody>
+		<tfoot>
+			<tr class="bg-dark text-light">
+				<th>Total</th>
+				{% for w in worker_total %}
+				<th class="text-center">{{ w|floatformat:2 }}</th>
+				{% endfor %}
+			</tr>
+		</tfoot>
 	</table>
+	{% comment %}
 	<ul>
 		{% for product in object_list %}
 		<li>{{ product.date_completed|date:"F j, Y" }}: {{ product.order_number }}</li>
 		{% endfor %}
 	</ul>
+	{% endcomment %}
 </div>
 {% endblock %}

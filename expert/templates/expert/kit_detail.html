@@ -1,11 +1,41 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_css %}
+<style>
+	.dot {
+		width:17px;
+		height: 17px;
+		background-color: black;
+		border-radius: 50%;
+		display: inline-block;
+	}
+	.color-gray {background-color: gray;}
+    .color-black {background-color: black;}
+    .color-beige {background-color: beige;}
+    .color-blue {background-color: blue;}
+    .color-white {background-color: white;}
+    .color-brown {background-color: brown;}
+    .color-green {background-color: green;}
+    .color-sand {background-color: yellow;}
+    .color-gray {background-color: gray;}
+    .color-olive_green {background-color: #556b2f;}
+    .color-light_sand {background-color: #c2b280;}
+    .color-light_gray {background-color: lightgray;}
+    .color-coffee_brown {background-color: #4a2c2a;}
+    .color-burgundy {background-color: #800020;}
+    .color-clear {background-color: clear;}
+
+</style>
+{% endblock %}
+
 {% block custom_js %}
 <script>
 $(document).ready(function() {
 	$('a.js-btn-product-complete').on('click', function(e) {
 		e.preventDefault();
+		//add the spinner to button
+		$(this).children().first().removeClass('fa-check').addClass('fa-spinner fa-pulse fa-fw');
 		let $this = $(this);
 		$.ajax({
 			type: "POST",
@@ -13,10 +43,11 @@ $(document).ready(function() {
 			async: true,
 			data: {},
 			success: function(result) {
-				$this.closest('tr').removeClass('bg-warning');
-				$this.closest('tr').addClass('bg-success');
-				$this.closest('td').prev().html('Complete');
+				$this.closest('td').prev().html('Completed');
+				$this.closest('td').prev().removeClass('bg-warning').addClass('bg-success text-light');
 				$this.addClass('disabled');
+				//remove the spinner and re-add the check icon
+				$this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-check');
 			}
 		});
 	});
@@ -30,8 +61,8 @@ $(document).ready(function() {
 			async: true,
 			data: {},
 			success: function(result) {
-				$this.closest('tr').addClass('bg-warning');
-				$this.closest('tr').children('.js-td-status').html('Assigned');
+				// $this.closest('tr').addClass('bg-warning');
+				$this.closest('tr').children('.js-td-status').addClass('bg-warning').html('Assigned');
 				$this.closest('tr').find('a.js-btn-product-complete').removeClass('disabled');
 				$this.closest('div.dropdown').children('button').html(result['assignedto'])
 			}
@@ -53,124 +84,94 @@ $(document).ready(function() {
 
 {% block main_content %}
 <div class="container-fluid">
-	<center class="mt-4 h2">Overview of KIT - {{ kit.number }}</center>
-	<center class="mt-2 h5">{{ kit.date_received }}</center>
-	<div class="text-right">
-		<small class="text-right">Product Completion Date - <b>{% if kit.date_product_completion %}{{ kit.date_product_completion|date:"N j, Y" }}{% else %}{% now "N j, Y" %}{% endif %}</b></small>
-	</div>
-	<table class="table table-sm table-bordered my-4 table-striped" id="main_product_table">
-		<thead>
-			<tr>
-				<th>Order Number</th>
-				<th>Qty (Pcs)</th>
-				<th>Size (Sq.Ft.)</th>
-				<th>Fabric</th>
-				<th>Color</th>
-				<th>Assigned To</th>
-				<th>Completed By</th>
-				<th>Completion Date</th>
-				<th>Status</th>
-				<th>Action</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for product in product_list %}
-			<tr class="{% if product.status == 'assigned' %}bg-warning{% elif product.status == 'completed' %}bg-success{% elif product.status == 'returned' %}bg-danger{% elif product.status == 'dispatched' %}bg-secondary{% endif %}">
-				<td><a href="{{ product.get_absolute_url }}">{{ product.order_number }}</a></td>
-				<td>{{ product.quantity }}</td>
-				<td>{{ product.size }}</td>
-				<td>{{ product.get_fabric_display }}</td>
-				<td>{{ product.get_color_display }}</td>
-				<td>
-					<div class="dropdown">
-						<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ product.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							{% if product.status == 'pending' %}
-							Assign To
-							{% else %}
-							{{ product.assignedto.get_fullname }}
-							{% endif %}
-						</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{ product.id }}">
-							{% for worker in worker_list %}
-							<a class="dropdown-item js-btn-product-assign" href="{% url 'expert:product-assign' product_pk=product.id worker_pk=worker.id %}">{{ worker.get_fullname }}</a>
-							{% endfor %}
+	<div class="heading text-center h3 mt-3 mb-0 pb-0">Overview of KIT {{ kit.number }}</div>
+	<div class="text-center small mb-2">{{ kit.date_received }}</div>
+	<div class="mt-1">
+		<div class="text-right small text-muted mb-1">
+			Product Completion Date -
+			<b>
+				{% if date_product_completion %}
+				{{ kit.date_product_completion|date:"N j, Y" }}
+				{% else %}
+				{% now "N j, Y" %}
+				{% endif %}
+			</b>
+		</div>
+		<table class="table table-sm table-hover table-striped text-center">
+			<thead class="bg-light">
+				<tr>
+					<th class="text-left">Order #</th>
+					<th>Qty</th>
+					<th>Size</th>
+					<th>Fabric</th>
+					<th>Color</th>
+					<th>Assigned To</th>
+					<th>Completed By</th>
+					<th>Completion Date</th>
+					<th>Status</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for product in product_list %}
+				<tr class="">
+					<td class="text-left font-italic"><a href="{{ product.get_absolute_url }}">{{ product.order_number }}</a></td>
+					<td>{{ product.quantity }}</td>
+					<td>{{ product.size }}</td>
+					<td>{{ product.get_fabric_display }}</td>
+					<td><span class="dot color-{{ product.color }}"></span> {{ product.get_color_display }}</td>
+					<td>
+						<div class="dropdown">
+							<button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ product.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								{% if product.status == 'pending' %}
+								Assign To
+								{% else %}
+								{{ product.assignedto.get_fullname }}
+								{% endif %}
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{ product.id }}">
+								{% for worker in worker_list %}
+								<a class="dropdown-item js-btn-product-assign" href="{% url 'expert:product-assign' product_pk=product.id worker_pk=worker.id %}">{{ worker.get_fullname }}</a>
+								{% endfor %}
+							</div>
 						</div>
-					</div>
-				</td>
-				<td>{{ product.completedby.get_fullname }}</td>
-				<td>{{ product.date_completed }}</td>
-				<td class="js-td-status">{{ product.get_status_display }}</td>
-				<td>
-					{% if product.status == 'assigned' %}
-					<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-success js-btn-product-complete">Complete</a>
-					{% else %}
-					<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-success js-btn-product-complete disabled">Complete</a>
-					{% endif %}
-					<a href="{% url 'expert:product-delete' product.id %}" class="btn btn-danger">Delete</a>
-				</td>
+					</td>
+					<td>{{ product.completedby.get_fullname }}</td>
+					<td>{{ product.date_completed }}</td>
+					<td class="
+					js-td-status
+					{% if product.status == 'assigned' %}bg-warning
+					{% elif product.status == 'completed' %}bg-success text-light
+					{% elif product.status == 'dispatched' %}bg-dark text-light
+					{% elif product.status == 'returned' %}bg-danger{% endif %}
+					">{{ product.get_status_display }}</td>
+					<td>
+						{% if product.status == 'assigned' %}
+						<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-outline-success btn-sm js-btn-product-complete"><i class="fa fa-check fa-lg"></i></a>
+						{% else %}
+						<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-outline-success btn-sm js-btn-product-complete disabled"><i class="fa fa-check fa-lg"></i></a>
+						{% endif %}
+						<a href="{% url 'expert:product-delete' product.id %}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash fa-lg"></i></a>
+					</td>
 
-			</tr>
-			{% endfor %}
-		</tbody>
-		<tfoot>
-			<tr>
-				<th></th>
-				<th>{{ kit.get_total_quantity }}</th>
-				<th>{{ kit.get_total_size }} SqFt.</th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-			</tr>
-		</tfoot>
-	</table>
-	{% comment %}
-	<a href="{% url 'expert:kit-list' %}" class="btn btn-primary">Back</a>
-	<a href="{% url 'expert:kit-update' slug=kit.number %}" class="btn btn-secondary">Edit</a>
-	<a href="{% url 'expert:product-create' kit_number=kit.number %}" class="btn btn-success">Add New</a>
-	<a href="{% url 'expert:kit-delete' kit.number %}" class="btn btn-danger">Delete</a>
-	{# TODO: check if this kit has non zero number of completed products #}
-	<a href="{% url 'expert:challan-init' pk=kit.id %}" class="btn btn-primary">Make Delivery Challan</a>
-	<a href="{% url 'expert:kit-uncomplete' pk=kit.id %}" class="btn btn-warning">Cancel Complete</a>
-	{% endcomment %}
-	<div class="my-3 py-4"></div>
-	<table class="table">
-		<tr>
-			<td>Original kit summary</td>
-			{% if kit.original_kit_summary %}
-			<td><img src="{{ kit.original_kit_summary.url }}" alt="Original KIT Summary Image" width="200" height="200"></td>
-			{% else %}
-			<td>Image Not Uploaded</td>
-			{% endif %}
-		</tr>
-		<tr>
-			<td>Jobwork Challan</td>
-			{% if kit.jobwork_challan %}
-			<td><img src="{{ kit.jobwork_challan.url }}" alt="Jobwork Challan" width="200" height="200"></td>
-			{% else %}
-			<td>Image Not Uploaded</td>
-			{% endif %}
-		</tr>
-		<tr>
-			<td>Jobwork GatePass</td>
-			{% if kit.jobwork_gatepass %}
-			<td><img src="{{ kit.jobwork_gatepass.url }}" alt="Jobwork GatePass" width="200" height="200"></td>
-			{% else %}
-			<td>Image Not Uploaded</td>
-			{% endif %}
-		</tr>
-		<tr>
-			<td>E-Way Bill</td>
-			{% if kit.ewaybill %}
-			<td><img src="{{ kit.ewaybill.url }}" alt="E-Way Bill" width="200" height="200"></td>
-			{% else %}
-			<td>Image Not Uploaded</td>
-			{% endif %}
-		</tr>
-	</table>
-	<a href="{% url 'expert:kit-update' kit.id %}" class="btn btn-primary">Edit</a>
+				</tr>
+				{% endfor %}
+			</tbody>
+			<tfoot>
+				<tr>
+					<th></th>
+					<th class="border-success">{{ kit.get_total_quantity }}</th>
+					<th class="border-success">{{ kit.get_total_size }} SqFt.</th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
 </div>
 {% endblock %}
