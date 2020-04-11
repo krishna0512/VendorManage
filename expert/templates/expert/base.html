@@ -27,6 +27,15 @@
 					<a class="nav-item nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{% url 'expert:worker-list' %}">Worker</a>
 					<a class="nav-item nav-link {% if view.navigation == 'challan' %}active{% endif %}" href="{% url 'expert:challan-list' %}">Challan</a>
 					<a class="nav-item nav-link {% if view.navigation == 'invoice' %}active{% endif %}" href="{% url 'expert:invoice-list' %}">Invoice</a>
+					<div class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarReportDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Reports
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarReportDropdown">
+							<a class="dropdown-item" href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">March 2020</a>
+							<a class="dropdown-item" href="{% url 'expert:report-monthly' year=2020 month='Apr' %}">April 2020</a>
+						</div>
+					</div>
 				</div>
 				{% block custom_navbar %}{% endblock %}
 			</div>
