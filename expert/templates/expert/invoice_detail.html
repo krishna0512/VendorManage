@@ -3,33 +3,37 @@
 
 {% block custom_navbar %}
 <div class="navbar-nav">
-	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:invoice-printable' slug=invoice.number %}"><i class="fa fa-print"></i> Get Printable</a>
+    <a class="btn btn-outline-success btn-sm mr-1" type="button" href="{% url 'expert:invoice-printable' slug=invoice.number %}"><i class="fa fa-print"></i> Get Printable</a>
+	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:invoice-update' slug=invoice.number %}"><i class="fa fa-pencil"></i> Edit</a>
 </div>
 {% endblock %}
 
 {% block main_content %}
-<div class="container">
-    <center class="mt-4 h2">Overview of Invoice - {{ invoice.number }}</center>
-    <div>
-        Date Sent -- {{ invoice.date_sent }}
+<div class="container pt-4">
+    <div class="p-2 h3 text-center">
+        Overview of Invoice {{ invoice.number }}<br>
+        <span class="text-secondary small">{{ invoice.date_sent }}</span>
     </div>
-    <div class="my-4">
-        {% for challan in invoice.challans.all %}
-        {{ challan.number }} -- <a href="{% url 'expert:invoice-remove-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="btn btn-danger btn-sm">Delete</a><br>
-        {% empty %}
-            No Challan to display
-        {% endfor %}
-    </div>
-    <div class="my-4">
-        Add new Challan
-        <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Add New Challan
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdown1">
-                {% for challan in challan_list %}
-                    <a href="{% url 'expert:invoice-add-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="dropdown-item">{{ challan.number }} ({{ challan.date_sent }})</a>
-                {% endfor %}
+    <div class="row pt-2">
+        <div class="list-group w-50 mx-auto">
+            {% for challan in invoice.challans.all %}
+            <div class="list-group-item list-group-item-action d-flex justify-content-between">
+                <span class="font-weight-bold">{{ challan.number }}</span>
+                <span class="text-secondary small">{{ challan.date_sent }}</span>
+                <span>
+                    <a href="{% url 'expert:invoice-remove-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash fa-lg"></i></a>
+                </span>
+            </div>
+            {% endfor %}
+            <div class="dropdown">
+                <button class="list-group-item list-group-item-action list-group-item-info text-center dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add New Challan
+                </button>
+                <div class="dropdown-menu list-group-item-action" aria-labelledby="dropdown1">
+                    {% for challan in challan_list %}
+                    <a href="{% url 'expert:invoice-add-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="mb-1 dropdown-item list-group-item list-group-item-action list-group-item-secondary">{{ challan.number }} ({{ challan.date_sent }})</a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
