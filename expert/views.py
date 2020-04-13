@@ -271,7 +271,7 @@ class ProductMonthArchiveView(MonthArchiveView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['worker_list'] = Worker.objects.all()
+        context['worker_list'] = Worker.objects.all().order_by('first_name')
         start_date = context['month']
         end_date = context['next_month'] - timedelta(days=1)
         data = []
