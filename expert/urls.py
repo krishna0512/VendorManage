@@ -36,6 +36,7 @@ urlpatterns = [
     path('invoice/create/', views.InvoiceCreateView.as_view(), name='invoice-create'),
     path('invoice/<slug:slug>/view/printable/', views.InvoicePrintableView.as_view(), name='invoice-printable'),
     path('invoice/<slug:slug>/view/', views.InvoiceDetailView.as_view(), name='invoice-detail'),
+    path('invoice/<slug:slug>/update/', views.InvoiceUpdateView.as_view(), name='invoice-update'),
 
     path('invoice/<int:invoice_pk>/add/<int:challan_pk>/', views.invoice_add_challan, name='invoice-add-challan'),
     path('invoice/<int:invoice_pk>/remove/<int:challan_pk>/', views.invoice_remove_challan, name='invoice-remove-challan'),

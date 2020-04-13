@@ -8,6 +8,7 @@ from django.views.generic.dates import MonthArchiveView, DayArchiveView
 from django.views.decorators.csrf import csrf_exempt
 
 from expert.models import Kit, Product, Worker, Challan, Invoice
+from expert.forms import *
 
 # Create your views here.
 
@@ -331,7 +332,10 @@ class WorkerDetailView(DetailView):
 
 class WorkerUpdateView(UpdateView):
     model = Worker
-    fields = '__all__'
+    fields = [
+        'first_name','last_name','address',
+        'date_joined','photo'
+    ]
     template_name_suffix = '_update_form'
 
 class WorkerDeleteView(DeleteView):
@@ -458,3 +462,18 @@ class InvoicePrintableView(DetailView):
         context = super().get_context_data(*args, **kwargs)
         context['challan_list'] = self.object.challans.order_by('number')
         return context
+
+class InvoiceUpdateView(UpdateView):
+    model = Invoice
+    # fields = '__all__'
+    form_class = InvoiceUpdateForm
+    template_name_suffix = '_update_form'
+    slug_field = 'number'
+
+    def form_valid(self, form):
+        print(form.instance.number)
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print('form is invalid')
+        return super().form_invalid(form)
