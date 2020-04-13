@@ -12,20 +12,22 @@
 			{% for kit in kit_list %}
 				<a href="{{ kit.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" title="{{ kit.get_total_size }} Sq.Ft.">
 					<span class="font-weight-bold">{{ kit.number }}</span>
-					<span class="small text-secondary mx-auto">{{ kit.date_received|naturalday|title }}</span>
-					{% if kit.get_pending_quantity %}
-					<span class="badge badge-light badge-pill" title="Pending Products">{{ kit.get_pending_quantity }}</span>
-					{% endif %}
-					{% if kit.get_assigned_quantity %}
-					<span class="badge badge-warning badge-pill" title="Assigned Products">{{ kit.get_assigned_quantity }}</span>
-					{% endif %}
-					{% if kit.get_completed_quantity %}
-					<span class="badge badge-success badge-pill" title="Completed Products">{{ kit.get_completed_quantity }}</span>
-					{% endif %}
-					{% firstof kit.get_pending_quantity kit.get_assigned_quantity kit.get_completed_quantity "check" as flag %}
-					{% if flag == 'check' %}
-					<span class="badge badge-primary badge-pill" title="Dispatched"><i class="fa fa-check"></i></span>
-					{% endif %}
+					<span class="small text-secondary">{{ kit.date_received|naturalday|title }}</span>
+					<span>
+						{% if kit.get_pending_quantity %}
+						<span class="badge badge-light badge-pill" title="Pending Products">{{ kit.get_pending_quantity }}</span>
+						{% endif %}
+						{% if kit.get_assigned_quantity %}
+						<span class="badge badge-warning badge-pill" title="Assigned Products">{{ kit.get_assigned_quantity }}</span>
+						{% endif %}
+						{% if kit.get_completed_quantity %}
+						<span class="badge badge-success badge-pill" title="Completed Products">{{ kit.get_completed_quantity }}</span>
+						{% endif %}
+						{% firstof kit.get_pending_quantity kit.get_assigned_quantity kit.get_completed_quantity "check" as flag %}
+						{% if flag == 'check' %}
+						<span class="badge badge-primary badge-pill" title="Dispatched"><i class="fa fa-check"></i></span>
+						{% endif %}
+					</span>
 				</a>
 			{% endfor %}
 			<a href="{% url 'expert:kit-create' %}" class="list-group-item list-group-item-action text-center list-group-item-info"><i class="fa fa-plus fa-lg"></i> Add New</a>
