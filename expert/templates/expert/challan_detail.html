@@ -1,10 +1,23 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_css %}
+<style>
+    .dropdown:hover > .dropdown-menu {
+        /* This is so that the active dropdown-menu doesnt
+        become inactive when moving the mouse from top to bottom
+        as there is a small space between a.dropdown-toggle and div.dropdown-menu
+        this -ve margin will eliminate this space. Go ahead and try this with or without it! */
+        margin-top: -1px;
+        display: block;
+    }
+</style>
+{% endblock %}
+
 {% block custom_navbar %}
 <div class="navbar-nav">
     <div class="dropdown mr-1">
-        <a class="btn btn-outline-primary btn-sm dropdown-toggle" href="#" id="navbarCopyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="btn btn-outline-success btn-sm dropdown-toggle" href="#" id="navbarCopyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-print"></i> Get Printable
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarCopyDropdown">
@@ -22,9 +35,9 @@
     <div clas="row">
         <div class="list-group w-75 mx-auto border">
             {% for product in challan.products.all %}
-            <a href="{{ product.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between">
-                <span>{{ product.order_number }}</span>
-                <span>{{ product.date_completed }}</span>
+            <a href="{{ product.get_absolute_url }}" class="font-italic list-group-item list-group-item-action d-flex justify-content-between">
+                <span class="font-weight-bold">{{ product.order_number }}</span>
+                <span class="text-secondary small">{{ product.date_completed }}</span>
                 {% if product.return_remark %}
                 <span class="badge badge-danger badge-pill">returned</span>
                 {% else %}
