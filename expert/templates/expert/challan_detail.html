@@ -3,7 +3,16 @@
 
 {% block custom_navbar %}
 <div class="navbar-nav">
-	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:challan-printable' slug=challan.number %}"><i class="fa fa-print"></i> Get Printable</a>
+    <div class="dropdown mr-1">
+        <a class="btn btn-outline-primary btn-sm dropdown-toggle" href="#" id="navbarCopyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-print"></i> Get Printable
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarCopyDropdown">
+            <a class="dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=original">Original Copy</a>
+            <a class="dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=duplicate">Duplicate Copy</a>
+            <a class="dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=triplicate">Triplicate Copy</a>
+        </div>
+    </div>
 	<a class="btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:challan-delete' slug=challan.number %}"><i class="fa fa-ban"></i> Cancel</a>
 </div>
 {% endblock %}

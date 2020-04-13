@@ -8,25 +8,25 @@
 </div>
 {% endblock %}
 
-{% comment %}
-TODO: Determine weather the print dialog should be opened on page load or not?
-{% block custom_js %}
-<script>
-    $(document).ready(function() {
-        window.print();
-    });
-</script>
+{% block custom_css %}
+<style>
+    .color-duplicate {
+        color: #d63a4f;
+    }
+    .color-triplicate {
+        color: #e3ce30;
+    }
+</style>
 {% endblock %}
-{% endcomment %}
 
 {% block main_content %}
 <div class="container border">
     <div class="row">
         <div class="col-10">
-            <center class="h3">Expert Traders</center>
+            <center class="h2 mt-1">Expert<span><img class="img-fluid" width="60" height="60" src="{% static 'expert/images/logo.png' %}"></span>Traders</center>
             <center class="small">J-142, 1st Floor, Sumel-6, Dhudheshwar, Ahmedabad-380004</center>
             <center class="small"><u>expertcovers2020@gmail.com</u> <b>9839085886</b>, 9660589909</center>
-            <center class="small">GSTN: AAPPTR3833RKKRHJ</center>
+            <center class="small">GSTN: 24AAPPT3833R1ZT</center>
         </div>
     </div>
     <div class="row">
@@ -36,8 +36,13 @@ TODO: Determine weather the print dialog should be opened on page load or not?
         <div class="col-2">
             <table class="table table-bordered table-sm">
                 <tr>
-                    <td>Original</td>
-                    <td>Duplicate</td>
+                    <td colspan="2" class="text-center font-weight-bold color-{{ request.GET.param_copy }}">
+                        {% if request.GET.param_copy %}
+                        {{ request.GET.param_copy|title }}
+                        {% else %}
+                        Original
+                        {% endif %}
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-center">{{ challan.date_sent |date:"d.m.Y" }}</td>
@@ -48,7 +53,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
     <div class="row">
         <div class="col-7">
             <div class="border">
-                Challan No. {{ challan.number }}/19-20
+                Challan No. <b>{{ challan.number }}/19-20</b>
             </div>
             <div class="border">STATE CODE - 24 GUJ.</div>
             <div class="border">
@@ -157,8 +162,8 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                 </tr>
                 <tr>
                     <th>Total</th>
-                    <td>{{ challan.get_total_quantity }}</td>
-                    <td>{{ challan.get_total_size }}</td>
+                    <td><b>{{ challan.get_total_quantity }}</b></td>
+                    <td><b>{{ challan.get_total_size }}</b></td>
                 </tr>
             </table>
         </div>
