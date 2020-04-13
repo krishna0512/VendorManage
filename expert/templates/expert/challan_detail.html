@@ -9,7 +9,24 @@
 {% endblock %}
 
 {% block main_content %}
-<div class="container">
+<div class="container pt-4">
+    <div clas="row">
+        <div class="list-group w-75 mx-auto border">
+            {% for product in challan.products.all %}
+            <a href="{{ product.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between">
+                <span>{{ product.order_number }}</span>
+                <span>{{ product.date_completed }}</span>
+                {% if product.return_remark %}
+                <span class="badge badge-danger badge-pill">returned</span>
+                {% else %}
+                <span class="badge badge-transparent badge-pill">&nbsp;</span>
+                {% endif %}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% comment %}
+        
     <center class="mt-4 h2">Overview of Challan - {{ challan.number }}</center>
     <ul>
         {% for product in challan.products.all %}
@@ -17,5 +34,6 @@
         {% endfor %}
     </ul>
     <br><br>
+    {% endcomment %}
 </div>
 {% endblock %}
