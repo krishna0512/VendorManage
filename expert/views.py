@@ -422,6 +422,8 @@ class InvoiceCreateView(CreateView):
         else:
             initial['number'] = 1
         initial['date_sent'] = datetime.now()
+        initial['destination'] = 'Gandhinagar'
+        initial['motor_vehicle_number'] = 'GJ-18-AU-3381'
         return initial
 
     def get_success_url(self):

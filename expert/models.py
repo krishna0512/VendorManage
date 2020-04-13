@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from num2words import num2words
 # Create your models here.
 
 
@@ -231,6 +232,22 @@ class Invoice(models.Model):
         verbose_name=_('Date of Dispatch'),
         help_text=_('Date at which this invoice was created and dispatched')
     )
+    # TODO: add a validator for vNo
+    motor_vehicle_number = models.CharField(
+        blank=False,
+        null=False,
+        default='',
+        max_length=100,
+        verbose_name=_('Motor Vehicle No.'),
+        help_text=_('Vehicle number from which the invoice is dispatched'),
+    )
+    destination = models.CharField(
+        blank=False,
+        null=False,
+        default='',
+        max_length=100,
+        help_text=_('Detination to which this invoice is dispatched'),
+    )
 
     def add_challan(self, challan_pk):
         """ function to add a challan to self invoice and perform various calculations.
@@ -272,13 +289,13 @@ class Invoice(models.Model):
             x = 100 - x
             x = round(x/100, 2)
         ret['roundoff'] = x
-        ret['total_words'] = 'xxxxxxxxxxxxxxxxxxxxxxx'
+        ret['total_words'] = '{} ruppees and {} paise'.format(num2words(int(ret['total'])), num2words(int(ret['total']*100)%100))
         return ret
 
     def get_total_amount(self):
         ret = {}
         ret['amount'] = int(self.get_total_tax()['total'] + self.get_total_tax()['roundoff'] + self.get_total_value())
-        ret['words'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+        ret['words'] = num2words(ret['amount'], lang='en_IN')
         return ret
 
     def get_total_size_by_fabric(self):
@@ -286,6 +303,8 @@ class Invoice(models.Model):
         for c in self.challans.all():
             for i in c.get_total_size_by_fabric():
                 ret[i] += c.get_total_size_by_fabric()[i]
+        for i in ret:
+            ret[i] = round(ret[i], 2)
         return ret
 
     def get_absolute_url(self):
