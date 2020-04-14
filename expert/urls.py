@@ -7,6 +7,10 @@ from expert import views
 app_name = 'expert'
 urlpatterns = [
     path('', views.IndexTemplateView.as_view(), name='index'),
+    # path('', auth_views.LoginView.as_view(template_name='expert/index.html'), name='index'),
+    path('login/', auth_views.LoginView.as_view(template_name='expert/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+
     path('kit/', views.KitListView.as_view(), name='kit-list'),
     path('kit/create/', views.KitCreateView.as_view(), name='kit-create'),
     path('kit/<slug:slug>/update/', views.KitUpdateView.as_view(), name='kit-update'),

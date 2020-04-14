@@ -1,14 +1,9 @@
 {% extends 'expert/base.html' %}
 {% load static %}
+{% load add_attr %}
 
 {% block main_content %}
-<div class="container">
-	<h1>Expert Traders</h1>
-	<a href="{% url 'expert:kit-list' %}">KITS</a><br>
-	<a href="{% url 'expert:worker-list' %}">Workers</a><br>
-	<a href="{% url 'expert:challan-list' %}">Challans</a><br>
-	<a href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">March Report</a><br>
-	<a href="{% url 'expert:report-monthly' year=2020 month='Apr' %}">April Report</a><br>
-	<a href="{% url 'expert:invoice-list' %}">Invoice</a>
+<div class="container text-center mt-4">
+	Some Home Page
 </div>
 {% endblock %}

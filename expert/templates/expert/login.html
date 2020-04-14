@@ -1,0 +1,41 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+{% load add_attr %}
+
+{% block main_content %}
+<div class="container">
+	<div class="row mt-4 pt-4">
+		<div class="col"></div>
+		<div class="col text-center">
+			<div class="card">
+				<div class="card-header">
+					Expert Traders
+				</div>
+				<div class="card-body">
+					<form method="post">
+						{% csrf_token %}
+						{% for field in form %}
+						<div class="form-group row">
+							<label for="{{ field.id_for_label }}" class="col-4 col-form-label d-none">{{ field.label }}</label>
+							<div class="col">
+			                    {% if field.errors %}
+			                    <small class="form-text text-danger font-weight-bold">{{ field.errors }}</small>
+			                    {{ field|add_attr:"form-control border border-danger" }}
+			                    {% else %}
+								{{ field|add_attr:"form-control" }}
+			                    {% endif %}
+								{% if field.help_text %}
+								<small class="form-text text-muted">{{ field.help_text }}</small>
+								{% endif %}
+							</div>
+						</div>
+						{% endfor %}
+						<button type="submit" class="btn btn-success">Submit</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col"></div>
+	</div>
+</div>
+{% endblock %}

@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.dates import MonthArchiveView, DayArchiveView
 from django.views.decorators.csrf import csrf_exempt
@@ -12,10 +13,10 @@ from expert.forms import *
 
 # Create your views here.
 
-class IndexTemplateView(TemplateView):
+class IndexTemplateView(LoginRequiredMixin, TemplateView):
     template_name='expert/index.html'
 
-class KitListView(ListView):
+class KitListView(LoginRequiredMixin, ListView):
     model = Kit
     # for navigation active display
     navigation = 'kit'
@@ -297,7 +298,7 @@ class ProductMonthArchiveView(MonthArchiveView):
 class ProductDetailView(DetailView):
     model = Product
 
-class WorkerListView(ListView):
+class WorkerListView(LoginRequiredMixin, ListView):
     queryset = Worker.objects.filter(active=True).order_by('first_name')
     navigation = ''
 
@@ -357,7 +358,7 @@ class WorkerDeleteView(DeleteView):
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
-class ChallanListView(ListView):
+class ChallanListView(LoginRequiredMixin, ListView):
     model = Challan
     navigation = 'challan'
     ordering = ['-number']
@@ -429,7 +430,7 @@ class InvoiceCreateView(CreateView):
     def get_success_url(self):
         return self.object.get_absolute_url()
 
-class InvoiceListView(ListView):
+class InvoiceListView(LoginRequiredMixin, ListView):
     model = Invoice
     navigation = 'invoice'
     ordering = ['-number']

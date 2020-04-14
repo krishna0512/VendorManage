@@ -46,6 +46,9 @@
 					</div>
 				</div>
 				{% block custom_navbar %}{% endblock %}
+				<div class="navbar-nav">
+					<a class="btn btn-sm btn-outline-danger mr-1" href="{% url 'expert:logout' %}" type="button"><i class="fa fa-sign-out"></i></a>
+				</div>
 			</div>
 		</nav>
 		{% endblock %}
