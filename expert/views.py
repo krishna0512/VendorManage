@@ -194,6 +194,15 @@ def product_return(request, pk):
         product.save()
     return redirect(product.get_absolute_url())
 
+@csrf_exempt
+def kit_change_product_completion(request, pk):
+    kit = Kit.objects.get(id=pk)
+    date = request.POST.get('date',None)
+    date = datetime.strptime(date, '%Y-%m-%d').date()
+    kit.date_product_completion = date
+    kit.save()
+    return JsonResponse({'date': date.strftime('%B %d, %Y')})
+
 # TODO: add a function in product model for completeing and uncompleting the product
 def kit_uncomplete(request, pk):
     kit = Kit.objects.get(id=pk)

@@ -16,6 +16,7 @@ urlpatterns = [
     path('kit/<slug:slug>/update/', views.KitUpdateView.as_view(), name='kit-update'),
     path('kit/<slug:slug>/view/', views.KitDetailView.as_view(), name='kit-detail'),
     path('kit/<slug:slug>/delete/', views.KitDeleteView.as_view(), name='kit-delete'),
+    path('kit/<int:pk>/change_date_product_completion/', views.kit_change_product_completion, name='kit-change-product-completion'),
 
     path('product/<int:pk>/update/', views.ProductUpdateView.as_view(), name='product-update'),
     path('product/create/<int:kit_number>/', views.ProductCreateView.as_view(), name='product-create'),

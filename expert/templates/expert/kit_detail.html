@@ -66,8 +66,28 @@ $(document).ready(function() {
 				$this.closest('tr').find('a.js-btn-product-complete').removeClass('disabled');
 				$this.closest('div.dropdown').children('button').html(result['assignedto'])
 			}
-		})
-	})
+		});
+	});
+
+	$('#datepicker_product_completion').datepicker({
+		dateFormat: "yy-mm-dd",
+		showOn: "button",
+		buttonText: ''
+	});
+	$('.ui-datepicker-trigger').addClass('fa fa-pencil btn btn-sm btn-outline-primary mb-1');
+	$('#datepicker_product_completion').on('change', function(e) {
+		e.preventDefault();
+		let $this = $(this);
+		$.ajax({
+			type: "post",
+			url: $(this).attr('data-href'),
+			async: true,
+			data: {"date": $(this).val()},
+			success: function(result) {
+				$this.closest('div').children('span').html(result['date']);
+			}
+		});
+	});
 });
 </script>
 {% endblock %}
@@ -89,13 +109,14 @@ $(document).ready(function() {
 	<div class="mt-1">
 		<div class="text-right small text-muted mb-1">
 			Product Completion Date -
-			<b>
-				{% if date_product_completion %}
+			<span class="font-weight-bold">
+				{% if kit.date_product_completion %}
 				{{ kit.date_product_completion|date:"N j, Y" }}
 				{% else %}
 				{% now "N j, Y" %}
 				{% endif %}
-			</b>
+			</span>
+			<input type="hidden" id="datepicker_product_completion" data-href="{% url 'expert:kit-change-product-completion' pk=kit.id %}">
 		</div>
 		<table class="table table-sm table-hover table-striped text-center">
 			<thead class="bg-light">

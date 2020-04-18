@@ -34,6 +34,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'expert.apps.ExpertConfig',
     'django_extensions',
+    'rest_framework',
+    # 'corsheaders',
     'django.contrib.humanize',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'website.urls'
@@ -127,5 +130,7 @@ LOGIN_REDIRECT_URL = '/expert/'
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# CORS_ORIGIN_ALLOW_ALL = True
 
 django_heroku.settings(locals())
