@@ -391,6 +391,13 @@ class Kit(models.Model):
         verbose_name=_('Jobwork Gate Pass'),
         help_text=_('Upload the original jpg/png of the jobwork gatepass that came with kit'),
     )
+    jobwork_gatepass_processed = models.ImageField(
+        upload_to=kit_image_path,
+        null=True,
+        blank=True,
+        verbose_name=_('Jobwork GatePass (Processed)'),
+        help_text=_('The field for storing the gate pass after it is processed')
+    )
 
     def __repr__(self):
         return '<Kit: {}>'.format(str(self.number))

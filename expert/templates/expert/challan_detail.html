@@ -26,6 +26,11 @@
             <a class="dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=triplicate">Triplicate Copy</a>
         </div>
     </div>
+    {% if challan.products.all.first.kit.jobwork_gatepass_processed %}
+    <a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{{ challan.products.all.first.kit.jobwork_gatepass_processed.url }}" target="_blank"><i class="fa fa-download"></i> Gatepass</a>
+    {% elif challan.products.all.first.kit.jobwork_gatepass %}
+    <a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:challan-gatepass' pk=challan.id %}">Gatepass</a>
+    {% endif %}
 	<a class="btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:challan-delete' slug=challan.number %}"><i class="fa fa-ban"></i> Cancel</a>
 </div>
 {% endblock %}

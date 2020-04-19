@@ -36,6 +36,8 @@ urlpatterns = [
     path('challan/<slug:slug>/view/', views.ChallanDetailView.as_view(), name='challan-detail'),
     path('challan/<slug:slug>/view/printable/', views.ChallanPrintableView.as_view(), name='challan-printable'),
     path('challan/<slug:slug>/delete/', views.ChallanDeleteView.as_view(), name='challan-delete'),
+    # url for downloading the gatepass 
+    path('challan/<int:pk>/gatepass/', views.challan_gatepass, name='challan-gatepass'),
 
     path('invoice/', views.InvoiceListView.as_view(), name='invoice-list'),
     path('invoice/create/', views.InvoiceCreateView.as_view(), name='invoice-create'),

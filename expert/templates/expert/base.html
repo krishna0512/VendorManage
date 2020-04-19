@@ -20,6 +20,14 @@
 		        padding-left: 0px;
 		        list-style: none;
 		    }
+    		.dropdown:hover > .dropdown-menu {
+    		    /* This is so that the active dropdown-menu doesnt
+    		    become inactive when moving the mouse from top to bottom
+    		    as there is a small space between a.dropdown-toggle and div.dropdown-menu
+    		    this -ve margin will eliminate this space. Go ahead and try this with or without it! */
+    		    margin-top: -1px;
+    		    display: block;
+    		}
 		</style>
 		{% block custom_css %}{% endblock %}
 		{% block custom_js %}{% endblock %}

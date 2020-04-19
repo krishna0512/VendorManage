@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
+from django.core.files import File
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,6 +11,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 from expert.models import Kit, Product, Worker, Challan, Invoice
 from expert.forms import *
+from expert import process
+# import cv2 as cv
+# import os
+# from tempfile import TemporaryDirectory
 
 # Create your views here.
 
@@ -99,7 +104,8 @@ class KitUpdateView(UpdateView):
     model = Kit
     slug_field = 'number'
     fields = [
-        'number','date_product_completion'
+        'number','date_product_completion',
+        'jobwork_gatepass'
     ]
     template_name_suffix = '_update_form'
 
@@ -234,6 +240,27 @@ def challan_init(request, pk):
     challan.date_sent = max([i.date_completed for i in challan.products.all() if i.date_completed])
     challan.save()
     return redirect(kit.get_absolute_url())
+
+def challan_gatepass(request, pk):
+    challan = Challan.objects.get(id=pk)
+    img = challan.products.all().first().kit.jobwork_gatepass.path
+    data = {
+        'date': challan.date_sent.strftime('%d/%m/%Y'),
+        'max_size': str(challan.get_total_size_by_fabric()['max']),
+        'tuff_size': str(challan.get_total_size_by_fabric()['tuff']),
+        'max_qty': sum([i.quantity for i in challan.products.filter(fabric='max', return_remark='')]),
+        'tuff_qty': sum([i.quantity for i in challan.products.filter(fabric='tuff', return_remark='')]),
+    }
+    _, img = process.main(img, data=data)
+    # tmp_dir = TemporaryDirectory(prefix='images')
+    # out_image_path = os.path.join(tmp_dir.name, 'gatepass_processed.jpg')
+    # cv.imwrite(out_image_path, img)
+    # f = open(out_image_path, 'rb')
+    f = open(img, 'rb')
+    kit = challan.products.all().first().kit
+    kit.jobwork_gatepass_processed.save('gatepass_processed.jpg', File(f))
+    kit.save()
+    return redirect(kit.jobwork_gatepass_processed.url)
 
 class ProductDeleteView(DeleteView):
     model = Product
