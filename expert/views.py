@@ -12,9 +12,6 @@ from django.views.decorators.csrf import csrf_exempt
 from expert.models import Kit, Product, Worker, Challan, Invoice
 from expert.forms import *
 from expert import process
-# import cv2 as cv
-# import os
-# from tempfile import TemporaryDirectory
 
 # Create your views here.
 

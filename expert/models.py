@@ -147,7 +147,6 @@ class Product(models.Model):
     def __repr__(self):
         return '<Product: {} ({})>'.format(self.order_number, self.id)
 
-    # TODO: update the str and repr definations
     def __str__(self):
         return str(self.order_number)
 
