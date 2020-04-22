@@ -463,6 +463,22 @@ class Worker(models.Model):
         verbose_name=_('Joined since'),
         help_text=_('Date of joining.'),
     )
+    # TODO: check if you can retrieve the image of aadhar from aadhar number
+    aadhar_number = models.CharField(
+        default='',
+        blank=True,
+        max_length=12,
+        verbose_name=_('Aadhar #'),
+        help_text=_('Aadhar number of the worker registered. (Enter without any space or delimiter)')
+    )
+    # TODO: do proper validations for both aadhar and mobile number
+    mobile_number = models.CharField(
+        default='',
+        blank=True,
+        max_length=20,
+        verbose_name=_('Mobile #'),
+        help_text=('10-digit mobile number of the worker without leading zero(s)'),
+    )
     photo = models.ImageField(
         upload_to=worker_image_path,
         null=True,
