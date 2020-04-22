@@ -112,7 +112,7 @@ class KitDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['worker_list'] = Worker.objects.filter(active=True)
+        context['worker_list'] = Worker.objects.filter(active=True).order_by('first_name')
         context['product_list'] = self.object.products.all().order_by('id')
         return context
 

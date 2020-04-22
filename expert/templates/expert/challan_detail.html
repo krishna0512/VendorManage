@@ -37,6 +37,15 @@
 
 {% block main_content %}
 <div class="container pt-4">
+    <div class="row">
+        <div class="col heading h4">
+            <div class="text-center">
+                Challan #: {{ challan.number }}<br>
+                For Ref. #: {{ challan.products.all.first.kit }}<br>
+                For Date: {{ challan.date_sent }}
+            </div>
+        </div>
+    </div>
     <div clas="row">
         <div class="list-group w-75 mx-auto border">
             {% for product in challan.products.all %}
