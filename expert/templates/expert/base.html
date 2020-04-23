@@ -31,6 +31,35 @@
 			#navbar-top div.btn-group a {
 				color: white;
 			}
+			.u-hover--sparkle {
+				box-sizing: border-box;
+				position: relative;
+				padding: 0.75em;
+			}
+			.u-hover--sparkle::before, .u-hover--sparkle::after {
+				content: '';
+				box-sizing: border-box;
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
+				transform-origin: center;
+			}
+			.u-hover--sparkle::before {
+				border-top: 0.2em solid #9F2042;
+				border-bottom: 0.2em solid #9F2042;
+				transform: scale3d(0, 1, 1);
+			}
+			.u-hover--sparkle::after {
+				border-left: 0.2em solid #9F2042;
+				border-right: 0.2em solid #9F2042;
+				transform: scale3d(1, 0, 1);
+			}
+			.u-hover--sparkle:hover::before, .u-hover--sparkle:hover::after {
+				transform: scale3d(1, 1, 1);
+				transition: transform 600ms;
+			}
 		</style>
 		{% block custom_css %}{% endblock %}
 		{% block custom_js %}{% endblock %}
@@ -51,24 +80,39 @@
 				{% block navbar-side %}
 				<nav class="col-md-1 d-none d-md-block bg-light sidebar">
 					<div class="sidebar-sticky">
-						<ul class="nav flex-column">
+						<ul class="nav flex-column text-center">
 							<li class="nav-item">
-								<a class="nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Kit</a>
+								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Kit</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{% url 'expert:worker-list' %}">Worker</a>
+								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{% url 'expert:worker-list' %}">Worker</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link {% if view.navigation == 'challan' %}active{% endif %}" href="{% url 'expert:challan-list' %}">Challan</a>
+								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'challan' %}active{% endif %}" href="{% url 'expert:challan-list' %}">Challan</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link {% if view.navigation == 'invoice' %}active{% endif %}" href="{% url 'expert:invoice-list' %}">Invoice</a>
+								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'invoice' %}active{% endif %}" href="{% url 'expert:invoice-list' %}">Invoice</a>
 							</li>
+							<li class="nav-item">
+								<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">Reports (Mar)</a>
+							</li>
+							{% comment %}
+							TODO: edit the dropright so that this works correctly
+							<li class="nav-item dropright">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarReportDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Reports
+								</a>
+								<div class="dropdown-menu" aria-labelledby="navbarReportDropdown">
+									<a class="dropdown-item" href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">March 2020</a>
+									<a class="dropdown-item" href="{% url 'expert:report-monthly' year=2020 month='Apr' %}">April 2020</a>
+								</div>
+							</li>
+							{% endcomment %}
 						</ul>
 					</div>
 				</nav>
 				{% endblock %}
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+				<main role="main" class="col-md-10 ml-sm-auto col-lg-11 pt-3 px-4">
 					{% block main_content %}{% endblock %}
 				</main>
 			</div>
