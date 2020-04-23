@@ -15,12 +15,12 @@
 {% endblock %}
 
 {% block custom_navbar %}
-<div class="navbar-nav">
+<div class="btn-group">
     <div class="dropdown mr-1">
         <a class="btn btn-outline-success btn-sm dropdown-toggle" href="#" id="navbarCopyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-print"></i> Get Printable
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarCopyDropdown">
+        <div class="dropdown-menu bg-dark" aria-labelledby="navbarCopyDropdown">
             <a class="dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=original">Original Copy</a>
             <a class="dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=duplicate">Duplicate Copy</a>
             <a class="dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=triplicate">Triplicate Copy</a>

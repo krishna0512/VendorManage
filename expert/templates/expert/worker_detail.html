@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block custom_navbar %}
-<div class="navbar-nav">
+<div class="btn-group">
 	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:worker-update' pk=worker.id %}"><i class="fa fa-pencil"></i> Edit</a>
 	<a class="btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:worker-delete' pk=worker.id %}"><i class="fa fa-trash"></i> Delete</a>
 </div>

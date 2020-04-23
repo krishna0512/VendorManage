@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block custom_navbar %}
-<div class="navbar-nav">
-    <a class="btn btn-outline-success btn-sm mr-1" type="button" href="{% url 'expert:invoice-printable' slug=invoice.number %}"><i class="fa fa-print"></i> Get Printable</a>
-	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:invoice-update' slug=invoice.number %}"><i class="fa fa-pencil"></i> Edit</a>
+<div class="btn-group">
+    <a class="btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:invoice-printable' slug=invoice.number %}"><i class="fa fa-print"></i> Get Printable</a>
+	<a class="btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:invoice-update' slug=invoice.number %}"><i class="fa fa-pencil"></i> Edit</a>
 </div>
 {% endblock %}
 

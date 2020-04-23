@@ -94,7 +94,7 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block custom_navbar %}
-<div class="navbar-nav">
+<div class="btn-group">
 	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:kit-update' slug=kit.number %}"><i class="fa fa-pencil"></i> Edit</a>
 	<a class="btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:kit-delete' kit.number %}"><i class="fa fa-trash"></i> Delete</a>
 	<a class="btn btn-outline-info btn-sm mr-1" type="button" href="{% url 'expert:product-create' kit_number=kit.number %}"><i class="fa fa-plus"></i> Add New</a>
