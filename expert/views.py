@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.core.files import File
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic.list import MultipleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.dates import MonthArchiveView, DayArchiveView
@@ -106,14 +107,16 @@ class KitUpdateView(UpdateView):
     ]
     template_name_suffix = '_update_form'
 
-class KitDetailView(DetailView):
+class KitDetailView(DetailView, MultipleObjectMixin):
     model = Kit
     slug_field = 'number'
+    paginate_by = 10
 
     def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
+        object_list = Product.objects.filter(kit=self.object).order_by('id')
+        context = super().get_context_data(object_list=object_list, **kwargs)
         context['worker_list'] = Worker.objects.filter(active=True).order_by('first_name')
-        context['product_list'] = self.object.products.all().order_by('id')
+        context['product_list'] = context['object_list']
         return context
 
 class KitDeleteView(DeleteView):

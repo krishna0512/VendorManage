@@ -32,6 +32,8 @@
 {% block custom_js %}
 <script>
 $(document).ready(function() {
+	// $('#product-table').DataTable();
+
 	$('a.js-btn-product-complete').on('click', function(e) {
 		e.preventDefault();
 		//add the spinner to button
@@ -119,7 +121,7 @@ $(document).ready(function() {
 			</span>
 			<input type="hidden" id="datepicker_product_completion" data-href="{% url 'expert:kit-change-product-completion' pk=kit.id %}">
 		</div>
-		<table class="table table-sm table-hover table-striped text-center">
+		<table class="table table-sm table-hover table-striped text-center" id="product-table">
 			<thead class="bg-light">
 				<tr>
 					<th class="text-left">Order #</th>
@@ -182,8 +184,8 @@ $(document).ready(function() {
 			<tfoot>
 				<tr>
 					<th></th>
-					<th class="border-success">{{ kit.get_total_quantity }}</th>
-					<th class="border-success">{{ kit.get_total_size }} SqFt.</th>
+					<th class="border border-success">{{ kit.get_total_quantity }}</th>
+					<th class="border border-success">{{ kit.get_total_size }} SqFt.</th>
 					<th></th>
 					<th></th>
 					<th></th>
@@ -194,6 +196,33 @@ $(document).ready(function() {
 				</tr>
 			</tfoot>
 		</table>
+		{% block pagination %}
+		{% if is_paginated %}
+		<nav aria-label="Pagination Nav">
+			<ul class="pagination justify-content-end">
+				{% if page_obj.has_previous %}
+				<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+				{% else %}
+				<li class="page-item disabled"><a href="" class="page-link">&laquo;</a></li>
+				{% endif %}
+				{% for i in paginator.page_range %}
+				{% if page_obj.number == i %}
+				<li class="page-item active"><a href="" class="page-link">{{ i }}</a></li>
+				{% else %}
+				<li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+				{% endif %}
+				{% endfor %}
+				{% if page_obj.has_next %}
+				<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+				{% else %}
+				<li class="page-item disabled"><a href="" class="page-link">&raquo;</a></li>
+				{% endif %}
+			</ul>
+		</nav>
+		{% endif %}
+		{% endblock %}
+		<div class="my-4">&nbsp;</div>
+		<div class="my-4">&nbsp;</div>
 	</div>
 </div>
 {% endblock %}
