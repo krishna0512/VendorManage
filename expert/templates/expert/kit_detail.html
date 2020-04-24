@@ -30,6 +30,9 @@
 	#product-table tbody td {
 		vertical-align: middle;
 	}
+	#product-table thead .dropdown-toggle::after {
+		content: none;
+	}
 
 </style>
 {% endblock %}
@@ -115,16 +118,19 @@ $(document).ready(function() {
 	<div class="heading text-center h3 mt-3 mb-0 pb-0">Overview of KIT {{ kit.number }}</div>
 	<div class="text-center small mb-2">{{ kit.date_received }}</div>
 	<div class="mt-1">
-		<div class="text-left small text-muted mb-1">
-			Product Completion Date -
-			<span class="font-weight-bold">
-				{% if kit.date_product_completion %}
-				{{ kit.date_product_completion|date:"N j, Y" }}
-				{% else %}
-				{% now "N j, Y" %}
-				{% endif %}
-			</span>
-			<input type="hidden" id="datepicker_product_completion" data-href="{% url 'expert:kit-change-product-completion' pk=kit.id %}">
+		<div class="d-flex">
+			<div class="mr-auto text-muted">
+				Product Completion Date -
+				<span class="font-weight-bold">
+					{% if kit.date_product_completion %}
+					{{ kit.date_product_completion|date:"N j, Y" }}
+					{% else %}
+					{% now "N j, Y" %}
+					{% endif %}
+				</span>
+				<input type="hidden" id="datepicker_product_completion" data-href="{% url 'expert:kit-change-product-completion' pk=kit.id %}">
+			</div>
+			<div>Hello</div>
 		</div>
 		<table class="table table-sm table-hover table-striped text-center" id="product-table">
 			<thead class="bg-dark text-light font-weight-bold">
@@ -132,12 +138,41 @@ $(document).ready(function() {
 					<th class="text-left">Order #</th>
 					<th>Qty</th>
 					<th>Size</th>
-					<th>Fabric</th>
+					<th>
+						Fabric
+						<div class="dropdown d-inline">
+							<button class="p-0 m-0 ml-1 dropdown-toggle bg-transparent border-0 text-light" type="button" id="dropdownstatussort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-filter"></i>
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownstatussort">
+								<a class="dropdown-item" href="?{% url_replace filters='' %}">All</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:max' %}">Max</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:tuff' %}">Tuff</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:fab' %}">Fab</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:clear' %}">Clear</a>
+							</div>
+						</div>
+					</th>
 					<th>Color</th>
 					<th>Assigned To</th>
 					<th>Completed By</th>
 					<th>Completion Date</th>
-					<th>Status</th>
+					<th>
+						Status
+						<div class="dropdown d-inline">
+							<button class="p-0 m-0 ml-1 dropdown-toggle bg-transparent border-0 text-light" type="button" id="dropdownstatussort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-filter"></i>
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownstatussort">
+								<a class="dropdown-item" href="?{% url_replace filters='' %}">All</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:pending' %}">Pending</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:assigned' %}">Assigned</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:completed' %}">Completed</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:dispatched' %}">Dispatched</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:returned' %}">Returned</a>
+							</div>
+						</div>
+					</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -148,7 +183,7 @@ $(document).ready(function() {
 					<td>{{ product.quantity }}</td>
 					<td>{{ product.size }}</td>
 					<td>{{ product.get_fabric_display }}</td>
-					<td><span class="dot color-{{ product.color }}"></span> {{ product.get_color_display }}</td>
+					<td><span class="dot color-{{ product.color }} align-middle"></span> {{ product.get_color_display }}</td>
 					<td>
 						<div class="dropdown">
 							<button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ product.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -183,6 +218,10 @@ $(document).ready(function() {
 						<a href="{% url 'expert:product-delete' product.id %}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash fa-lg"></i></a>
 					</td>
 
+				</tr>
+				{% empty %}
+				<tr>
+					<td colspan="10" class="text-center h5">No Data to display, Please select appropriate filters</td>
 				</tr>
 				{% endfor %}
 			</tbody>

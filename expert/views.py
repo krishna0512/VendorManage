@@ -112,8 +112,24 @@ class KitDetailView(DetailView, MultipleObjectMixin):
     slug_field = 'number'
     paginate_by = 10
 
+    def apply_filters(self, queryset, filters):
+        def filter_status(q, s):
+            return q.filter(status=s)
+        def filter_fabric(q, f):
+            return q.filter(fabric=f)
+
+        if not ':' in filters:
+            return queryset
+        if filters.split(':')[0].strip() == 'status':
+            queryset = filter_status(queryset, filters.split(':')[1].strip())
+        elif filters.split(':')[0].strip() == 'fabric':
+            queryset = filter_fabric(queryset, filters.split(':')[1].strip())
+        return queryset
+
     def get_context_data(self, *args, **kwargs):
         object_list = Product.objects.filter(kit=self.object).order_by('id')
+        if self.request.GET.get('filters',None):
+            object_list = self.apply_filters(object_list, self.request.GET.get('filters',None))
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['worker_list'] = Worker.objects.filter(active=True).order_by('first_name')
         context['product_list'] = context['object_list']
