@@ -86,6 +86,14 @@ $(document).ready(function() {
 		buttonText: ''
 	});
 	$('.ui-datepicker-trigger').addClass('fa fa-pencil btn btn-sm btn-outline-primary mb-1');
+	// $('.ui-datepicker-trigger').hover(function() {
+	// 	$(this).removeClass('fa fa-pencil');
+	// 	let date = '{% if kit.date_product_completion %}{{ kit.date_product_completion|date:"N j, Y" }}{% else %}{% now "N j, Y" %}{% endif %}'
+	// 	$(this).html(date);
+	// }, function() {
+	// 	$(this).addClass('fa fa-pencil');
+	// 	$(this).html('');
+	// });
 	$('#datepicker_product_completion').on('change', function(e) {
 		e.preventDefault();
 		let $this = $(this);
@@ -139,10 +147,9 @@ $(document).ready(function() {
 					<th>Qty</th>
 					<th>Size</th>
 					<th>
-						Fabric
 						<div class="dropdown d-inline">
-							<button class="p-0 m-0 ml-1 dropdown-toggle bg-transparent border-0 text-light" type="button" id="dropdownstatussort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="fa fa-filter"></i>
+							<button class="p-0 m-0 ml-1 dropdown-toggle bg-transparent border-0 text-light font-weight-bold" type="button" id="dropdownstatussort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Fabric<i class="fa fa-filter ml-2"></i>
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownstatussort">
 								<a class="dropdown-item" href="?{% url_replace filters='' %}">All</a>
@@ -158,10 +165,9 @@ $(document).ready(function() {
 					<th>Completed By</th>
 					<th>Completion Date</th>
 					<th>
-						Status
 						<div class="dropdown d-inline">
-							<button class="p-0 m-0 ml-1 dropdown-toggle bg-transparent border-0 text-light" type="button" id="dropdownstatussort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="fa fa-filter"></i>
+							<button class="p-0 m-0 ml-1 dropdown-toggle bg-transparent border-0 text-light font-weight-bold" type="button" id="dropdownstatussort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Status<i class="fa fa-filter ml-2"></i>
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownstatussort">
 								<a class="dropdown-item" href="?{% url_replace filters='' %}">All</a>
