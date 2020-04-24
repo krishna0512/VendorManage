@@ -1,5 +1,6 @@
 {% extends 'expert/base.html' %}
 {% load static %}
+{% load url_replace %}
 
 {% block custom_css %}
 <style>
@@ -24,7 +25,11 @@
     .color-light_gray {background-color: lightgray;}
     .color-coffee_brown {background-color: #4a2c2a;}
     .color-burgundy {background-color: #800020;}
-    .color-clear {background-color: clear;}
+	.color-clear {background-color: clear;}
+
+	#product-table tbody td {
+		vertical-align: middle;
+	}
 
 </style>
 {% endblock %}
@@ -110,7 +115,7 @@ $(document).ready(function() {
 	<div class="heading text-center h3 mt-3 mb-0 pb-0">Overview of KIT {{ kit.number }}</div>
 	<div class="text-center small mb-2">{{ kit.date_received }}</div>
 	<div class="mt-1">
-		<div class="text-right small text-muted mb-1">
+		<div class="text-left small text-muted mb-1">
 			Product Completion Date -
 			<span class="font-weight-bold">
 				{% if kit.date_product_completion %}
@@ -122,7 +127,7 @@ $(document).ready(function() {
 			<input type="hidden" id="datepicker_product_completion" data-href="{% url 'expert:kit-change-product-completion' pk=kit.id %}">
 		</div>
 		<table class="table table-sm table-hover table-striped text-center" id="product-table">
-			<thead class="bg-light">
+			<thead class="bg-dark text-light font-weight-bold">
 				<tr>
 					<th class="text-left">Order #</th>
 					<th>Qty</th>
@@ -133,7 +138,7 @@ $(document).ready(function() {
 					<th>Completed By</th>
 					<th>Completion Date</th>
 					<th>Status</th>
-					<th>Action</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -169,7 +174,7 @@ $(document).ready(function() {
 					{% elif product.status == 'dispatched' %}bg-dark text-light
 					{% elif product.status == 'returned' %}bg-danger{% endif %}
 					">{{ product.get_status_display }}</td>
-					<td>
+					<td class="text-right">
 						{% if product.status == 'assigned' %}
 						<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-outline-success btn-sm js-btn-product-complete"><i class="fa fa-check fa-lg"></i></a>
 						{% else %}
@@ -201,7 +206,7 @@ $(document).ready(function() {
 		<nav aria-label="Pagination Nav">
 			<ul class="pagination justify-content-end">
 				{% if page_obj.has_previous %}
-				<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+				<li class="page-item"><a class="page-link" href="?{% url_replace page=page_obj.previous_page_number %}">&laquo;</a></li>
 				{% else %}
 				<li class="page-item disabled"><a href="" class="page-link">&laquo;</a></li>
 				{% endif %}
@@ -209,11 +214,11 @@ $(document).ready(function() {
 				{% if page_obj.number == i %}
 				<li class="page-item active"><a href="" class="page-link">{{ i }}</a></li>
 				{% else %}
-				<li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+				<li class="page-item"><a class="page-link" href="?{% url_replace page=i %}">{{ i }}</a></li>
 				{% endif %}
 				{% endfor %}
 				{% if page_obj.has_next %}
-				<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+				<li class="page-item"><a class="page-link" href="?{% url_replace page=page_obj.next_page_number %}">&raquo;</a></li>
 				{% else %}
 				<li class="page-item disabled"><a href="" class="page-link">&raquo;</a></li>
 				{% endif %}
