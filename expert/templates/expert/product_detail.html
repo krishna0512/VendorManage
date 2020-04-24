@@ -4,15 +4,13 @@
 {% block custom_navbar %}
 <div class="btn-group">
 	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:product-update' pk=product.id %}"><i class="fa fa-pencil"></i> Edit</a>
+	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ product.kit.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
 </div>
 {% endblock %}
 
 {% block main_content %}
 <div class="container">
     <center class="mt-4 h4">Overview of Product</center>
-    <div class="row">
-        <div class="col"><a href="{{ product.kit.get_absolute_url }}" class="btn btn-primary">Back</a></div>
-    </div>
     <div class="row my-2">
         <div class="col">
             <table class="table">
