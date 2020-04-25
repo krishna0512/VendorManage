@@ -121,6 +121,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                         <th>Max-380</th>
                         <th>Tuff-560</th>
                         <th>Fab</th>
+                        <th>Clear</th>
                         <th>Total Sq.Ft.</th>
                         <th>Rate/Sq.Ft.</th>
                         <th>Total Amt.</th>
@@ -137,6 +138,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                             <td>{{ challan.get_total_size_by_fabric.max }}</td>
                             <td>{{ challan.get_total_size_by_fabric.tuff }}</td>
                             <td>{{ challan.get_total_size_by_fabric.fab }}</td>
+                            <td>{{ challan.get_total_size_by_fabric.clear }}</td>
                             <td>{{ challan.get_total_size }}</td>
                             <td>3.5</td>
                             <td>{{ challan.get_total_value }}</td>
@@ -153,10 +155,11 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
+                        <td>&nbsp;</td>
                     </tr>
                 </tbody>
                 <tfoot>
-                    <tr>
+                    <tr class="font-weight-bold">
                         <td></td>
                         <td>Total</td>
                         <td></td>
@@ -164,6 +167,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                         <td>{{ invoice.get_total_size_by_fabric.max }}</td>
                         <td>{{ invoice.get_total_size_by_fabric.tuff }}</td>
                         <td>{{ invoice.get_total_size_by_fabric.fab }}</td>
+                        <td>{{ invoice.get_total_size_by_fabric.clear }}</td>
                         <td>{{ invoice.get_total_size }}</td>
                         <td></td>
                         <td>{{ invoice.get_total_value }}</td>
@@ -174,7 +178,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td colspan="3">Add: CGST</td>
+                        <td colspan="4">Add: CGST</td>
                         <td>6%</td>
                         <td>{{ invoice.get_total_tax.cgst }}</td>
                     </tr>
@@ -184,7 +188,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td colspan="3">Add: SGST</td>
+                        <td colspan="4">Add: SGST</td>
                         <td>6%</td>
                         <td>{{ invoice.get_total_tax.sgst }}</td>
                     </tr>
@@ -194,14 +198,14 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td colspan="3">Add: Round off</td>
+                        <td colspan="4">Add: Round off</td>
                         <td></td>
                         <td>{{ invoice.get_total_tax.roundoff }}</td>
                     </tr>
                     <tr>
-                        <td colspan="9">
+                        <td colspan="10">
                             Amount Chargeble (in words)<br>
-                            <b>INR {{ invoice.get_total_amount.words|title }}</b>
+                            <b>{{ invoice.get_total_amount.words|title }} Ruppees</b>
                         </td>
                         <td class="font-weight-bold align-middle h6">{{ invoice.get_total_amount.amount }}</td>
                     </tr>
