@@ -44,7 +44,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
             <div>
                 <div><b>EXPERT<span><img class="img-fluid" width="40" height="40" src="{% static 'expert/images/logo.png' %}"></span>TRADERS</b></div>
                 <div><small>J-142, Sumel-6, Dhudheshwar, AHM-4 (GUJ)</small></div>
-                <div><small class="font-italic"><u>expertcovers2020@gmail.com</u></small></div>
+                <div><small class="font-italic">expertcovers2020@gmail.com</small></div>
                 <div><small>Ph No. 9839085886</small></div>
                 <div><small>GSTN: 24AAPPT3833R1ZT / S-Code 24</small></div>
             </div>
@@ -205,7 +205,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                     <tr>
                         <td colspan="10">
                             Amount Chargeble (in words)<br>
-                            <b>{{ invoice.get_total_amount.words|title }} Ruppees</b>
+                            <b>{{ invoice.get_total_amount.words|title }} Rupees Only</b>
                         </td>
                         <td class="font-weight-bold align-middle h6">{{ invoice.get_total_amount.amount }}</td>
                     </tr>
@@ -250,7 +250,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                 <tr>
                     <td colspan="7">
                         Tax Amount (in words)<br>
-                        <b>{{ invoice.get_total_tax.total_words|title }}</b>
+                        <b>{{ invoice.get_total_tax.total_words|title }} Only</b>
                     </td>
                 </tr>
             </table>
@@ -262,7 +262,8 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                 DECLARATION: We declared that this invoice shows the actual prince of the goods described and that all particulars are true and correct to best of our knowledge.
             </small>
         </div>
-        <div class="col text-center">
+        <div class="col d-flex justify-content-around">
+            <div></div>
             <div>For Expert Traders</div>
         </div>
     </div>
@@ -273,6 +274,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
             <div>A/C No. 489301010033569</div>
             <div>PAN No. AAPPT3833R</div>
         </div>
+        <div class="col"></div>
         <div class="col"></div>
         <div class="col">
             <img src="{% static 'expert/images/sign_vinayak.jpg' %}" alt="Vinayak Sign" width="200">

@@ -288,7 +288,7 @@ class Invoice(models.Model):
             x = 100 - x
             x = round(x/100, 2)
         ret['roundoff'] = x
-        ret['total_words'] = '{} ruppees and {} paise'.format(num2words(int(ret['total'])), num2words(int(ret['total']*100)%100))
+        ret['total_words'] = '{} rupees and {} paise'.format(num2words(int(ret['total'])), num2words(int(ret['total']*100)%100))
         return ret
 
     def get_total_amount(self):
