@@ -1,9 +1,22 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{# blocks changes so that invoice is printed normally without the side navbar interfering #}
+{% block custom_js %}
+<script>
+    $(document).ready(function() {
+        $('#main_content').removeClass('col-md-10 col-lg-11').addClass('col');
+    });
+</script>
+{% endblock %}
+
+{% block navbar-side %}
+<div class="d-none"></div>
+{% endblock %}
+
 {% block custom_navbar %}
 <div class="btn-group">
-	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="javascript:window.print();"><i class="fa fa-print"></i> Print</a>
+	<a class="btn btn-outline-primary btn-sm mr-1" id="js-btn-print" type="button" href="javascript:window.print();"><i class="fa fa-print"></i> Print</a>
 	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ invoice.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
 </div>
 {% endblock %}
@@ -29,7 +42,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
     <div class="row">
         <div class="col-6">
             <div>
-                <div><b>EXPERT TRADERS</b></div>
+                <div><b>EXPERT<span><img class="img-fluid" width="40" height="40" src="{% static 'expert/images/logo.png' %}"></span>TRADERS</b></div>
                 <div><small>J-142, Sumel-6, Dhudheshwar, AHM-4 (GUJ)</small></div>
                 <div><small class="font-italic"><u>expertcovers2020@gmail.com</u></small></div>
                 <div><small>Ph No. 9839085886</small></div>
@@ -41,7 +54,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
             <table class="table table-bordered table-sm">
                 <tr>
                     <td>Invoice No.</td>
-                    <td>{{ invoice.number }}</td>
+                    <td class="font-weight-bold h6">{{ invoice.number }}</td>
                 </tr>
                 <tr>
                     <td>Date</td>
@@ -188,9 +201,9 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                     <tr>
                         <td colspan="9">
                             Amount Chargeble (in words)<br>
-                            <b>{{ invoice.get_total_amount.words }}</b>
+                            <b>INR {{ invoice.get_total_amount.words|title }}</b>
                         </td>
-                        <td>{{ invoice.get_total_amount.amount }}</td>
+                        <td class="font-weight-bold align-middle h6">{{ invoice.get_total_amount.amount }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -220,9 +233,9 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                     <td>{{ invoice.get_total_tax.cgst }}</td>
                     <td>6%</td>
                     <td>{{ invoice.get_total_tax.sgst }}</td>
-                    <td rowspan="2">{{ invoice.get_total_tax.total }}</td>
+                    <td rowspan="2" class="font-weight-bold align-middle h6">{{ invoice.get_total_tax.total }}</td>
                 </tr>
-                <tr>
+                <tr class="font-weight-bold">
                     <td>Total</td>
                     <td>{{ invoice.get_total_value }}</td>
                     <td></td>
@@ -233,7 +246,7 @@ TODO: Determine weather the print dialog should be opened on page load or not?
                 <tr>
                     <td colspan="7">
                         Tax Amount (in words)<br>
-                        <b>{{ invoice.get_total_tax.total_words }}</b>
+                        <b>{{ invoice.get_total_tax.total_words|title }}</b>
                     </td>
                 </tr>
             </table>
@@ -256,9 +269,15 @@ TODO: Determine weather the print dialog should be opened on page load or not?
             <div>A/C No. 489301010033569</div>
             <div>PAN No. AAPPT3833R</div>
         </div>
+        <div class="col"></div>
+        <div class="col">
+            <img src="{% static 'expert/images/sign_vinayak.jpg' %}" alt="Vinayak Sign" width="200">
+        </div>
+    </div>
+    <div class="row mt-1">
         <div class="col text-center small">
-            <div>Subject to Ahmedabad Jurisdication</div>
-            <div>This is a Computer Generated Invoice</div>
+            <span>Subject to Ahmedabad Jurisdication</span>
+            <span>This is a Computer Generated Invoice</span>
         </div>
     </div>
 </div>

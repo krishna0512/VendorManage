@@ -1,6 +1,19 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{# blocks changes so that challan is printed normally without the side navbar interfering #}
+{% block custom_js %}
+<script>
+    $(document).ready(function() {
+        $('#main_content').removeClass('col-md-10 col-lg-11').addClass('col');
+    });
+</script>
+{% endblock %}
+
+{% block navbar-side %}
+<div class="d-none"></div>
+{% endblock %}
+
 {% block custom_navbar %}
 <div class="btn-group">
 	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="javascript:window.print();"><i class="fa fa-print"></i> Print</a>
