@@ -1,7 +1,72 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_js %}
+<script>
+	//TODO: change the method with which the data is transfered b/w django and js
+	$(document).ready(function() {
+		var ctx = document.getElementById('report-monthly-chart').getContext('2d');
+		var config = {
+			type: 'line',
+			data: {
+				labels: {{ chart_data.date_list|safe }},
+				datasets: [{
+					label: 'Completed',
+					backgroundColor: 'rgb(0,123,255)',
+					borderColor: 'rgb(0,123,255)',
+					data: {{ chart_data.product_completed|safe }},
+					fill: false,
+				}, {
+					label: 'Returned',
+					backgroundColor: 'rgb(220,53,69)',
+					borderColor: 'rgb(220,53,69)',
+					data: {{ chart_data.product_returned|safe }},
+					fill: false,
+				}]
+			},
+			options: {}
+		};
+		var chart = new Chart(ctx, config);
+	});
+</script>
+{% endblock %}
+
 {% block main_content %}
+<div>
+	<div class="header-cards" style="font-size: 1rem;">
+		<div class="card-deck mx-3 text-center">
+			<div class="card border border-primary shadow">
+				<div class="card-header bg-primary text-light">
+					Products Completed
+				</div>
+				<div class="card-body">
+					<p class="card-text">1135.65 Sq.Ft.</p>
+				</div>
+			</div>
+			<div class="card border border-warning shadow">
+				<div class="card-header bg-warning">
+					Products Pending
+				</div>
+				<div class="card-body">
+					<p class="card-text">1135.65 Sq.Ft.</p>
+				</div>
+			</div>
+			<div class="card border border-danger shadow">
+				<div class="card-header bg-danger text-light">
+					Products Returned
+				</div>
+				<div class="card-body">
+					<p class="card-text">1135.65 Sq.Ft.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="main-chart mt-4">
+		<canvas id="report-monthly-chart" class="w-100 border border-red" height="400"></canvas>
+	</div>
+</div>
+{% endblock %}
+
 <div class="container-fluid mt-3">
 	<center class="my-4 h2">{{ month|date:"F Y" }}</center>
 	{# TODO: Add the if condition for previous_month and next_month #}
@@ -54,4 +119,3 @@
 	</ul>
 	{% endcomment %}
 </div>
-{% endblock %}

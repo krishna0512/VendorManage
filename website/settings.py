@@ -125,8 +125,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'kt.krishna.tulsyan@gmail.com'
+DEFAULT_FROM_MAIL = 'kt.krishna.tulsyan@gmail.com'
+SERVER_EMAIL = 'kt.krishna.tulsyan@gmail.com'
 EMAIL_HOST_PASSWORD = 'krishna0512'
 
 LOGIN_URL = 'expert:login'
@@ -138,6 +139,8 @@ LOGIN_REDIRECT_URL = 'expert:index'
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+WORKER_PASSWORD = '2020'
 
 # CORS_ORIGIN_ALLOW_ALL = True
 

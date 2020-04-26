@@ -51,6 +51,12 @@ class Product(models.Model):
         ('mistake', 'Cutting Mistake'),
     ]
 
+    class Meta:
+        permissions = [
+            ('assign_product','Can Assign a worker to product'),
+            ('complete_product','Can Complete a product'),
+        ]
+
     order_number = models.CharField(
         max_length=50,
         default='',
@@ -442,6 +448,12 @@ def worker_image_path(instance, filename):
     return 'Worker/{}/{}'.format(instance.first_name.lower(), filename)
 
 class Worker(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='worker',
+        null=True,
+    )
     first_name = models.CharField(
         max_length=100,
         default='',
@@ -451,6 +463,12 @@ class Worker(models.Model):
         max_length=100,
         default='',
         blank=True,
+    )
+    username = models.CharField(
+        max_length=100,
+        verbose_name=_('Username'),
+        default='',
+        help_text=_('Username for worker login (unique for each worker)'),
     )
     address = models.TextField(
         default='',
@@ -535,3 +553,6 @@ class Worker(models.Model):
     def cleanup(self):
         if self.photo:
             self.photo.delete(False)
+
+
+from expert.signals import *

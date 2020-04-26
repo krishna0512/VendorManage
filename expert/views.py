@@ -2,33 +2,70 @@ from datetime import datetime, timedelta
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.core.files import File
+from django.core.mail import send_mail
+from django.db.models import Q
 from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views import View
+from django.views.generic import TemplateView, ListView, DetailView, RedirectView
+from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.dates import MonthArchiveView, DayArchiveView
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 from expert.models import Kit, Product, Worker, Challan, Invoice
 from expert.forms import *
 from expert import process
+from random import random
 
 # Create your views here.
+
+def  send_email(request):
+    ret = send_mail(
+        subject='test',
+        message='Hi, This is a test message from Auto Django.',
+        from_email='kt.krishna.tulsyan@gmail.com',
+        recipient_list=['expertcovers2020@gmail.com'],
+        fail_silently=False
+    )
+    return JsonResponse({'response': 'Email sent to {ret} Users'})
+
+def email_invoice(request, pk):
+    def get_emails(to):
+        ret = to.strip().split(',')
+        ret = [i.strip() for i in ret]
+        return ret
+
+    to = request.POST.get('to',None)
+    to = get_email(to)
+    subject = request.POST.get('subject','').strip()
+    message = request.POST.get('message','').strip()
+    Invoice.objects.get(id=pk).send_email(
+        to=to,
+        subject=subject,
+        message=message,
+        attach_invoice=True,
+    )
+    print(to, subject, message)
+    return JsonResponse({'response': 'Email sent to {ret} Users'})
 
 class IndexTemplateView(LoginRequiredMixin, TemplateView):
     template_name='expert/index.html'
 
-class KitListView(LoginRequiredMixin, ListView):
+class KitListView(PermissionRequiredMixin, ListView):
     model = Kit
     # for navigation active display
     navigation = 'kit'
     ordering = ['-number']
+    permission_required = ('expert.view_kit')
 
-class KitCreateView(CreateView):
+class KitCreateView(PermissionRequiredMixin, CreateView):
     model = Kit
     fields = '__all__'
     template_name_suffix = '_create_form'
+    permission_required = ('expert.view_kit','expert.add_kit')
 
     def get_initial(self, *args, **kwargs):
         initial = super().get_initial(*args, **kwargs)
@@ -98,7 +135,7 @@ class KitCreateView(CreateView):
             self.process_excel_data(self.object.data)
         return response
 
-class KitUpdateView(UpdateView):
+class KitUpdateView(PermissionRequiredMixin, UpdateView):
     model = Kit
     slug_field = 'number'
     fields = [
@@ -106,20 +143,24 @@ class KitUpdateView(UpdateView):
         'jobwork_gatepass'
     ]
     template_name_suffix = '_update_form'
+    permission_required = ('expert.view_kit','expert.change_kit')
 
-class KitDetailView(DetailView, MultipleObjectMixin):
+class KitDetailView(PermissionRequiredMixin, DetailView, MultipleObjectMixin):
     model = Kit
     slug_field = 'number'
     paginate_by = 10
+    permission_required = ('expert.view_kit','expert.view_product')
 
     def apply_filters(self, queryset, filters):
         def filter_status(q, s):
-            return q.filter(status=s)
+            return Q(status=s)
+            # return q.filter(status=s)
         def filter_fabric(q, f):
-            return q.filter(fabric=f)
+            return Q(fabric=f)
+            # return q.filter(fabric=f)
 
         if not ':' in filters:
-            return queryset
+            return Q()
         if filters.split(':')[0].strip() == 'status':
             queryset = filter_status(queryset, filters.split(':')[1].strip())
         elif filters.split(':')[0].strip() == 'fabric':
@@ -129,31 +170,47 @@ class KitDetailView(DetailView, MultipleObjectMixin):
     def get_context_data(self, *args, **kwargs):
         object_list = Product.objects.filter(kit=self.object).order_by('id')
         if self.request.GET.get('filters',None):
-            object_list = self.apply_filters(object_list, self.request.GET.get('filters',None))
+            filterq = self.apply_filters(object_list, self.request.GET.get('filters',None))
+        else:
+            filterq = Q()
+        # context = super().get_context_data(object_list=object_list, **kwargs)
+        context = {}
+        if self.request.user.is_superuser:
+            worker_list = Worker.objects.filter(active=True).order_by('first_name')
+            object_list = object_list.filter(filterq)
+            # context['product_list'] = context['object_list']
+        else:
+            worker_list = Worker.objects.filter(id__in=[self.request.user.worker.id])
+            # a BaseWorker can only view the products that are pending, and the products that
+            # are completedby or assignedto the particular worker.
+            q = Q(status='pending') | Q(assignedto=self.request.user.worker) | Q(completedby=self.request.user.worker)
+            object_list = object_list.filter(filterq & q)
         context = super().get_context_data(object_list=object_list, **kwargs)
-        context['worker_list'] = Worker.objects.filter(active=True).order_by('first_name')
+        context['worker_list'] = worker_list
         context['product_list'] = context['object_list']
         return context
 
-class KitDeleteView(DeleteView):
+class KitDeleteView(PermissionRequiredMixin, DeleteView):
     model = Kit
     slug_field = 'number'
     success_url = reverse_lazy('expert:kit-list')
+    permission_required = ('expert.view_kit','expert.delete_kit')
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(PermissionRequiredMixin, UpdateView):
     model = Product
     fields = '__all__'
     template_name_suffix = '_update_form'
+    permission_required = ('expert.view_product','expert.change_product')
 
     def form_valid(self, form):
         if form.instance.return_remark:
             form.instance.status = 'returned'
         return super().form_valid(form)
 
-class ProductCreateView(CreateView):
+class ProductCreateView(PermissionRequiredMixin, CreateView):
     model = Product
     fields = [
         'order_number','quantity','size',
@@ -161,6 +218,7 @@ class ProductCreateView(CreateView):
         'completedby','date_completed','return_remark'
     ]
     template_name_suffix = '_create_form'
+    permission_required = ('expert.view_product','expert.add_product')
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -183,79 +241,124 @@ class ProductCreateView(CreateView):
         form.instance.kit = Kit.objects.filter(number=self.kwargs['kit_number']).first()
         return super().form_valid(form)
 
-@csrf_exempt
-def product_complete(request, pk):
-    #TODO: change the p to product and convert to Class based view
-    product = Product.objects.get(id=pk)
-    product.completedby = product.assignedto
-    if product.kit.date_product_completion:
-        product.date_completed = product.kit.date_product_completion
-    else:
-        product.date_completed = datetime.now()
-    product.status = 'completed'
-    product.save()
-    return JsonResponse({'saved': True})
+@method_decorator(csrf_exempt, name='dispatch')
+class ProductCompleteView(PermissionRequiredMixin, SingleObjectMixin, View):
+    model = Product
+    permission_required = ('expert.view_kit','expert.view_product','expert.complete_product',)
 
-@csrf_exempt
-def product_assign(request, product_pk, worker_pk):
-    # Convert to class based RedirectView 
-    product = Product.objects.get(id=product_pk)
-    worker = Worker.objects.get(id=worker_pk)
-    product.assignedto = worker
-    product.return_remark = ''
-    product.status = 'assigned'
-    product.save()
-    return JsonResponse({'assignedto': worker.get_fullname()})
-
-def product_return(request, pk):
-    product =  Product.objects.get(id=pk)
-    rr = request.GET.get('rr', None)
-    if rr in ['unprocessed','semiprocessed','mistake']:
-        product.return_remark = str(rr)
-        product.status = 'returned'
+    def post(self, *args, **kwargs):
+        product = self.get_object()
+        product.completedby = product.assignedto
+        if product.kit.date_product_completion:
+            product.date_completed = product.kit.date_product_completion
+        else:
+            product.date_completed = datetime.now()
+        product.status = 'completed'
         product.save()
-    return redirect(product.get_absolute_url())
+        return JsonResponse({'saved': True})
 
-@csrf_exempt
-def kit_change_product_completion(request, pk):
-    kit = Kit.objects.get(id=pk)
-    date = request.POST.get('date',None)
-    date = datetime.strptime(date, '%Y-%m-%d').date()
-    kit.date_product_completion = date
-    kit.save()
-    return JsonResponse({'date': date.strftime('%B %d, %Y')})
+@method_decorator(csrf_exempt, name='dispatch')
+class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
+    model = Product
+    http_method_names = ['post']
+    pk_url_kwarg = 'product_pk'
+    permission_required = ('expert.view_kit','expert.view_product','expert.assign_product',)
 
-# TODO: add a function in product model for completeing and uncompleting the product
-def kit_uncomplete(request, pk):
-    kit = Kit.objects.get(id=pk)
-    products = kit.products.filter(status='completed')
-    for product in products:
-        product.completedby = None
-        product.date_completed = None
+    def post(self, *args, **kwargs):
+        product = self.get_object()
+        if product.assignedto:
+            # The product that user clicked has already been assigned to someone else.
+            # check if worker has the permission to reassign product using change_product perm
+            if self.request.user.has_perm('expert.change_product'):
+                # Yes, the worker has the permission to reassign the products.
+                worker = Worker.objects.get(id=self.kwargs['worker_pk'])
+                product.assignedto = worker
+                product.return_remark = ''
+                product.status = 'assigned'
+                product.save()
+                # TODO: serialize the Worker model so I can directly pass it here.
+                return JsonResponse({'assignedto': worker.get_fullname(), 'refresh': False})
+            else:
+                # No, worker does'nt have the permission to change the assignment.
+                # give a warning that product has already been assigned and refresh the page.
+                return JsonResponse({'assignedto': None, 'refresh': True})
+        worker = Worker.objects.get(id=self.kwargs['worker_pk'])
+        product.assignedto = worker
+        product.return_remark = ''
         product.status = 'assigned'
         product.save()
-    return redirect(kit.get_absolute_url())
+        # TODO: serialize the Worker model so I can directly pass it here.
+        return JsonResponse({'assignedto': worker.get_fullname(), 'refresh': False})
+
+class ProductReturnRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
+    model = Product
+    permission_required = ('expert.view_kit','expert.view_product','expert.change_product',)
+
+    def get_redirect_url(self, *args, **kwargs):
+        product = self.get_object()
+        rr = self.request.GET.get('rr', '')
+        if rr in ['unprocessed','semiprocessed','mistake']:
+            product.return_remark = str(rr)
+            product.status = 'returned'
+            product.save()
+        return product.get_absolute_url()
+
+@method_decorator(csrf_exempt, name='dispatch')
+class KitChangeCompletionDate(PermissionRequiredMixin, SingleObjectMixin, View):
+    model = Kit
+    http_method_names = ['post']
+    permission_required = ('expert.view_kit','expert.view_product','expert.change_kit',)
+
+    def post(self, *args, **kwargs):
+        kit = self.get_object()
+        date = self.request.POST.get('date',None)
+        date = datetime.strptime(date, '%Y-%m-%d').date()
+        kit.date_product_completion = date
+        kit.save()
+        return JsonResponse({'date': date.strftime('%B %d, %Y')})
+
+# TODO: add a function in product model for completeing and uncompleting the product
+class KitUncompleteRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
+    model = Kit
+    permission_required = ('expert.view_kit','expert.view_product','expert.change_product',)
+
+    def get_redirect_url(self, *args, **kwargs):
+        kit = self.get_object()
+        products = kit.products.filter(status='completed')
+        for product in products:
+            product.completedby = None
+            product.date_completed = None
+            product.status = 'assigned'
+            product.save()
+        return kit.get_absolute_url()
 
 
-def challan_init(request, pk):
-    def _get_challan_number():
+class ChallanInitRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
+    model = Kit
+    permission_required = ('expert.view_kit','expert.view_product','expert.view_challan','expert.add_challan', 'expert.change_product')
+
+    def _get_challan_number(self):
         if not Challan.objects.all().exists():
             return 51
         else:
             return Challan.objects.all().order_by('-number').first().number + 1
-    kit = Kit.objects.get(id=pk)
-    challan = Challan.objects.create(
-        date_sent=datetime.now(),
-        number=_get_challan_number(),
-    )
-    products = kit.products.filter(status='completed') | kit.products.filter(status='returned')
-    for product in products:
-        product.challan = challan
-        product.status = 'dispatched'
-        product.save()
-    challan.date_sent = max([i.date_completed for i in challan.products.all() if i.date_completed])
-    challan.save()
-    return redirect(kit.get_absolute_url())
+
+    def get_redirect_url(self, *args, **kwargs):
+        kit = self.get_object()
+        challan = Challan.objects.create(
+            date_sent=datetime.now(),
+            number=self._get_challan_number(),
+        )
+        # products = kit.products.filter(status='completed') | kit.products.filter(status='returned')
+        products = kit.products.filter(status__in=['completed','returned'])
+        for product in products:
+            product.challan = challan
+            product.status = 'dispatched'
+            product.save()
+        challan.date_sent = max([i.date_completed for i in challan.products.all() if i.date_completed])
+        challan.save()
+        return challan.get_absolute_url()
+
 
 def challan_gatepass(request, pk):
     challan = Challan.objects.get(id=pk)
@@ -278,8 +381,9 @@ def challan_gatepass(request, pk):
     kit.save()
     return redirect(kit.jobwork_gatepass_processed.url)
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(PermissionRequiredMixin, DeleteView):
     model = Product
+    permission_required = ('expert.view_kit','expert.view_product','expert.delete_product')
 
     def delete(self, request, *args, **kwargs):
         self.kit_number = self.get_object().kit.number
@@ -323,47 +427,114 @@ class ProductMonthArchiveView(MonthArchiveView):
     allow_future = True
     template_name_suffix = '_report_month'
 
+    def get_product_completed(self, start_date, end_date):
+        d = start_date
+        ret = []
+        while d <= end_date:
+            x = Product.objects.filter(date_completed=d)
+            if not x.exists():
+                ret.append(0)
+            else:
+                x = round(sum([i.size for i in x]), 2)
+                ret.append(x)
+            d += timedelta(days=1)
+        return ret
+    
+    def get_product_returned(self, start_date, end_date):
+        d = start_date
+        ret = []
+        while d <= end_date:
+            x = Product.objects.filter(date_completed=d).exclude(return_remark='')
+            if not x.exists():
+                ret.append(0)
+            else:
+                x = round(sum([i.size for i in x]), 2)
+                ret.append(x)
+            d += timedelta(days=1)
+        return ret
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['worker_list'] = Worker.objects.all().order_by('first_name')
         start_date = context['month']
         end_date = context['next_month'] - timedelta(days=1)
-        data = []
-        dd = start_date
-        while dd <= end_date:
-            data.append(
-                {
-                    'date': dd,
-                    'contributions': [sum([i.size for i in worker.get_products_completed_on_date(dd)]) for worker in Worker.objects.all()]
-                }
-            )
-            data[-1]['contributions'].append(sum(data[-1]['contributions']))
-            dd += timedelta(days=1)
-        context['date_list'] = data
-        x = [0]*len(data[0]['contributions'])
-        from operator import add
-        for i in data:
-            x = list(map(add, x, i['contributions']))
-        context['worker_total'] = x
+        # print(list(range(start_date, end_date, timedelta(days=1))))
+        dl = []
+        d = start_date
+        while d <= end_date:
+            dl.append(d)
+            d += timedelta(days=1)
+        dl = [str(i.day) for i in dl]
+        for i in range(9):
+            dl[i] = '0{}'.format(dl[i])
+        chart_data = {}
+        chart_data['date_list'] = str(dl)
+        chart_data['product_completed'] = str(self.get_product_completed(start_date, end_date))
+        chart_data['product_returned'] = str(self.get_product_returned(start_date, end_date))
+        # d = start_date
+        # pc = []
+        # while d <= end_date:
+        #     x = Product.objects.filter(date_completed=d)
+        #     x = [i.size for i in x]
+        #     x = sum(x)
+        #     x = round(x, 2)
+        #     pc.append(x)
+        #     d += timedelta(days=1)
+        # chart_data['product_completed'] = str(pc)
+        # context['date_list_string'] = str(dl)
+        # data = [int(random()*100) for i in range(30)]
+        # context['data'] = str(data)
+        context['chart_data'] = chart_data
         return context
 
-class ProductDetailView(DetailView):
-    model = Product
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super().get_context_data(*args, **kwargs)
+    #     context['worker_list'] = Worker.objects.all().order_by('first_name')
+    #     start_date = context['month']
+    #     end_date = context['next_month'] - timedelta(days=1)
+    #     data = []
+    #     dd = start_date
+    #     d_list = []
+    #     while dd <= end_date:
+    #         d_list.append(dd)
+    #         data.append(
+    #             {
+    #                 'date': dd,
+    #                 'contributions': [sum([i.size for i in worker.get_products_completed_on_date(dd)]) for worker in Worker.objects.all()]
+    #             }
+    #         )
+    #         data[-1]['contributions'].append(sum(data[-1]['contributions']))
+    #         dd += timedelta(days=1)
+    #     context['date_list'] = data
+    #     d_list = [str(i) for i in d_list]
+    #     print(str(d_list))
+    #     x = [0]*len(data[0]['contributions'])
+    #     from operator import add
+    #     for i in data:
+    #         x = list(map(add, x, i['contributions']))
+    #     context['worker_total'] = x
+    #     return context
 
-class WorkerListView(LoginRequiredMixin, ListView):
+class ProductDetailView(PermissionRequiredMixin, DetailView):
+    model = Product
+    permission_required = ('expert.view_product')
+
+class WorkerListView(PermissionRequiredMixin, ListView):
     queryset = Worker.objects.filter(active=True).order_by('first_name')
     navigation = ''
+    permission_required = ('expert.view_worker')
 
-class WorkerCreateView(CreateView):
+class WorkerCreateView(PermissionRequiredMixin, CreateView):
     model = Worker
     fields = [
         'first_name','last_name','address',
         'date_joined','photo',
     ]
     template_name_suffix = '_create_form'
+    permission_required = ('expert.view_worker','expert.add_worker')
 
-class WorkerDetailView(DetailView):
+class WorkerDetailView(PermissionRequiredMixin, DetailView):
     model = Worker
+    permission_required = ('expert.view_worker')
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -383,17 +554,19 @@ class WorkerDetailView(DetailView):
         context['data'] = ret
         return context
 
-class WorkerUpdateView(UpdateView):
+class WorkerUpdateView(PermissionRequiredMixin, UpdateView):
     model = Worker
     fields = [
         'first_name','last_name','address',
         'date_joined','photo'
     ]
     template_name_suffix = '_update_form'
+    permission_required = ('expert.view_worker','expert.change_worker')
 
-class WorkerDeleteView(DeleteView):
+class WorkerDeleteView(PermissionRequiredMixin, DeleteView):
     model = Worker
     success_url = reverse_lazy('expert:worker-list')
+    permission_required = ('expert.view_worker','expert.delete_worker')
 
     def delete(self, request, *args, **kwargs):
         """
@@ -410,19 +583,22 @@ class WorkerDeleteView(DeleteView):
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
-class ChallanListView(LoginRequiredMixin, ListView):
+class ChallanListView(PermissionRequiredMixin, ListView):
     model = Challan
     navigation = 'challan'
     ordering = ['-number']
+    permission_required = ('expert.view_challan')
 
-class ChallanDetailView(DetailView):
+class ChallanDetailView(PermissionRequiredMixin, DetailView):
     model = Challan
     slug_field = 'number'
+    permission_required = ('expert.view_challan','expert.view_product')
 
-class ChallanPrintableView(DetailView):
+class ChallanPrintableView(PermissionRequiredMixin, DetailView):
     model = Challan
     slug_field = 'number'
     template_name_suffix = '_detail_printable'
+    permission_required = ('expert.view_challan','expert.view_product')
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -439,10 +615,11 @@ class ChallanPrintableView(DetailView):
         context['groupby_fabric'] = ret
         return context
 
-class ChallanDeleteView(DeleteView):
+class ChallanDeleteView(PermissionRequiredMixin, DeleteView):
     model = Challan
     slug_field = 'number'
     success_url = reverse_lazy('expert:challan-list')
+    permission_required = ('expert.view_challan','expert.delete_challan')
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
@@ -463,10 +640,11 @@ class ChallanDeleteView(DeleteView):
         # self.object.save()
         # return HttpResponseRedirect(success_url)
 
-class InvoiceCreateView(CreateView):
+class InvoiceCreateView(PermissionRequiredMixin, CreateView):
     model = Invoice
     fields = '__all__'
     template_name_suffix = '_create_form'
+    permission_required = ('expert.view_invoice','expert.add_invoice')
 
     def get_initial(self, *args, **kwargs):
         initial = super().get_initial(*args, **kwargs)
@@ -482,48 +660,53 @@ class InvoiceCreateView(CreateView):
     def get_success_url(self):
         return self.object.get_absolute_url()
 
-class InvoiceListView(LoginRequiredMixin, ListView):
+class InvoiceListView(PermissionRequiredMixin, ListView):
     model = Invoice
     navigation = 'invoice'
     ordering = ['-number']
+    permission_required = ('expert.view_invoice')
 
-class InvoiceDetailView(DetailView):
+class InvoiceDetailView(PermissionRequiredMixin, DetailView):
     model = Invoice
     slug_field = 'number'
+    permission_required = ('expert.view_invoice','expert.view_challan')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['challan_list'] = Challan.objects.filter(invoice=None).order_by('-number')
         return context
     
+class InvoiceChallanOperationView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
+    model = Invoice
+    pk_url_kwarg = 'invoice_pk'
+    permission_required = ('expert.view_invoice','expert.view_challan','expert.change_invoice','expert.change_challan')
 
-def invoice_add_challan(request, invoice_pk, challan_pk):
-    invoice = Invoice.objects.get(id=invoice_pk)
-    invoice.add_challan(challan_pk)
-    return redirect(invoice.get_absolute_url())
+    def get_redirect_url(self, *args, **kwargs):
+        invoice = self.get_object()
+        if self.kwargs['operation'] == 'add':
+            invoice.add_challan(self.kwargs['challan_pk'])
+        else:
+            invoice.remove_challan(self.kwargs['challan_pk'])
+        return invoice.get_absolute_url()
 
-def invoice_remove_challan(request, invoice_pk, challan_pk):
-    invoice = Invoice.objects.get(id=invoice_pk)
-    invoice.remove_challan(challan_pk)
-    print('removed the challan from invoice')
-    return redirect(invoice.get_absolute_url())
-
-class InvoicePrintableView(DetailView):
+class InvoicePrintableView(PermissionRequiredMixin, DetailView):
     model = Invoice
     slug_field = 'number'
     template_name_suffix = '_detail_printable'
+    permission_required = ('expert.view_invoice','expert.view_challan')
 
     def get_context_date(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['challan_list'] = self.object.challans.order_by('number')
         return context
 
-class InvoiceUpdateView(UpdateView):
+class InvoiceUpdateView(PermissionRequiredMixin, UpdateView):
     model = Invoice
     # fields = '__all__'
     form_class = InvoiceUpdateForm
     template_name_suffix = '_update_form'
     slug_field = 'number'
+    permission_required = ('expert.view_invoice','expert.change_invoice')
 
     def form_valid(self, form):
         print(form.instance.number)

@@ -6,6 +6,22 @@
 <script>
     $(document).ready(function() {
         $('#main_content').removeClass('col-md-10 col-lg-11').addClass('col');
+
+        $('#js-email-form').submit(function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var url = form.attr('action');
+
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: url,
+                data: form.serialize(),
+                success: function(result) {
+                    alert(result['response']);
+                }
+            });
+        });
     });
 </script>
 {% endblock %}
@@ -14,9 +30,38 @@
 <div class="d-none"></div>
 {% endblock %}
 
+{% block custom_css %}
+<style>
+    .dropdown-form .form-control {
+        margin-bottom: 6px;
+    }
+</style>
+{% endblock %}
+
 {% block custom_navbar %}
 <div class="btn-group">
-	<a class="btn btn-outline-primary btn-sm mr-1" id="js-btn-print" type="button" href="javascript:window.print();"><i class="fa fa-print"></i> Print</a>
+    <a class="btn btn-outline-primary btn-sm mr-1" id="js-btn-print" type="button" href="javascript:window.print();"><i class="fa fa-print"></i> Print</a>
+    <div class="dropleft dropdown-form">
+        <a class="btn btn-outline-info btn-sm mr-1 dropdown-toggle" href="#" role="button" id="dropdownsendmailform" data-toggle="dropdown">
+            Send
+        </a>
+        <div class="dropdown-menu border border-info">
+            <div class="text-center font-weight-bold h5">Send Email</div>
+            <div class="dropdown-divider border-info"></div>
+            <form class="px-4 py-3" style="width: 500px; height: auto;" id="js-email-form" action="{% url 'expert:email-invoice' pk=invoice.id %}">
+                {% csrf_token %}
+                <input name="to" type="text" class="form-control" id="id_to" placeholder="Receiptent List (comma seperated)" required>
+                <input type="text" name="subject" class="form-control" id="id_subject" placeholder="Subject">
+                <textarea type="text" name="message" class="form-control" id="id_message" placeholder="Message" required></textarea>
+                <div class="form-control">
+                    <i class="fa fa-paperclip" title="Attachment included in Email"></i>
+                    <i class="fa fa-file-pdf-o mx-1" title="PDF File"></i>
+                    InvoiceBill-{{ invoice.number }}.pdf
+                </div>
+                <button type="submit" class="btn btn-success my-2 w-100">Send</button>
+            </form>
+        </div>
+    </div>
 	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ invoice.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
 </div>
 {% endblock %}

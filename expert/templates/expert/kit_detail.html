@@ -58,6 +58,12 @@ $(document).ready(function() {
 				$this.addClass('disabled');
 				//remove the spinner and re-add the check icon
 				$this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-check');
+			},
+			statusCode: {
+				403: function() {
+					$this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-check');
+					alert('You dont have permission to Complete this Product.');
+				}
 			}
 		});
 	});
@@ -75,6 +81,11 @@ $(document).ready(function() {
 				$this.closest('tr').children('.js-td-status').addClass('bg-warning').html('Assigned');
 				$this.closest('tr').find('a.js-btn-product-complete').removeClass('disabled');
 				$this.closest('div.dropdown').children('button').html(result['assignedto'])
+			},
+			statusCode: {
+				403: function() {
+					alert('You dont have permission to Assign this Product.');
+				}
 			}
 		});
 	});
@@ -104,6 +115,11 @@ $(document).ready(function() {
 			data: {"date": $(this).val()},
 			success: function(result) {
 				$this.closest('div').children('span').html(result['date']);
+			},
+			statusCode: {
+				403: function() {
+					alert('You dont have permission to Change the Completion date of this KIT.');
+				}
 			}
 		});
 	});
