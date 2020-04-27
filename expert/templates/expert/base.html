@@ -67,21 +67,38 @@
 	<body>
 		{% block navbar-top %}
 		{# bg-custom-2 is defined in Dashboard.css #}
-		<nav class="navbar navbar-dark sticky-top bg-custom-2 flex-md-nowrap p-0 shadow" id="navbar-top">
+		<nav class="navbar navbar-dark sticky-top bg-custom-2 flex-nowrap p-0 shadow navbar-expand-md" id="navbar-top">
 			<a class="navbar-brand col-sm-3 col-md-2 mr-0 text-center" href="{% url 'expert:index' %}">Expert Traders</a>
-			<input class="form-control form-control-dark col mr-auto" type="text" placeholder="Search" aria-label="Search">
-			<div class="btn-toolbar mx-2">
-				{% block custom_navbar %}{% endblock %}
-				<div class="btn-group">
-					<a class="btn btn-sm btn-outline-danger mr-1" href="{% url 'expert:logout' %}" type="button"><i class="fa fa-sign-out"></i></a>
+			<input class="form-control form-control-dark d-none d-sm-block col mr-auto" type="text" placeholder="Search" aria-label="Search">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbartopcontent" aria-controls="navbartopcontent" aria-expanded="false" aria-label="Toggle Top Navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbartopcontent">
+				<ul class="navbar-nav ml-auto">
+					<!-- <li class="nav-item"> -->
+						{% block custom_navbar %}{% endblock %}
+					<!-- </li> -->
+					<li class="nav-item">
+						<a class="nav-link btn btn-sm btn-outline-danger mr-1" href="{% url 'expert:logout' %}" type="button"><i class="fa fa-sign-out"></i></a>
+					</li>
+				</ul>
+			</div>
+			{% comment %}
+			<div class="btn-toolbar mx-2 collapse navbar-collapse" id="navbartopcontent">
+				<div class="navbar-nav">
+					{% block custom_navbar %}{% endblock %}
+					<div class="btn-group">
+						<a class="btn btn-sm btn-outline-danger mr-1" href="{% url 'expert:logout' %}" type="button"><i class="fa fa-sign-out"></i></a>
+					</div>
 				</div>
 			</div>
+			{% endcomment %}
 		</nav>
 		{% endblock %}
 		<div class="container-fluid">
 			<div class="row">
 				{% block navbar-side %}
-				<nav class="col-md-1 d-none d-md-block bg-light sidebar">
+				<nav class="col-lg-1 col-3 d-block bg-light sidebar">
 					<div class="sidebar-sticky">
 						<ul class="nav flex-column text-center">
 							<li class="nav-item">
@@ -115,7 +132,7 @@
 					</div>
 				</nav>
 				{% endblock %}
-				<main role="main" class="col-md-10 ml-sm-auto col-lg-11 pt-3 px-4" id="main_content">
+				<main role="main" class="col-9 ml-auto col-lg-11 pt-3 pl-4 px-xl-4" id="main_content">
 					{% block main_content %}{% endblock %}
 				</main>
 			</div>
@@ -158,7 +175,13 @@
 
 	<style>
 		body {
-		  font-size: .875rem;
+			font-size: .65rem;
+		  /* font-size: .875rem; */
+		}
+		@media(min-width: 500px) {
+			body {
+				font-size: .875rem;
+			}
 		}
 		/*
 		 * Sidebar

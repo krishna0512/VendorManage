@@ -129,11 +129,11 @@ $(document).ready(function() {
 
 {% block custom_navbar %}
 <div class="btn-group">
-	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:kit-update' slug=kit.number %}"><i class="fa fa-pencil"></i> Edit</a>
-	<a class="btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:kit-delete' kit.number %}"><i class="fa fa-trash"></i> Delete</a>
-	<a class="btn btn-outline-info btn-sm mr-1" type="button" href="{% url 'expert:product-create' kit_number=kit.number %}"><i class="fa fa-plus"></i> Add New</a>
-	<a class="btn btn-outline-success btn-sm mr-1" type="button" href="{% url 'expert:challan-init' pk=kit.id %}">Make Challan</a>
-	<a class="btn btn-outline-warning btn-sm mr-1" {% if kit.get_completed_quantity == 0 %}disbaled{% endif %} type="button" href="{% url 'expert:kit-uncomplete' pk=kit.id %}"><i class="fa fa-ban"></i> Cancel Complete</a>
+	<a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:kit-update' slug=kit.number %}"><i class="fa fa-pencil"></i> Edit</a>
+	<a class="nav-link btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:kit-delete' kit.number %}"><i class="fa fa-trash"></i> Delete</a>
+	<a class="nav-link btn btn-outline-info btn-sm mr-1" type="button" href="{% url 'expert:product-create' kit_number=kit.number %}"><i class="fa fa-plus"></i> Add New</a>
+	<a class="nav-link btn btn-outline-success btn-sm mr-1" type="button" href="{% url 'expert:challan-init' pk=kit.id %}">Make Challan</a>
+	<a class="nav-link btn btn-outline-warning btn-sm mr-1" {% if kit.get_completed_quantity == 0 %}disbaled{% endif %} type="button" href="{% url 'expert:kit-uncomplete' pk=kit.id %}"><i class="fa fa-ban"></i> Cancel Complete</a>
 </div>
 {% endblock %}
 
@@ -141,7 +141,7 @@ $(document).ready(function() {
 <div class="container-fluid">
 	<div class="heading text-center h3 mt-3 mb-0 pb-0">Overview of KIT {{ kit.number }}</div>
 	<div class="text-center small mb-2">{{ kit.date_received }}</div>
-	<div class="mt-1">
+	<div class="mt-1 table-responsive">
 		<div class="d-flex">
 			<div class="mr-auto text-muted">
 				Product Completion Date -
