@@ -128,13 +128,11 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block custom_navbar %}
-<div class="btn-group">
-	<a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:kit-update' slug=kit.number %}"><i class="fa fa-pencil"></i> Edit</a>
-	<a class="nav-link btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:kit-delete' kit.number %}"><i class="fa fa-trash"></i> Delete</a>
-	<a class="nav-link btn btn-outline-info btn-sm mr-1" type="button" href="{% url 'expert:product-create' kit_number=kit.number %}"><i class="fa fa-plus"></i> Add New</a>
-	<a class="nav-link btn btn-outline-success btn-sm mr-1" type="button" href="{% url 'expert:challan-init' pk=kit.id %}">Make Challan</a>
-	<a class="nav-link btn btn-outline-warning btn-sm mr-1" {% if kit.get_completed_quantity == 0 %}disbaled{% endif %} type="button" href="{% url 'expert:kit-uncomplete' pk=kit.id %}"><i class="fa fa-ban"></i> Cancel Complete</a>
-</div>
+<li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:kit-update' slug=kit.number %}"><i class="fa fa-pencil"></i> Edit</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:kit-delete' kit.number %}"><i class="fa fa-trash"></i> Delete</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-info btn-sm mr-1" type="button" href="{% url 'expert:product-create' kit_number=kit.number %}"><i class="fa fa-plus"></i> Add New</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-success btn-sm mr-1" type="button" href="{% url 'expert:challan-init' pk=kit.id %}">Make Challan</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-warning btn-sm mr-1" {% if kit.get_completed_quantity == 0 %}disbaled{% endif %} type="button" href="{% url 'expert:kit-uncomplete' pk=kit.id %}"><i class="fa fa-ban"></i> Cancel Complete</a></li>
 {% endblock %}
 
 {% block main_content %}

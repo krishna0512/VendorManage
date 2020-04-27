@@ -39,13 +39,15 @@
 {% endblock %}
 
 {% block custom_navbar %}
-<div class="btn-group">
-    <a class="btn btn-outline-primary btn-sm mr-1" id="js-btn-print" type="button" href="javascript:window.print();"><i class="fa fa-print"></i> Print</a>
-    <div class="dropleft dropdown-form">
-        <a class="btn btn-outline-info btn-sm mr-1 dropdown-toggle" href="#" role="button" id="dropdownsendmailform" data-toggle="dropdown">
+<li class="nav-item">
+    <a class="nav-link btn btn-outline-primary btn-sm mr-1" id="js-btn-print" type="button" href="javascript:window.print();"><i class="fa fa-print"></i> Print</a>
+</li>
+<li class="nav-item">
+    <div class="dropdown dropdown-form">
+        <a class="nav-link btn btn-outline-info btn-sm mr-1 dropdown-toggle" href="#" role="button" id="dropdownsendmailform" data-toggle="dropdown">
             Send
         </a>
-        <div class="dropdown-menu border border-info">
+        <div class="dropdown-menu border border-info dropdown-menu-right">
             <div class="text-center font-weight-bold h5">Send Email</div>
             <div class="dropdown-divider border-info"></div>
             <form class="px-4 py-3" style="width: 500px; height: auto;" id="js-email-form" action="{% url 'expert:email-invoice' pk=invoice.id %}">
@@ -62,8 +64,10 @@
             </form>
         </div>
     </div>
-	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ invoice.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
-</div>
+</li>
+<li class="nav-item">
+    <a class="nav-link btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ invoice.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
+</li>
 {% endblock %}
 
 {% comment %}

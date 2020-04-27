@@ -14,15 +14,13 @@
 {% endblock %}
 
 {% block custom_navbar %}
-<div class="btn-group">
-	<a class="btn btn-success btn-sm mr-1" type="button" href="" id="btn-update"><i class="fa fa-pencil-square-o"></i> Update</a>
-	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ kit.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
-</div>
+<li class="nav-item"><a class="nav-link btn btn-success btn-sm mr-1" type="button" href="" id="btn-update"><i class="fa fa-pencil-square-o"></i> Update</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ kit.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a></li>
 {% endblock %}
 
 {% block main_content %}
 <div class="container d-flex justify-content-center">
-	<div class="card w-75 mt-3 border-primary">
+	<div class="card col-lg-8 mt-3 border-primary px-0">
 		<div class="card-header text-center border-primary">
 			Kit Update
 		</div>

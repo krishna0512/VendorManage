@@ -15,24 +15,24 @@
 {% endblock %}
 
 {% block custom_navbar %}
-<div class="btn-group">
+<li class="nav-item">
     <div class="dropdown mr-1">
-        <a class="btn btn-outline-success btn-sm dropdown-toggle" href="#" id="navbarCopyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link btn btn-outline-success btn-sm dropdown-toggle" href="#" id="navbarCopyDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-print"></i> Get Printable
         </a>
         <div class="dropdown-menu bg-dark" aria-labelledby="navbarCopyDropdown">
-            <a class="dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=original">Original Copy</a>
-            <a class="dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=duplicate">Duplicate Copy</a>
-            <a class="dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=triplicate">Triplicate Copy</a>
+            <a class="text-light dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=original">Original Copy</a>
+            <a class="text-light dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=duplicate">Duplicate Copy</a>
+            <a class="text-light dropdown-item" href="{% url 'expert:challan-printable' slug=challan.number %}?param_copy=triplicate">Triplicate Copy</a>
         </div>
     </div>
-    {% if challan.products.all.first.kit.jobwork_gatepass_processed %}
-    <a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{{ challan.products.all.first.kit.jobwork_gatepass_processed.url }}" target="_blank"><i class="fa fa-download"></i> Gatepass</a>
-    {% elif challan.products.all.first.kit.jobwork_gatepass %}
-    <a class="btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:challan-gatepass' pk=challan.id %}">Gatepass</a>
-    {% endif %}
-	<a class="btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:challan-delete' slug=challan.number %}"><i class="fa fa-ban"></i> Cancel</a>
-</div>
+</li>
+{% if challan.products.all.first.kit.jobwork_gatepass_processed %}
+<li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{{ challan.products.all.first.kit.jobwork_gatepass_processed.url }}" target="_blank"><i class="fa fa-download"></i> Gatepass</a> </li>
+{% elif challan.products.all.first.kit.jobwork_gatepass %}
+<li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:challan-gatepass' pk=challan.id %}">Gatepass</a> </li>
+{% endif %}
+<li class="nav-item"><a class="nav-link btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:challan-delete' slug=challan.number %}"><i class="fa fa-ban"></i> Cancel</a> </li>
 {% endblock %}
 
 {% block main_content %}

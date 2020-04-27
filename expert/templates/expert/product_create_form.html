@@ -18,16 +18,14 @@
 {% endblock %}
 
 {% block custom_navbar %}
-<div class="btn-group">
-	<a class="btn btn-success btn-sm mr-1" type="button" href="" id="btn-save"><i class="fa fa-floppy-o"></i> Save</a>
-	<a class="btn btn-primary btn-sm mr-1" type="button" href="" id="btn-save-another">Save & Add Another</a>
-	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ kit.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
-</div>
+<li class="nav-item"><a class="nav-link btn btn-success btn-sm mr-1" type="button" href="" id="btn-save"><i class="fa fa-floppy-o"></i> Save</a></li>
+<li class="nav-item"><a class="nav-link btn btn-primary btn-sm mr-1" type="button" href="" id="btn-save-another">Save & Add Another</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ kit.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a></li>
 {% endblock %}
 
 {% block main_content %}
 <div class="container d-flex justify-content-center">
-	<div class="w-75">
+	<div class="col-lg-8">
 		<div class="heading text-center my-4 h3">Create New Product</div>
 		<form method="post">
 			{% csrf_token %}

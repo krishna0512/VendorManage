@@ -15,10 +15,10 @@
 {% endblock %}
 
 {% block custom_navbar %}
-<div class="btn-group">
-	<a class="btn btn-outline-primary btn-sm mr-1" type="button" href="javascript:window.print();"><i class="fa fa-print"></i> Print</a>
-	<a class="btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ challan.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a>
-</div>
+<!-- <div class="btn-group"> -->
+	<li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="javascript:window.print();"><i class="fa fa-print"></i> Print</a></li>
+	<li class="nav-item"><a class="nav-link btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ challan.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a></li>
+<!-- </div> -->
 {% endblock %}
 
 {% block custom_css %}

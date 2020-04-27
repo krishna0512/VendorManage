@@ -28,7 +28,7 @@
     		    margin-top: -1px;
     		    display: block;
 			}
-			#navbar-top div.btn-group a {
+			#navbar-top li.nav-item a.nav-link {
 				color: white;
 			}
 			.u-hover--sparkle {
@@ -66,33 +66,24 @@
 	</head>
 	<body>
 		{% block navbar-top %}
-		{# bg-custom-2 is defined in Dashboard.css #}
-		<nav class="navbar navbar-dark sticky-top bg-custom-2 flex-nowrap p-0 shadow navbar-expand-md" id="navbar-top">
-			<a class="navbar-brand col-sm-3 col-md-2 mr-0 text-center" href="{% url 'expert:index' %}">Expert Traders</a>
+		<nav class="navbar navbar-dark sticky-top bg-custom-2 flex-md-nowrap p-0 shadow navbar-expand-md" id="navbar-top">
+			<a class="navbar-brand col-2 col-sm-3 col-md-2 mr-0 text-center" href="{% url 'expert:index' %}">Expert Traders</a>
 			<input class="form-control form-control-dark d-none d-sm-block col mr-auto" type="text" placeholder="Search" aria-label="Search">
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbartopcontent" aria-controls="navbartopcontent" aria-expanded="false" aria-label="Toggle Top Navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbartopcontent">
 				<ul class="navbar-nav ml-auto">
-					<!-- <li class="nav-item"> -->
-						{% block custom_navbar %}{% endblock %}
-					<!-- </li> -->
-					<li class="nav-item">
-						<a class="nav-link btn btn-sm btn-outline-danger mr-1" href="{% url 'expert:logout' %}" type="button"><i class="fa fa-sign-out"></i></a>
+					{% block custom_navbar %}{% endblock %}
+					<li class="nav-item dropdown">
+						<a id="navbaruserdropdown" class="nav-link btn btn-sm btn-outline-danger mr-1 dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-sign-out"></i></a>
+						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbaruserdropdown">
+							<a class="dropdown-item" href="">Hi, {{ user.username|title }}</a>
+							<a class="dropdown-item" href="{% url 'expert:logout' %}">Logout</a>
+						</div>
 					</li>
 				</ul>
 			</div>
-			{% comment %}
-			<div class="btn-toolbar mx-2 collapse navbar-collapse" id="navbartopcontent">
-				<div class="navbar-nav">
-					{% block custom_navbar %}{% endblock %}
-					<div class="btn-group">
-						<a class="btn btn-sm btn-outline-danger mr-1" href="{% url 'expert:logout' %}" type="button"><i class="fa fa-sign-out"></i></a>
-					</div>
-				</div>
-			</div>
-			{% endcomment %}
 		</nav>
 		{% endblock %}
 		<div class="container-fluid">
@@ -132,45 +123,11 @@
 					</div>
 				</nav>
 				{% endblock %}
-				<main role="main" class="col-9 ml-auto col-lg-11 pt-3 pl-4 px-xl-4" id="main_content">
+				<main role="main" class="col-9 ml-auto col-lg-11 pt-3 px-0 px-xl-4" id="main_content">
 					{% block main_content %}{% endblock %}
 				</main>
 			</div>
 		</div>
-		{% comment %}
-		{% block navbar %}
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="{% url 'expert:index' %}">Expert Traders</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMarkup" aria-controls="navbarMarkup" aria-expanded="false" aria-label="Toggle Navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarMarkup">
-				<div class="navbar-nav mr-auto">
-					<a class="nav-item nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Kit</a>
-					<a class="nav-item nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{% url 'expert:worker-list' %}">Worker</a>
-					<a class="nav-item nav-link {% if view.navigation == 'challan' %}active{% endif %}" href="{% url 'expert:challan-list' %}">Challan</a>
-					<a class="nav-item nav-link {% if view.navigation == 'invoice' %}active{% endif %}" href="{% url 'expert:invoice-list' %}">Invoice</a>
-					<div class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarReportDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Reports
-						</a>
-						<div class="dropdown-menu" aria-labelledby="navbarReportDropdown">
-							<a class="dropdown-item" href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">March 2020</a>
-							<a class="dropdown-item" href="{% url 'expert:report-monthly' year=2020 month='Apr' %}">April 2020</a>
-						</div>
-					</div>
-				</div>
-				{% block custom_navbar %}{% endblock %}
-				<div class="navbar-nav">
-					<a class="btn btn-sm btn-outline-danger mr-1" href="{% url 'expert:logout' %}" type="button"><i class="fa fa-sign-out"></i></a>
-				</div>
-			</div>
-		</nav>
-		{% endblock %}
-		{% endcomment %}
-		<main>
-		{# {% block main_content %}{% endblock %} #}
-		</main>
 	</body>
 
 	<style>

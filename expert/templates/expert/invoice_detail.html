@@ -2,10 +2,8 @@
 {% load static %}
 
 {% block custom_navbar %}
-<div class="btn-group">
-    <a class="btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:invoice-printable' slug=invoice.number %}"><i class="fa fa-print"></i> Get Printable</a>
-	<a class="btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:invoice-update' slug=invoice.number %}"><i class="fa fa-pencil"></i> Edit</a>
-</div>
+<li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:invoice-printable' slug=invoice.number %}"><i class="fa fa-print"></i> Get Printable</a></li>
+<li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:invoice-update' slug=invoice.number %}"><i class="fa fa-pencil"></i> Edit</a></li>
 {% endblock %}
 
 {% block main_content %}
@@ -14,7 +12,7 @@
         Overview of Invoice {{ invoice.number }}<br>
         <span class="text-secondary small">{{ invoice.date_sent }}</span>
     </div>
-    <div class="row pt-2">
+    <div class="row pt-2 pl-1">
         <div class="list-group col-xl-6 col-lg-8 mx-auto">
             {% for challan in invoice.challans.all %}
             <div class="list-group-item list-group-item-action d-flex justify-content-between">
