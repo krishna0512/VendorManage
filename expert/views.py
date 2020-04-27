@@ -247,14 +247,15 @@ class ProductCompleteView(PermissionRequiredMixin, SingleObjectMixin, View):
     permission_required = ('expert.view_kit','expert.view_product','expert.complete_product',)
 
     def post(self, *args, **kwargs):
-        product = self.get_object()
-        product.completedby = product.assignedto
-        if product.kit.date_product_completion:
-            product.date_completed = product.kit.date_product_completion
-        else:
-            product.date_completed = datetime.now()
-        product.status = 'completed'
-        product.save()
+        self.get_object().complete()
+        # product = self.get_object()
+        # product.completedby = product.assignedto
+        # if product.kit.date_product_completion:
+        #     product.date_completed = product.kit.date_product_completion
+        # else:
+        #     product.date_completed = datetime.now()
+        # product.status = 'completed'
+        # product.save()
         return JsonResponse({'saved': True})
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -326,10 +327,11 @@ class KitUncompleteRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redi
         kit = self.get_object()
         products = kit.products.filter(status='completed')
         for product in products:
-            product.completedby = None
-            product.date_completed = None
-            product.status = 'assigned'
-            product.save()
+            product.uncomplete()
+            # product.completedby = None
+            # product.date_completed = None
+            # product.status = 'assigned'
+            # product.save()
         return kit.get_absolute_url()
 
 
@@ -427,7 +429,11 @@ class ProductMonthArchiveView(MonthArchiveView):
     allow_future = True
     template_name_suffix = '_report_month'
 
+    # TODO: convert these methods to Manager methods of Product
     def get_product_completed(self, start_date, end_date):
+        # ret = Product.objects.get_date_completed_range(start_date, end_date)
+        # ret = ret.filter(status__in=['completed','dispatched'])
+        # return ret
         d = start_date
         ret = []
         while d <= end_date:
@@ -441,6 +447,8 @@ class ProductMonthArchiveView(MonthArchiveView):
         return ret
     
     def get_product_returned(self, start_date, end_date):
+        # ret = Product.objects.get_date_completed_range(start_date, end_date).exclude(return_remark='')
+        # return ret
         d = start_date
         ret = []
         while d <= end_date:
@@ -470,6 +478,12 @@ class ProductMonthArchiveView(MonthArchiveView):
         chart_data['date_list'] = str(dl)
         chart_data['product_completed'] = str(self.get_product_completed(start_date, end_date))
         chart_data['product_returned'] = str(self.get_product_returned(start_date, end_date))
+        r = Product.objects.filter(date_completed__lte=end_date, date_completed__gte=start_date)
+        context['total_product_completed'] = sum([i.size for i in r.filter(return_remark='')])
+        context['total_product_returned'] = sum([i.size for i in r.exclude(return_remark='')])
+        context['total_product_accepted'] = sum([i.size for i in r])
+        context['product_completed_percent'] = context['total_product_completed']*100 // context['total_product_accepted']
+        context['product_returned_percent'] = context['total_product_returned']*100 // context['total_product_accepted']
         # d = start_date
         # pc = []
         # while d <= end_date:

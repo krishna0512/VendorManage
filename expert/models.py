@@ -4,8 +4,12 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from num2words import num2words
+from datetime import datetime, date
 # Create your models here.
 
+class ProductManager(models.Manager):
+    def get_date_completed_range(self, start_date, end_date=date.today()):
+        return self.filter(date_completed__lte=end_date, date_completed__gte=start_date)
 
 class Product(models.Model):
     COLOR_CHOICES = [
@@ -56,6 +60,7 @@ class Product(models.Model):
             ('assign_product','Can Assign a worker to product'),
             ('complete_product','Can Complete a product'),
         ]
+    objects = ProductManager()
 
     order_number = models.CharField(
         max_length=50,
@@ -162,10 +167,46 @@ class Product(models.Model):
         self.size = round(self.size, 2)
         return super().save(*args, **kwargs)
 
+    def assign(self, worker_pk):
+        """
+        TODO: check for return_remarks and what should be done!
+        i.e. weather return_remarks should be emptied out or not.
+        In the original implementation in views it is emptied.
+        """
+        if self.status not in ['completed','pending','assigned']:
+            return False
+        worker = Worker.objects.get(id=worker_pk)
+        self.assignedto = worker
+        self.completedby = None
+        self.date_completed = None
+        self.status = 'assigned'
+        self.save()
+        return True
+
+    def complete(self):
+        """TODO: refactor the method to use Exceptions"""
+        if not self.assignedto or (self.date_product_completion and self.kit.date_product_completion > datetime.now()):
+            return False
+        self.completedby = self.assignedto
+        if self.date_product_completion:
+            self.date_completed = self.date_product_completion
+        else:
+            self.date_completed = datetime.now()
+        self.status = 'completed'
+        self.save()
+        return True
+
+    def uncomplete(self):
+        if self.status != 'completed':
+            return False
+        self.completedby = None
+        self.date_completed = None
+        self.status = 'assigned'
+        self.save()
+        return True
+
     def get_absolute_url(self):
-        return reverse(
-            'expert:product-detail', kwargs={'pk':self.id}
-        )
+        return reverse('expert:product-detail', kwargs={'pk':self.id})
 
 class Challan(models.Model):
     """Container for model that represents Delivery Challan"""
