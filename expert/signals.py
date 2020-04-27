@@ -25,7 +25,8 @@ def save_user_profile(sender, instance, created, **kwargs):
     # have included the username in worker then create&update the user.
     if not instance.user and instance.username:
         u = User.objects.create(username=instance.username)
-        u.set_password(settings['WORKER_PASSWORD'])
+        u.set_password(settings.WORKER_PASSWORD)
+        # u.set_password(settings['WORKER_PASSWORD'])
         u.save()
         instance.user = u
         instance.save()
