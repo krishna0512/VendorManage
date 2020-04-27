@@ -479,6 +479,7 @@ class ProductMonthArchiveView(MonthArchiveView):
         chart_data['product_completed'] = str(self.get_product_completed(start_date, end_date))
         chart_data['product_returned'] = str(self.get_product_returned(start_date, end_date))
         r = Product.objects.filter(date_completed__lte=end_date, date_completed__gte=start_date)
+        context['kits_received'] = Kit.objects.filter(date_received__gte=start_date, date_received__lte=end_date).count()
         context['total_product_completed'] = sum([i.size for i in r.filter(return_remark='')])
         context['total_product_returned'] = sum([i.size for i in r.exclude(return_remark='')])
         context['total_product_accepted'] = sum([i.size for i in r])
