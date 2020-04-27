@@ -5,10 +5,13 @@ from django.utils.translation import ugettext_lazy as _
 
 from num2words import num2words
 from datetime import datetime, date
+from dateutil.relativedelta import relativedelta as timedelta
 # Create your models here.
 
 class ProductManager(models.Manager):
-    def get_date_completed_range(self, start_date, end_date=date.today()):
+    def get_date_completed_range(self, start_date, end_date=None):
+        if end_date is None:
+            end_date = start_date + timedelta(months=1) - timedelta(days=1)
         return self.filter(date_completed__lte=end_date, date_completed__gte=start_date)
 
 class Product(models.Model):
@@ -493,6 +496,7 @@ class Worker(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='worker',
+        blank=True,
         null=True,
     )
     first_name = models.CharField(
