@@ -192,8 +192,8 @@ class Product(models.Model):
         if not self.assignedto or (self.date_product_completion and self.kit.date_product_completion > datetime.now()):
             return False
         self.completedby = self.assignedto
-        if self.date_product_completion:
-            self.date_completed = self.date_product_completion
+        if self.kit.date_product_completion:
+            self.date_completed = self.kit.date_product_completion
         else:
             self.date_completed = datetime.now()
         self.status = 'completed'
@@ -206,6 +206,15 @@ class Product(models.Model):
         self.completedby = None
         self.date_completed = None
         self.status = 'assigned'
+        self.save()
+        return True
+
+    def return_product(self, rr=None):
+        if rr is None or rr not in ['unprocessed','semiprocessed','mistake']:
+            return False
+        self.return_remark = rr
+        self.status = 'returned'
+        self.dispatched = False
         self.save()
         return True
 
@@ -467,6 +476,14 @@ class Kit(models.Model):
         return round(sum([i.size for i in self.products.all()]),2)
 
     def get_total_quantity(self):
+        return sum([i.quantity for i in self.products.all()])
+
+    @property
+    def size(self):
+        return round(sum([i.size for i in self.products.all()]), 2)
+
+    @property
+    def quantity(self):
         return sum([i.quantity for i in self.products.all()])
 
     def get_pending_quantity(self):

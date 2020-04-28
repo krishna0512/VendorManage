@@ -274,11 +274,6 @@ class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
                 # Yes, the worker has the permission to reassign the products.
                 worker = Worker.objects.get(id=self.kwargs['worker_pk'])
                 product.assign(worker.id)
-                # product.assignedto = worker
-                # product.return_remark = ''
-                # product.status = 'assigned'
-                # product.save()
-                # TODO: serialize the Worker model so I can directly pass it here.
                 return JsonResponse({'assignedto': worker.get_fullname(), 'refresh': False})
             else:
                 # No, worker does'nt have the permission to change the assignment.
@@ -286,10 +281,6 @@ class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
                 return JsonResponse({'assignedto': None, 'refresh': True})
         worker = Worker.objects.get(id=self.kwargs['worker_pk'])
         product.assign(worker.id)
-        # product.assignedto = worker
-        # product.return_remark = ''
-        # product.status = 'assigned'
-        # product.save()
         # TODO: serialize the Worker model so I can directly pass it here.
         return JsonResponse({'assignedto': worker.get_fullname(), 'refresh': False})
 
