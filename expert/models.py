@@ -189,13 +189,13 @@ class Product(models.Model):
 
     def complete(self):
         """TODO: refactor the method to use Exceptions"""
-        if not self.assignedto or (self.kit.date_product_completion and self.kit.date_product_completion > datetime.now()):
+        if not self.assignedto or (self.kit.date_product_completion and self.kit.date_product_completion > date.today()):
             return False
         self.completedby = self.assignedto
         if self.kit.date_product_completion:
             self.date_completed = self.kit.date_product_completion
         else:
-            self.date_completed = datetime.now()
+            self.date_completed = date.today()
         self.status = 'completed'
         self.save()
         return True
