@@ -93,7 +93,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				{% block navbar-side %}
-				<nav class="col-lg-1 col-3 d-block bg-light sidebar">
+				<nav class="col-md-2 col-xl-1 col-3 d-block bg-light sidebar">
 					<div class="sidebar-sticky">
 						<ul class="nav flex-column text-center">
 							<li class="nav-item">
@@ -127,7 +127,7 @@
 					</div>
 				</nav>
 				{% endblock %}
-				<main role="main" class="col-9 ml-auto col-lg-11 pt-3 px-0 px-xl-4" id="main_content">
+				<main role="main" class="col-9 ml-auto col-md-10 col-xl-11 pt-3 px-0 px-xl-4" id="main_content">
 					{% block main_content %}{% endblock %}
 				</main>
 			</div>
@@ -159,8 +159,9 @@
 		}
 
 		.sidebar-sticky {
-		  position: -webkit-sticky;
-		  position: sticky;
+		  /* position: -webkit-sticky;
+		  position: sticky; */
+		  position: fixed;
 		  /* top: 48px; Height of navbar */
 		  top: calc(100vh - var(--vh, 1vh)*100 + 48px);
 		  /* height: calc(100vh - 48px); */
