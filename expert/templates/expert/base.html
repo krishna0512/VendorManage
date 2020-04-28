@@ -12,6 +12,10 @@
 					dateFormat: "yy-mm-dd"
 				});
 			});
+			window.addEventListener('resize', () => {
+				let vh = window.innerHeight * 0.01;
+				document.documentElement.style.setProperty('--vh', `${vh}px`);
+			});
 		</script>
 		<style>
 		    .errorlist {
@@ -157,8 +161,10 @@
 		.sidebar-sticky {
 		  position: -webkit-sticky;
 		  position: sticky;
-		  top: 48px; /* Height of navbar */
-		  height: calc(100vh - 48px);
+		  /* top: 48px; Height of navbar */
+		  top: calc(100vh - var(--vh, 1vh)*100 + 48px);
+		  /* height: calc(100vh - 48px); */
+		  height: calc(var(--vh, 1vh)*100 - 48px);
 		  padding-top: .5rem;
 		  overflow-x: hidden;
 		  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
