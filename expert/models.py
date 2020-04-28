@@ -14,6 +14,21 @@ class ProductManager(models.Manager):
             end_date = start_date + timedelta(months=1) - timedelta(days=1)
         return self.filter(date_completed__lte=end_date, date_completed__gte=start_date)
 
+    def pending(self):
+        return self.filter(status='pending')
+
+    def assigned(self):
+        return self.filter(status='assigned')
+
+    def completed(self):
+        return self.filter(status='completed')
+
+    def returned(self):
+        return self.filter(status='returned')
+
+    def dispatched(self):
+        return self.filter(dispatched=True)
+
 class Product(models.Model):
     COLOR_CHOICES = [
         ('black','Black'),
@@ -472,11 +487,11 @@ class Kit(models.Model):
             }
         )
 
-    def get_total_size(self):
-        return round(sum([i.size for i in self.products.all()]),2)
+    # def get_total_size(self):
+    #     return round(sum([i.size for i in self.products.all()]),2)
 
-    def get_total_quantity(self):
-        return sum([i.quantity for i in self.products.all()])
+    # def get_total_quantity(self):
+    #     return sum([i.quantity for i in self.products.all()])
 
     @property
     def size(self):
@@ -486,14 +501,46 @@ class Kit(models.Model):
     def quantity(self):
         return sum([i.quantity for i in self.products.all()])
 
-    def get_pending_quantity(self):
-        return sum([i.quantity for i in self.products.filter(status='pending')])
+    @property
+    def quantity_detail(self):
+        pending = sum([i.quantity for i in self.products.pending()])
+        completed = sum([i.quantity for i in self.products.completed()])
+        assigned = sum([i.quantity for i in self.products.assigned()])
+        returned = sum([i.quantity for i in self.products.returned()])
+        dispatched = sum([i.quantity for i in self.products.dispatched()])
+        ret = {
+            'pending': pending,
+            'assigned': assigned,
+            'completed': completed,
+            'returned': returned,
+            'dispatched': dispatched,
+        }
+        return ret
 
-    def get_assigned_quantity(self):
-        return sum([i.quantity for i in self.products.filter(status='assigned')])
+    @property
+    def size_detail(self):
+        pending = sum([i.size for i in self.products.pending()])
+        completed = sum([i.size for i in self.products.completed()])
+        assigned = sum([i.size for i in self.products.assigned()])
+        returned = sum([i.size for i in self.products.returned()])
+        dispatched = sum([i.size for i in self.products.dispatched()])
+        ret = {
+            'pending': round(pending, 2),
+            'assigned': round(assigned, 2),
+            'completed': round(completed, 2),
+            'returned': round(returned, 2),
+            'dispatched': round(dispatche, 2),
+        }
+        return ret
 
-    def get_completed_quantity(self):
-        return sum([i.quantity for i in self.products.filter(status='completed')])
+    # def get_pending_quantity(self):
+    #     return sum([i.quantity for i in self.products.filter(status='pending')])
+
+    # def get_assigned_quantity(self):
+    #     return sum([i.quantity for i in self.products.filter(status='assigned')])
+
+    # def get_completed_quantity(self):
+    #     return sum([i.quantity for i in self.products.filter(status='completed')])
 
     def cleanup(self):
         if self.original_kit_summary:
