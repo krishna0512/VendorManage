@@ -273,10 +273,11 @@ class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
             if self.request.user.has_perm('expert.change_product'):
                 # Yes, the worker has the permission to reassign the products.
                 worker = Worker.objects.get(id=self.kwargs['worker_pk'])
-                product.assignedto = worker
-                product.return_remark = ''
-                product.status = 'assigned'
-                product.save()
+                product.assign(worker.id)
+                # product.assignedto = worker
+                # product.return_remark = ''
+                # product.status = 'assigned'
+                # product.save()
                 # TODO: serialize the Worker model so I can directly pass it here.
                 return JsonResponse({'assignedto': worker.get_fullname(), 'refresh': False})
             else:
@@ -284,10 +285,11 @@ class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
                 # give a warning that product has already been assigned and refresh the page.
                 return JsonResponse({'assignedto': None, 'refresh': True})
         worker = Worker.objects.get(id=self.kwargs['worker_pk'])
-        product.assignedto = worker
-        product.return_remark = ''
-        product.status = 'assigned'
-        product.save()
+        product.assign(worker.id)
+        # product.assignedto = worker
+        # product.return_remark = ''
+        # product.status = 'assigned'
+        # product.save()
         # TODO: serialize the Worker model so I can directly pass it here.
         return JsonResponse({'assignedto': worker.get_fullname(), 'refresh': False})
 
@@ -355,7 +357,8 @@ class ChallanInitRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redire
         products = kit.products.filter(status__in=['completed','returned'])
         for product in products:
             product.challan = challan
-            product.status = 'dispatched'
+            # product.status = 'dispatched'
+            product.dispatched = True
             product.save()
         challan.date_sent = max([i.date_completed for i in challan.products.all() if i.date_completed])
         challan.save()
@@ -646,8 +649,10 @@ class ChallanDeleteView(PermissionRequiredMixin, DeleteView):
             # it should be done automatically but todo that we have to most probably change
             # the on_delete attrib of challan in Product to somethingelse instead of CASCADE
             product.challan = None
+            # Legacy Code
             if product.status == 'dispatched':
                 product.status = 'returned' if product.return_remark else 'completed'
+            product.dispatched = False
             product.save()
         return super().delete(request, *args, **kwargs)
         # success_url = self.get_success_url()

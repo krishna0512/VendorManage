@@ -103,6 +103,7 @@ class Product(models.Model):
         verbose_name=_('Status'),
         help_text=_('Status of the Product'),
     )
+    dispatched = models.BooleanField(default=False)
     kit = models.ForeignKey(
         'Kit',
         on_delete=models.CASCADE,
@@ -176,7 +177,7 @@ class Product(models.Model):
         i.e. weather return_remarks should be emptied out or not.
         In the original implementation in views it is emptied.
         """
-        if self.status not in ['completed','pending','assigned']:
+        if self.status not in ['completed','pending','assigned'] or self.dispatched:
             return False
         worker = Worker.objects.get(id=worker_pk)
         self.assignedto = worker
