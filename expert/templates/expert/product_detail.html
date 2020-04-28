@@ -30,11 +30,11 @@
                 </tr>
                 <tr>
                     <td>Assigned To</td>
-                    <td><a href="{{ product.assignedto.get_absolute_url }}">{{ product.assignedto.get_fullname }}</a></td>
+                    <td><a href="{{ product.assignedto.get_absolute_url }}">{{ product.assignedto.username }}</a></td>
                 </tr>
                 <tr>
                     <td>Completed By</td>
-                    <td>{{ product.completedby.get_fullname }}</td>
+                    <td>{{ product.completedby.username }}</td>
                 </tr>
                 <tr>
                     <td>Date of Completion</td>

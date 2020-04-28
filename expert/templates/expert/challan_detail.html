@@ -61,15 +61,5 @@
             {% endfor %}
         </div>
     </div>
-    {% comment %}
-        
-    <center class="mt-4 h2">Overview of Challan - {{ challan.number }}</center>
-    <ul>
-        {% for product in challan.products.all %}
-        <li class="{% if product.return_remark %}bg-warning{% endif %}"><a href="{{ product.get_absolute_url }}">{{ product.order_number }}</a> - {{ product.size }} (By {{ product.completedby.get_fullname }})</li>
-        {% endfor %}
-    </ul>
-    <br><br>
-    {% endcomment %}
 </div>
 {% endblock %}

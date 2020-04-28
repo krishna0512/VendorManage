@@ -18,7 +18,7 @@
 			<tr>
 				<th>Order Number</th>
 				{% for worker in worker_list %}
-				<th class="text-center"><a href="{{ worker.get_absolute_url }}">{{ worker.get_fullname }}</a></th>
+				<th class="text-center"><a href="{{ worker.get_absolute_url }}">{{ worker.username }}</a></th>
 				{% endfor %}
 			</tr>
 		</thead>

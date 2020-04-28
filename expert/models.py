@@ -527,7 +527,7 @@ class Worker(models.Model):
         default='',
         blank=True,
     )
-    username = models.CharField(
+    _username = models.CharField(
         max_length=100,
         verbose_name=_('Username'),
         default='',
@@ -578,6 +578,17 @@ class Worker(models.Model):
             return '{} {}'.format(self.first_name, self.last_name)
         else:
             return self.first_name
+
+    @property
+    def username(self):
+        return self._username.strip().capitalize()
+
+    @username.setter
+    def username(self, value):
+        if self.user:
+            self.user.username = value.lower()
+            self.user.save()
+        self._username = value.lower()
 
     def get_total_contribution(self):
         return round(sum([i.size for i in self.products_completed.all()]),2)

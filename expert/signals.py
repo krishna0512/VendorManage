@@ -10,15 +10,6 @@ def all_cleanup_files(sender, instance, **kwargs):
     if 'cleanup' in dir(instance):
         instance.cleanup()
 
-# @receiver(post_save, sender=Worker)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         u = User.objects.create(username=instance.username)
-#         u.set_password(settings['WORKER_PASSWORD'])
-#         u.save()
-#         instance.user = u
-#         instance.save()
-
 @receiver(post_save, sender=Worker)
 def save_user_profile(sender, instance, created, **kwargs):
     # If the user is not defined for the worker and you
@@ -31,7 +22,8 @@ def save_user_profile(sender, instance, created, **kwargs):
         instance.user = u
         instance.save()
     # check for changes in username
-    if instance.username != instance.user.username:
-        u = instance.user
-        u.username = instance.username
-        u.save()
+    # This Functionality is redundant because of property getter and setters.
+    # if instance.username != instance.user.username:
+    #     u = instance.user
+    #     u.username = instance.username
+    #     u.save()

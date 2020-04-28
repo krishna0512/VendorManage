@@ -248,14 +248,6 @@ class ProductCompleteView(PermissionRequiredMixin, SingleObjectMixin, View):
 
     def post(self, *args, **kwargs):
         self.get_object().complete()
-        # product = self.get_object()
-        # product.completedby = product.assignedto
-        # if product.kit.date_product_completion:
-        #     product.date_completed = product.kit.date_product_completion
-        # else:
-        #     product.date_completed = datetime.now()
-        # product.status = 'completed'
-        # product.save()
         return JsonResponse({'saved': True})
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -274,7 +266,7 @@ class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
                 # Yes, the worker has the permission to reassign the products.
                 worker = Worker.objects.get(id=self.kwargs['worker_pk'])
                 product.assign(worker.id)
-                return JsonResponse({'assignedto': worker.get_fullname(), 'refresh': False})
+                return JsonResponse({'assignedto': worker.username, 'refresh': False})
             else:
                 # No, worker does'nt have the permission to change the assignment.
                 # give a warning that product has already been assigned and refresh the page.
@@ -282,7 +274,7 @@ class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
         worker = Worker.objects.get(id=self.kwargs['worker_pk'])
         product.assign(worker.id)
         # TODO: serialize the Worker model so I can directly pass it here.
-        return JsonResponse({'assignedto': worker.get_fullname(), 'refresh': False})
+        return JsonResponse({'assignedto': worker.username, 'refresh': False})
 
 class ProductReturnRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
     model = Product

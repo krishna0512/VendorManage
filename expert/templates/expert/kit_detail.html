@@ -210,17 +210,17 @@ $(document).ready(function() {
 								{% if product.status == 'pending' %}
 								Assign To
 								{% else %}
-								{{ product.assignedto.get_fullname }}
+								{{ product.assignedto.username }}
 								{% endif %}
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{ product.id }}">
 								{% for worker in worker_list %}
-								<a class="dropdown-item js-btn-product-assign" href="{% url 'expert:product-assign' product_pk=product.id worker_pk=worker.id %}">{{ worker.get_fullname }}</a>
+								<a class="dropdown-item js-btn-product-assign" href="{% url 'expert:product-assign' product_pk=product.id worker_pk=worker.id %}">{{ worker.username }}</a>
 								{% endfor %}
 							</div>
 						</div>
 					</td>
-					<td>{{ product.completedby.get_fullname }}</td>
+					<td>{{ product.completedby.username }}</td>
 					<td>{{ product.date_completed }}</td>
 					<td class="
 					js-td-status
