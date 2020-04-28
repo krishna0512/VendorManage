@@ -189,7 +189,7 @@ class Product(models.Model):
 
     def complete(self):
         """TODO: refactor the method to use Exceptions"""
-        if not self.assignedto or (self.date_product_completion and self.kit.date_product_completion > datetime.now()):
+        if not self.assignedto or (self.kit.date_product_completion and self.kit.date_product_completion > datetime.now()):
             return False
         self.completedby = self.assignedto
         if self.kit.date_product_completion:
