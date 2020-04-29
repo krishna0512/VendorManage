@@ -230,11 +230,15 @@ $(document).ready(function() {
 					{% elif product.status == 'returned' %}bg-danger{% endif %}
 					">{{ product.get_status_display }}</td>
 					<td class="text-right">
-						{% if product.status == 'assigned' %}
-						<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-outline-success btn-sm js-btn-product-complete"><i class="fa fa-check fa-lg"></i></a>
-						{% else %}
-						<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-outline-success btn-sm js-btn-product-complete disabled"><i class="fa fa-check fa-lg"></i></a>
-						{% endif %}
+						<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-outline-success btn-sm js-btn-product-complete {% if not product.is_assigned %}disabled{% endif %}"><i class="fa fa-check fa-lg"></i></a>
+            			<div class="dropdown d-inline">
+            			    <button class="btn btn-sm btn-outline-danger dropdown-toggle" type="button" id="returndropdownbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Return Product"><i class="fa fa-recycle"></i></button>
+            			    <div class="dropdown-menu" aria-labelledby="returndropdownbutton">
+            			        <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=unprocessed">UnProcessed</a>
+            			        <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=semiprocessed">Semi-Processed</a>
+            			        <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=mistake">Cutting Mistake</a>
+            			    </div>
+            			</div>
 						<a href="{% url 'expert:product-delete' product.id %}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash fa-lg"></i></a>
 					</td>
 

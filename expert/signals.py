@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db.models.signals import post_save, post_delete, pre_save, pre_delete
 from django.dispatch import receiver
 from django.conf import settings
@@ -17,7 +17,8 @@ def save_user_profile(sender, instance, created, **kwargs):
     if not instance.user and instance.username:
         u = User.objects.create(username=instance.username)
         u.set_password(settings.WORKER_PASSWORD)
-        # u.set_password(settings['WORKER_PASSWORD'])
+        g = Group.objects.get(name='BaseWorkers')
+        u.groups.add(g)
         u.save()
         instance.user = u
         instance.save()

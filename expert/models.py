@@ -233,6 +233,22 @@ class Product(models.Model):
         self.save()
         return True
 
+    @property
+    def is_pending(self):
+        return self.status == 'pending'
+    @property
+    def is_assigned(self):
+        return self.status == 'assigned'
+    @property
+    def is_completed(self):
+        return self.status == 'completed'
+    @property
+    def is_returned(self):
+        return self.status == 'returned'
+    @property
+    def is_dispatched(self):
+        return self.dispatched
+
     def get_absolute_url(self):
         return reverse('expert:product-detail', kwargs={'pk':self.id})
 

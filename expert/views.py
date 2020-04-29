@@ -284,11 +284,7 @@ class ProductReturnRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redi
         product = self.get_object()
         rr = self.request.GET.get('rr', '')
         product.return_product(rr)
-        # if rr in ['unprocessed','semiprocessed','mistake']:
-        #     product.return_remark = str(rr)
-        #     product.status = 'returned'
-        #     product.save()
-        return product.get_absolute_url()
+        return product.kit.get_absolute_url()
 
 @method_decorator(csrf_exempt, name='dispatch')
 class KitChangeCompletionDate(PermissionRequiredMixin, SingleObjectMixin, View):
