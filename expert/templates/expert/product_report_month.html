@@ -66,7 +66,7 @@
 					Kits Received
 				</div>
 				<div class="card-body">
-					<p class="card-text">{{ kits_received }}</p>
+					<p class="card-text">{{ kit_list.count }}</p>
 				</div>
 			</div>
 			<div class="card border border-primary shadow">
@@ -98,6 +98,38 @@
 	<div class="main-chart mt-4">
 		<canvas id="report-monthly-chart" class="w-100 border border-red" height="400"></canvas>
 	</div>
+	<div class="my-3">
+		<div class="table-responsive">
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Kit #</th>
+						<th>Date Received</th>
+						<th>Pending</th>
+						<th>Assigned</th>
+						<th>Completed</th>
+						<th>Returned</th>
+						<th>Dispatched</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for kit in kit_list %}
+					<tr>
+						<td>{{ forloop.counter }}</td>
+						<td>{{ kit.number }}</td>
+						<td>{{ kit.date_received }}</td>
+						<td>{{ kit.size_detail.pending }}</td>
+						<td>{{ kit.size_detail.assigned }}</td>
+						<td>{{ kit.size_detail.completed }}</td>
+						<td>{{ kit.size_detail.returned }}</td>
+						<td>{{ kit.size_detail.dispatched }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 {% endblock %}
 
@@ -117,7 +149,7 @@
 			<tr>
 				<th><a href="#" class="btn btn-link">Date</a></th>
 				{% for worker in worker_list %}
-				<th class="text-center"><a href="{{ worker.get_absolute_url }}" class="btn btn-link">{{ worker.get_fullname }}</a></th>
+				<th class="text-center"><a href="{{ worker.get_absolute_url }}" class="btn btn-link">{{ worker.fullname }}</a></th>
 				{% endfor %}
 				<th class="text-center"><a href="#" class="btn btn-link">Total</a></th>
 			</tr>

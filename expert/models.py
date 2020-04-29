@@ -93,7 +93,7 @@ class Product(models.Model):
         verbose_name=_('Quantity (Pcs)'),
         help_text=_('Number of commissions'),
     )
-    size = models.FloatField(
+    _size = models.FloatField(
         default=0.0,
         blank=False,
         verbose_name=_('Size (Sq.Ft.)'),
@@ -186,18 +186,14 @@ class Product(models.Model):
         self.size = round(self.size, 2)
         return super().save(*args, **kwargs)
 
-    def assign(self, worker_pk):
-        """
-        TODO: check for return_remarks and what should be done!
-        i.e. weather return_remarks should be emptied out or not.
-        In the original implementation in views it is emptied.
-        """
-        if self.status not in ['completed','pending','assigned'] or self.dispatched:
+    def assign(self, worker_id):
+        if self.dispatched:
             return False
-        worker = Worker.objects.get(id=worker_pk)
+        worker = Worker.objects.get(id=worker_id)
         self.assignedto = worker
         self.completedby = None
         self.date_completed = None
+        self.return_remark = ''
         self.status = 'assigned'
         self.save()
         return True
@@ -232,6 +228,15 @@ class Product(models.Model):
         self.dispatched = False
         self.save()
         return True
+
+    @property
+    def size(self):
+        return round(self._size, 2)
+    @size.setter
+    def size(self, value):
+        if value < 0:
+            raise ValueError("Size cannot be negative")
+        self._size = round(value, 2)
 
     @property
     def is_pending(self):
@@ -410,6 +415,12 @@ def kit_image_path(instance, filename):
     # return 'Kit_{}/Images/{}'.format(instance.number, filename)
     return 'Kit/{}/Images/{}'.format(instance.number, filename)
 
+class KitManager(models.Manager):
+    def get_date_received_range(self, start_date, end_date=None):
+        if end_date is None:
+            end_date = start_date + timedelta(months=1) - timedelta(days=1)
+        return self.filter(date_received__lte=end_date, date_received__gte=start_date)
+
 class Kit(models.Model):
     """Container for model that represents the KIT that is sent each day"""
     STATUS_CHOICES = [
@@ -489,6 +500,8 @@ class Kit(models.Model):
         help_text=_('The field for storing the gate pass after it is processed')
     )
 
+    objects = KitManager()
+
     def __repr__(self):
         return '<Kit: {}>'.format(str(self.number))
 
@@ -502,12 +515,6 @@ class Kit(models.Model):
                 'slug': self.number
             }
         )
-
-    # def get_total_size(self):
-    #     return round(sum([i.size for i in self.products.all()]),2)
-
-    # def get_total_quantity(self):
-    #     return sum([i.quantity for i in self.products.all()])
 
     @property
     def size(self):
@@ -545,18 +552,9 @@ class Kit(models.Model):
             'assigned': round(assigned, 2),
             'completed': round(completed, 2),
             'returned': round(returned, 2),
-            'dispatched': round(dispatche, 2),
+            'dispatched': round(dispatched, 2),
         }
         return ret
-
-    # def get_pending_quantity(self):
-    #     return sum([i.quantity for i in self.products.filter(status='pending')])
-
-    # def get_assigned_quantity(self):
-    #     return sum([i.quantity for i in self.products.filter(status='assigned')])
-
-    # def get_completed_quantity(self):
-    #     return sum([i.quantity for i in self.products.filter(status='completed')])
 
     def cleanup(self):
         if self.original_kit_summary:
@@ -636,11 +634,12 @@ class Worker(models.Model):
         help_text=_('Is the Worker Active?'),
     )
 
-    def get_fullname(self):
+    @property
+    def fullname(self):
         if self.last_name:
-            return '{} {}'.format(self.first_name, self.last_name)
+            return '{} {}'.format(self.first_name.capitalize(), self.last_name.capitalize())
         else:
-            return self.first_name
+            return self.first_name.capitalize()
 
     @property
     def username(self):
@@ -677,7 +676,7 @@ class Worker(models.Model):
         return '<Worker: {}>'.format(self.first_name.lower())
 
     def __str__(self):
-        return self.get_fullname()
+        return self.fullname
 
     def get_absolute_url(self):
         return reverse(
