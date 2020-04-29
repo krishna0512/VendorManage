@@ -127,6 +127,18 @@
 					</tr>
 					{% endfor %}
 				</tbody>
+				<tfoot>
+					<tr>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th>{{ total_product_completed|floatformat:2 }}</th>
+						<th>{{ total_product_returned|floatformat:2 }}</th>
+						<th>{{ total_product_dispatched|floatformat:2 }}</th>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
 	</div>

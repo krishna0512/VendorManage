@@ -463,9 +463,13 @@ class ProductMonthArchiveView(MonthArchiveView):
         chart_data['product_returned'] = str(self.get_product_returned(start_date, end_date))
         r = Product.objects.filter(date_completed__lte=end_date, date_completed__gte=start_date)
         context['kit_list'] = Kit.objects.get_date_received_range(start_date, end_date).order_by('date_received')
+        kit_list = context['kit_list']
         context['kits_received'] = Kit.objects.filter(date_received__gte=start_date, date_received__lte=end_date).count()
-        context['total_product_completed'] = sum([i.size for i in r.filter(return_remark='')])
-        context['total_product_returned'] = sum([i.size for i in r.exclude(return_remark='')])
+        context['total_product_completed'] = sum([i.size_detail['completed'] for i in kit_list])
+        context['total_product_returned'] = sum([i.size_detail['returned'] for i in kit_list])
+        context['total_product_dispatched'] = sum([i.size for i in kit_list])
+        # context['total_product_completed'] = sum([i.size for i in r.filter(return_remark='')])
+        # context['total_product_returned'] = sum([i.size for i in r.exclude(return_remark='')])
         context['total_product_accepted'] = sum([i.size for i in r])
         context['product_completed_percent'] = context['total_product_completed']*100 // context['total_product_accepted']
         context['product_returned_percent'] = context['total_product_returned']*100 // context['total_product_accepted']
