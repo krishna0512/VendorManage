@@ -118,6 +118,7 @@ class Product(models.Model):
     fabric = models.CharField(
         max_length=10,
         choices=FABRIC_CHOICES,
+        verbose_name=_('Fabric'),
         help_text=_('Fabric to be used to complete order.'),
     )
     color = models.CharField(
