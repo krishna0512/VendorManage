@@ -139,7 +139,7 @@ class KitUpdateView(PermissionRequiredMixin, UpdateView):
     model = Kit
     slug_field = 'number'
     fields = [
-        'number','date_product_completion',
+        'number','date_received','date_product_completion',
         'jobwork_gatepass'
     ]
     template_name_suffix = '_update_form'
