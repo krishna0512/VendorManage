@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.core.files import File
@@ -74,7 +74,7 @@ class KitCreateView(PermissionRequiredMixin, CreateView):
         else:
             n = 1
         initial['number'] = str(n)
-        initial['date_received'] = datetime.now()
+        initial['date_received'] = date.today()
         return initial
 
     def process_excel_data(self, data):
@@ -153,6 +153,10 @@ class KitDetailView(PermissionRequiredMixin, DetailView, MultipleObjectMixin):
 
     def apply_filters(self, queryset, filters):
         def filter_status(q, s):
+            if s=='dispatched':
+                return Q(dispatched=True)
+            if s=='completed':
+                return Q(dispatched=False)&Q(status=s)
             return Q(status=s)
             # return q.filter(status=s)
         def filter_fabric(q, f):
@@ -201,7 +205,10 @@ class KitDeleteView(PermissionRequiredMixin, DeleteView):
 
 class ProductUpdateView(PermissionRequiredMixin, UpdateView):
     model = Product
-    fields = '__all__'
+    fields = [
+        'order_number','quantity','size',
+        'fabric','color'
+    ]
     template_name_suffix = '_update_form'
     permission_required = ('expert.view_product','expert.change_product')
 
@@ -238,7 +245,8 @@ class ProductCreateView(PermissionRequiredMixin, CreateView):
             return self.object.kit.get_absolute_url()
 
     def form_valid(self, form):
-        form.instance.kit = Kit.objects.filter(number=self.kwargs['kit_number']).first()
+        form.instance.kit = Kit.objects.get(number=self.kwargs['kit_number'])
+        # form.instance.kit = Kit.objects.filter(number=self.kwargs['kit_number']).first()
         return super().form_valid(form)
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -307,13 +315,8 @@ class KitUncompleteRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redi
 
     def get_redirect_url(self, *args, **kwargs):
         kit = self.get_object()
-        products = kit.products.filter(status='completed')
-        for product in products:
+        for product in kit.products.all():
             product.uncomplete()
-            # product.completedby = None
-            # product.date_completed = None
-            # product.status = 'assigned'
-            # product.save()
         return kit.get_absolute_url()
 
 
@@ -333,13 +336,8 @@ class ChallanInitRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redire
             date_sent=datetime.now(),
             number=self._get_challan_number(),
         )
-        # products = kit.products.filter(status='completed') | kit.products.filter(status='returned')
-        products = kit.products.filter(status__in=['completed','returned'])
-        for product in products:
-            product.challan = challan
-            # product.status = 'dispatched'
-            product.dispatched = True
-            product.save()
+        for product in kit.products.all():
+            product.add_challan(challan.id)
         challan.date_sent = max([i.date_completed for i in challan.products.all() if i.date_completed])
         challan.save()
         return challan.get_absolute_url()
@@ -371,11 +369,12 @@ class ProductDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ('expert.view_kit','expert.view_product','expert.delete_product')
 
     def delete(self, request, *args, **kwargs):
-        self.kit_number = self.get_object().kit.number
+        # self.kit_number = self.get_object().kit.number
+        self.success_url = self.get_object().kit.get_absolute_url()
         return super().delete(request, *args, **kwargs)
 
-    def get_success_url(self):
-        return Kit.objects.filter(number=self.kit_number).first().get_absolute_url()
+    # def get_success_url(self):
+    #     return Kit.objects.filter(number=self.kit_number).first().get_absolute_url()
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
@@ -467,12 +466,23 @@ class ProductMonthArchiveView(MonthArchiveView):
         context['kits_received'] = Kit.objects.filter(date_received__gte=start_date, date_received__lte=end_date).count()
         context['total_product_completed'] = sum([i.size_detail['completed'] for i in kit_list])
         context['total_product_returned'] = sum([i.size_detail['returned'] for i in kit_list])
-        context['total_product_dispatched'] = sum([i.size for i in kit_list])
+        context['total_product_received'] = sum([i.size for i in kit_list])
+        context['total_product_dispatched'] = sum([i.size_detail['dispatched'] for i in kit_list])
         # context['total_product_completed'] = sum([i.size for i in r.filter(return_remark='')])
         # context['total_product_returned'] = sum([i.size for i in r.exclude(return_remark='')])
         context['total_product_accepted'] = sum([i.size for i in r])
         context['product_completed_percent'] = context['total_product_completed']*100 // context['total_product_accepted']
         context['product_returned_percent'] = context['total_product_returned']*100 // context['total_product_accepted']
+        worker_list = Worker.objects.active().order_by('_username')
+        a = []
+        for worker in worker_list:
+            a.append({
+                'worker': worker,
+                'completed': worker.get_date_completed_product_range(start_date, end_date).completed().dispatched().size,
+                'returned': worker.get_date_completed_product_range(start_date, end_date).returned().dispatched().size,
+            })
+        context['worker_list'] = a
+        print(a)
         # d = start_date
         # pc = []
         # while d <= end_date:
@@ -628,22 +638,14 @@ class ChallanDeleteView(PermissionRequiredMixin, DeleteView):
         return self.post(*args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
+        """TODO: I shouldnt have to reset the challan foreign key
+        it should be done automatically but todo that we have to most probably change
+        the on_delete attrib of challan in Product to somethingelse instead of CASCADE
+        """
         self.object = self.get_object()
         for product in self.object.products.all():
-            # TODO: I shouldnt have to reset the challan foreign key
-            # it should be done automatically but todo that we have to most probably change
-            # the on_delete attrib of challan in Product to somethingelse instead of CASCADE
-            product.challan = None
-            # Legacy Code
-            if product.status == 'dispatched':
-                product.status = 'returned' if product.return_remark else 'completed'
-            product.dispatched = False
-            product.save()
+            product.remove_challan()
         return super().delete(request, *args, **kwargs)
-        # success_url = self.get_success_url()
-        # self.object.active = False
-        # self.object.save()
-        # return HttpResponseRedirect(success_url)
 
 class InvoiceCreateView(PermissionRequiredMixin, CreateView):
     model = Invoice

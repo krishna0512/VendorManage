@@ -100,14 +100,16 @@
 	</div>
 	<div class="my-3">
 		<div class="table-responsive">
-			<table class="table table-striped table-hover table-bordered">
+			<table class="table table-striped table-hover table-bordered text-center">
 				<thead>
 					<tr>
-						<th>#</th>
+						<th colspan="7" class="bg-dark text-light font-weight-bold h5">Kit Production Stats</th>
+					</tr>
+					<tr>
+						<th></th>
 						<th>Kit #</th>
 						<th>Date Received</th>
-						<th>Pending</th>
-						<th>Assigned</th>
+						<th>Received</th>
 						<th>Completed</th>
 						<th>Returned</th>
 						<th>Dispatched</th>
@@ -116,11 +118,10 @@
 				<tbody>
 					{% for kit in kit_list %}
 					<tr>
-						<td>{{ forloop.counter }}</td>
+						<td class="text-left">{{ forloop.counter }}</td>
 						<td>{{ kit.number }}</td>
 						<td>{{ kit.date_received }}</td>
-						<td>{{ kit.size_detail.pending }}</td>
-						<td>{{ kit.size_detail.assigned }}</td>
+						<td>{{ kit.size }}</td>
 						<td>{{ kit.size_detail.completed }}</td>
 						<td>{{ kit.size_detail.returned }}</td>
 						<td>{{ kit.size_detail.dispatched }}</td>
@@ -132,13 +133,39 @@
 						<th></th>
 						<th></th>
 						<th></th>
-						<th></th>
-						<th></th>
+						<th>{{ total_product_received|floatformat:2 }}</th>
 						<th>{{ total_product_completed|floatformat:2 }}</th>
 						<th>{{ total_product_returned|floatformat:2 }}</th>
 						<th>{{ total_product_dispatched|floatformat:2 }}</th>
 					</tr>
 				</tfoot>
+			</table>
+		</div>
+	</div>
+	<div class="my-3">
+		<div class="table-responsive">
+			<table class="table table-hover table-bordered table-striped text-center">
+				<thead>
+					<tr>
+						<th colspan="4" class="font-weight-bold bg-dark text-light h5">Worker Production Stats</th>
+					</tr>
+					<tr>
+						<th></th>
+						<th>Worker</th>
+						<th>Product Completed</th>
+						<th>Returned (Fault)</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for data in worker_list %}
+					<tr>
+						<td class="text-left">{{ forloop.counter }}</td>
+						<td>{{ data.worker.username }}</td>
+						<td>{{ data.completed }}</td>
+						<td>{{ data.returned }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
 			</table>
 		</div>
 	</div>

@@ -8,7 +8,7 @@ from datetime import datetime, date
 from dateutil.relativedelta import relativedelta as timedelta
 # Create your models here.
 
-class ProductManager(models.Manager):
+class ProductQuerySet(models.QuerySet):
     def get_date_completed_range(self, start_date, end_date=None):
         if end_date is None:
             end_date = start_date + timedelta(months=1) - timedelta(days=1)
@@ -21,6 +21,7 @@ class ProductManager(models.Manager):
         return self.filter(status='assigned')
 
     def completed(self):
+        """This filters the products that are already dispatched"""
         return self.filter(status='completed')
 
     def returned(self):
@@ -28,6 +29,20 @@ class ProductManager(models.Manager):
 
     def dispatched(self):
         return self.filter(dispatched=True)
+
+    @property
+    def quantity(self):
+        """returns the sum of quantity of the products in filter"""
+        if not self.exists():
+            return 0
+        return sum([i.quantity for i in self.all()])
+
+    @property
+    def size(self):
+        """returns the sum of the size of the products in filter (rounded 2)"""
+        if not self.exists():
+            return 0.0
+        return round(sum([i.size for i in self.all()]), 2)
 
 class Product(models.Model):
     COLOR_CHOICES = [
@@ -71,6 +86,7 @@ class Product(models.Model):
         ('unprocessed', 'UnProcessed'),
         ('semiprocessed', 'Semi-Processed'),
         ('mistake', 'Cutting Mistake'),
+        ('fault', 'Fault'),
     ]
 
     class Meta:
@@ -78,7 +94,7 @@ class Product(models.Model):
             ('assign_product','Can Assign a worker to product'),
             ('complete_product','Can Complete a product'),
         ]
-    objects = ProductManager()
+    objects = ProductQuerySet.as_manager()
 
     order_number = models.CharField(
         max_length=50,
@@ -202,6 +218,8 @@ class Product(models.Model):
         """TODO: refactor the method to use Exceptions"""
         if not self.assignedto or (self.kit.date_product_completion and self.kit.date_product_completion > date.today()):
             return False
+        if not self.is_assigned:
+            return False
         self.completedby = self.assignedto
         if self.kit.date_product_completion:
             self.date_completed = self.kit.date_product_completion
@@ -212,7 +230,7 @@ class Product(models.Model):
         return True
 
     def uncomplete(self):
-        if self.status != 'completed':
+        if self.is_dispatched or not self.is_completed:
             return False
         self.completedby = None
         self.date_completed = None
@@ -221,10 +239,31 @@ class Product(models.Model):
         return True
 
     def return_product(self, rr=None):
-        if rr is None or rr not in ['unprocessed','semiprocessed','mistake']:
+        if rr is None or rr not in ['unprocessed','semiprocessed','mistake','fault']:
+            return False
+        if self.is_dispatched and rr != 'fault':
+            # you cannot return a product with un/semi/mistake if product is already dispatched
             return False
         self.return_remark = rr
         self.status = 'returned'
+        self.save()
+        return True
+
+    def add_challan(self, challan_id):
+        challan = Challan.objects.get(id=challan_id)
+        if self.is_dispatched:
+            return False
+        if not self.is_completed and not self.is_returned:
+            return False
+        self.challan = challan
+        self.dispatched = True
+        self.save()
+        return True
+
+    def remove_challan(self):
+        if not self.is_dispatched:
+            return False
+        self.challan = None
         self.dispatched = False
         self.save()
         return True
@@ -415,7 +454,7 @@ def kit_image_path(instance, filename):
     # return 'Kit_{}/Images/{}'.format(instance.number, filename)
     return 'Kit/{}/Images/{}'.format(instance.number, filename)
 
-class KitManager(models.Manager):
+class KitQuerySet(models.QuerySet):
     def get_date_received_range(self, start_date, end_date=None):
         if end_date is None:
             end_date = start_date + timedelta(months=1) - timedelta(days=1)
@@ -500,7 +539,7 @@ class Kit(models.Model):
         help_text=_('The field for storing the gate pass after it is processed')
     )
 
-    objects = KitManager()
+    objects = KitQuerySet.as_manager()
 
     def __repr__(self):
         return '<Kit: {}>'.format(str(self.number))
@@ -526,33 +565,33 @@ class Kit(models.Model):
 
     @property
     def quantity_detail(self):
-        pending = sum([i.quantity for i in self.products.pending()])
-        completed = sum([i.quantity for i in self.products.completed()])
-        assigned = sum([i.quantity for i in self.products.assigned()])
-        returned = sum([i.quantity for i in self.products.returned()])
-        dispatched = sum([i.quantity for i in self.products.dispatched()])
+        # pending = sum([i.quantity for i in self.products.pending()])
+        # completed = sum([i.quantity for i in self.products.completed()])
+        # assigned = sum([i.quantity for i in self.products.assigned()])
+        # returned = sum([i.quantity for i in self.products.returned()])
+        # dispatched = sum([i.quantity for i in self.products.dispatched()])
         ret = {
-            'pending': pending,
-            'assigned': assigned,
-            'completed': completed,
-            'returned': returned,
-            'dispatched': dispatched,
+            'pending': self.products.pending().quantity,
+            'assigned': self.products.assigned().quantity,
+            'completed': self.products.completed().dispatched().quantity,
+            'returned': self.products.returned().dispatched().quantity,
+            'dispatched': self.products.dispatched().quantity,
         }
         return ret
 
     @property
     def size_detail(self):
-        pending = sum([i.size for i in self.products.pending()])
-        completed = sum([i.size for i in self.products.completed()])
-        assigned = sum([i.size for i in self.products.assigned()])
-        returned = sum([i.size for i in self.products.returned()])
-        dispatched = sum([i.size for i in self.products.dispatched()])
+        # pending = sum([i.size for i in self.products.pending()])
+        # completed = sum([i.size for i in self.products.completed()])
+        # assigned = sum([i.size for i in self.products.assigned()])
+        # returned = sum([i.size for i in self.products.returned()])
+        # dispatched = sum([i.size for i in self.products.dispatched()])
         ret = {
-            'pending': round(pending, 2),
-            'assigned': round(assigned, 2),
-            'completed': round(completed, 2),
-            'returned': round(returned, 2),
-            'dispatched': round(dispatched, 2),
+            'pending': self.products.pending().size,
+            'assigned': self.products.assigned().size,
+            'completed': self.products.completed().dispatched().size,
+            'returned': self.products.returned().dispatched().size,
+            'dispatched': self.products.dispatched().size,
         }
         return ret
 
@@ -569,6 +608,10 @@ class Kit(models.Model):
 
 def worker_image_path(instance, filename):
     return 'Worker/{}/{}'.format(instance.first_name.lower(), filename)
+
+class WorkerQuerySet(models.QuerySet):
+    def active(self):
+        return self.filter(active=True)
 
 class Worker(models.Model):
     user = models.OneToOneField(
@@ -634,6 +677,8 @@ class Worker(models.Model):
         help_text=_('Is the Worker Active?'),
     )
 
+    objects = WorkerQuerySet.as_manager()
+
     @property
     def fullname(self):
         if self.last_name:
@@ -651,6 +696,14 @@ class Worker(models.Model):
             self.user.username = value.lower()
             self.user.save()
         self._username = value.lower()
+
+    def get_date_completed_product_range(self, start_date, end_date=None):
+        """Get all the products completed by the worker between these dates."""
+        if end_date is None:
+            end_date = start_date + timedelta(months=1) - timedelta(days=1)
+        kit_list = Kit.objects.get_date_received_range(start_date, end_date)
+        ret = Product.objects.filter(completedby=self, kit__in=kit_list)
+        return ret
 
     def get_total_contribution(self):
         return round(sum([i.size for i in self.products_completed.all()]),2)
