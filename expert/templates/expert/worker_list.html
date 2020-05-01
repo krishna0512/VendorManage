@@ -1,20 +1,75 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_js %}
+<script>
+	$(function() {
+		var table = $('#table-worker-list').DataTable({
+			'ordering': false,
+			'conditionalPaging': true,
+			'searching': false,
+			"fnDrawCallback": function(settings) {
+				$(settings.nTHead).hide();
+			},
+			dom: '<"float-right"B>ltip',
+			buttons: [{
+				text: '<i class="fa fa-plus"></i> Add New',
+				className: 'btn btn-primary btn-sm font-italic',
+				action: function(e, dt, node, config) {
+					window.location.href = "{% url 'expert:worker-create' %}";
+				}
+			}],
+		});
+
+		$('#table-worker-list tbody').on('click', 'tr', function() {
+			var url = $(this).attr('data-href');
+			window.location.href = url;
+		})
+	});
+</script>
+{% endblock %}
+
+{% block custom_css %}
+<style>
+	#table-worker-list tbody td {
+		padding: 10px 25px;
+	}
+	#table-worker-list tbody tr:hover {
+		cursor: pointer;
+	}
+	ul.pagination > .paginate_button {
+		padding: 4px 2px!important;
+	}
+</style>
+{% endblock %}
+
 {% block main_content %}
 <div class="container py-0 pl-4 pl-lg-0">
-	<div class="p-3 h2 text-center m-0">
+	<div class="px-3 h2 text-center m-0 py-1">
 		List of Workers
 	</div>
-	<div class="row mt-3">
-		<div class="list-group col-xl-6 col-lg-8 mx-auto font-italic">
-			{% for worker in worker_list %}
-				<a href="{{ worker.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" title="">
-					<span class="font-weight-bold"><span class="mr-2 pr-2 border-right border-dark">{{ forloop.counter }}</span>{{ worker.username }}</span>
-					<span class="badge badge-success badge-pill">{{ worker.get_approx_contribution_badge }}</span>
-				</a>
-			{% endfor %}
-			<a href="{% url 'expert:worker-create' %}" class="list-group-item list-group-item-action text-center list-group-item-info"><i class="fa fa-plus fa-lg"></i> Add New</a>
+	<div class="row mt-2">
+		<div class="col-lg-8 col-xl-6 mx-auto font-italic">
+			<table class="hover display row-border" id="table-worker-list">
+				<thead>
+					<tr>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for worker in worker_list %}
+					<tr data-href="{{ worker.get_absolute_url }}">
+						<td class="font-weight-bold text-left">
+							<span class="mr-2 pr-2 border-right border-dark">{{ forloop.counter }}</span>{{ worker.username }}
+						</td>
+						<td class="text-right">
+							<span class="badge badge-success badge-pill">{{ worker.get_approx_contribution_badge }}</span>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div>
