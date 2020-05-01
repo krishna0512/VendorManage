@@ -5,7 +5,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		{% include "expert/head_content.html" %}
-		<title>{% block title %}Expert Traders{% endblock %}</title>
+		<title>{% block title %}KTSoft{% endblock %}</title>
 		<script>
 			$(function() {
 				$("[id^=id_date]").datepicker({
@@ -92,7 +92,9 @@
 	<body>
 		{% block navbar-top %}
 		<nav class="navbar navbar-dark sticky-top bg-custom-2 flex-md-nowrap p-0 shadow navbar-expand-md" id="navbar-top">
-			<a class="navbar-brand col-2 col-sm-3 col-md-2 mr-0 text-center" href="{% url 'expert:index' %}">Expert Traders</a>
+			<a class="navbar-brand col-2 col-sm-3 col-md-2 mr-0 text-center" href="{% url 'expert:index' %}">
+				<img src="{% static 'expert/images/logo_transparent.png' %}" alt="KTS Logo" width="100" class="img-fluid">
+			</a>
 			<input class="form-control form-control-dark d-none d-sm-block col mr-auto" type="text" placeholder="Search" aria-label="Search">
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbartopcontent" aria-controls="navbartopcontent" aria-expanded="false" aria-label="Toggle Top Navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -155,9 +157,17 @@
 				</main>
 			</div>
 		</div>
+				<footer class="bg-dark text-light py-2 w-100">
+					<div class="text-center text-secondary">
+						<i class="fa fa-copyright"></i> Copyright Reserved. KT Software Solutions.
+					</div>
+				</footer>
 	</body>
 
 	<style>
+		html, body {
+			height: 100%;
+		}
 		body {
 			font-size: .75rem;
 		  /* font-size: .875rem; */
@@ -167,6 +177,14 @@
 				font-size: .875rem;
 			}
 		} */
+		/* Footer */
+		footer {
+			/* just behind the sidebar but above everything else */
+			z-index: 99;
+			position: fixed;
+			left: 0;
+			bottom: 0;
+		}
 		/*
 		 * Sidebar
 		 */
