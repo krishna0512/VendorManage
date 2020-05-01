@@ -59,7 +59,7 @@
 
 {% block main_content %}
 <div>
-	<div class="header-cards" style="font-size: 1rem;">
+	<div class="header-cards" style="font-size: 1.1em;">
 		<div class="card-deck mx-3 text-center">
 			<div class="card border border-primary shadow">
 				<div class="card-header bg-primary text-light">
@@ -122,9 +122,9 @@
 						<td><a href="{{ kit.get_absolute_url }}">{{ kit.number }}</a></td>
 						<td>{{ kit.date_received }}</td>
 						<td>{{ kit.size }}</td>
-						<td>{{ kit.size_detail.completed }}</td>
-						<td>{{ kit.size_detail.returned }}</td>
-						<td>{{ kit.size_detail.dispatched }}</td>
+						<td>{{ kit.products.completed.dispatched.size }}</td>
+						<td>{{ kit.products.dispatched.returned.size }}</td>
+						<td>{{ kit.products.dispatched.size }}</td>
 					</tr>
 					{% endfor %}
 				</tbody>

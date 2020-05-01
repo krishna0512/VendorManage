@@ -460,6 +460,9 @@ class KitQuerySet(models.QuerySet):
             end_date = start_date + timedelta(months=1) - timedelta(days=1)
         return self.filter(date_received__lte=end_date, date_received__gte=start_date)
 
+    def products(self):
+        return Product.objects.filter(kit__in=self.all())
+
 class Kit(models.Model):
     """Container for model that represents the KIT that is sent each day"""
     STATUS_CHOICES = [
@@ -557,11 +560,11 @@ class Kit(models.Model):
 
     @property
     def size(self):
-        return round(sum([i.size for i in self.products.all()]), 2)
+        return self.products.all().size
 
     @property
     def quantity(self):
-        return sum([i.quantity for i in self.products.all()])
+        return self.products.all().quantity
 
     @property
     def quantity_detail(self):
