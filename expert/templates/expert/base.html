@@ -138,6 +138,9 @@
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'invoice' %}active{% endif %}" href="{% url 'expert:invoice-list' %}">Invoice</a>
 							</li>
 							<li class="nav-item">
+								<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Feb' %}">Reports (Feb)</a>
+							</li>
+							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">Reports (Mar)</a>
 							</li>
 							<li class="nav-item mt-auto border-top">

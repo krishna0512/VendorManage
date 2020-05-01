@@ -2,22 +2,68 @@
 {% load static %}
 {% load humanize %}
 
+{% block custom_js %}
+<script>
+	$(function() {
+		var table = $('#table-challan-list').DataTable({
+			'ordering': false,
+			'conditionalPaging': true,
+			'searching': false,
+			"fnDrawCallback": function(settings) {
+				$(settings.nTHead).hide();
+			},
+		});
+
+		$('#table-challan-list tbody').on('click', 'tr', function() {
+			var url = $(this).attr('data-href');
+			window.location.href = url;
+		})
+	});
+</script>
+{% endblock %}
+
+{% block custom_css %}
+<style>
+	#table-challan-list tbody td {
+		padding: 10px 25px;
+	}
+	#table-challan-list tbody tr:hover {
+		cursor: pointer;
+	}
+	ul.pagination > .paginate_button {
+		padding: 4px 2px!important;
+	}
+</style>
+{% endblock %}
+
 {% block main_content %}
 <div class="container py-0 pl-4 pl-lg-0">
     <div class="p-3 h2 text-center m-0">
         List of Challans
     </div>
-    <div class="row mt-3">
-        <div class="list-group col-xl-6 col-lg-8 mx-auto font-italic">
-            {% for challan in challan_list %}
-                <a href="{{ challan.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" title="">
-                    <span class="font-weight-bold">{{ challan.number }}</span>
-                    <span class="small text-secondary">{{ challan.date_sent|naturalday|title }}</span>
-                    <span class="badge badge-success badge-pill">{{ challan.products.all.count }}</span>
-                </a>
-            {% endfor %}
-            {# <a href="" class="list-group-item list-group-item-action text-center list-group-item-info">Add New</a> #}
-        </div>
-    </div>
+	<div class="row mt-3">
+		<div class="col-lg-8 col-xl-6 mx-auto font-italic">
+			<table class="hover display row-border" id="table-challan-list">
+				<thead>
+					<tr>
+						<th></th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+                    {% for challan in challan_list %}
+                    <tr data-href="{{ challan.get_absolute_url }}">
+                        <td class="font-weight-bold text-left">{{ challan.number }}</td>
+                        <td class="small text-secondary text-center">{{ challan.date_sent|naturalday|title }}</td>
+                        <td class="text-right">
+                            <span class="badge badge-success badge-pill">{{ challan.products.all.count }}</span>
+                        </td>
+                    </tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 {% endblock %}

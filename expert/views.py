@@ -477,9 +477,13 @@ class ProductMonthArchiveView(MonthArchiveView):
         context['total_product_dispatched'] = sum([i.size_detail['dispatched'] for i in kit_list])
         # context['total_product_completed'] = sum([i.size for i in r.filter(return_remark='')])
         # context['total_product_returned'] = sum([i.size for i in r.exclude(return_remark='')])
-        context['total_product_accepted'] = sum([i.size for i in r])
-        context['product_completed_percent'] = context['total_product_completed']*100 // context['total_product_accepted']
-        context['product_returned_percent'] = context['total_product_returned']*100 // context['total_product_accepted']
+        # context['total_product_accepted'] = sum([i.size for i in r])
+        try:
+            context['product_completed_percent'] = context['total_product_completed']*100 // context['total_product_received']
+            context['product_returned_percent'] = context['total_product_returned']*100 // context['total_product_received']
+        except ZeroDivisionError:
+            context['product_completed_percent'] = 100
+            context['product_returned_percent'] = 0
         worker_list = Worker.objects.active().order_by('_username')
         a = []
         for worker in worker_list:

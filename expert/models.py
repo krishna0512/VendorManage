@@ -21,7 +21,6 @@ class ProductQuerySet(models.QuerySet):
         return self.filter(status='assigned')
 
     def completed(self):
-        """This filters the products that are already dispatched"""
         return self.filter(status='completed')
 
     def returned(self):

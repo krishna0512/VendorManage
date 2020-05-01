@@ -74,7 +74,7 @@
 					Products Received
 				</div>
 				<div class="card-body">
-					<p class="card-text">{{ total_product_accepted|floatformat:2 }} Sq.Ft.</p>
+					<p class="card-text">{{ total_product_received|floatformat:2 }} Sq.Ft.</p>
 				</div>
 			</div>
 			<div class="card border border-warning shadow">
@@ -119,7 +119,7 @@
 					{% for kit in kit_list %}
 					<tr>
 						<td class="text-left">{{ forloop.counter }}</td>
-						<td>{{ kit.number }}</td>
+						<td><a href="{{ kit.get_absolute_url }}">{{ kit.number }}</a></td>
 						<td>{{ kit.date_received }}</td>
 						<td>{{ kit.size }}</td>
 						<td>{{ kit.size_detail.completed }}</td>
@@ -160,7 +160,7 @@
 					{% for data in worker_list %}
 					<tr>
 						<td class="text-left">{{ forloop.counter }}</td>
-						<td>{{ data.worker.username }}</td>
+						<td><a href="{{ data.worker.get_absolute_url }}">{{ data.worker.username }}</a></td>
 						<td>{{ data.completed }}</td>
 						<td>{{ data.returned }}</td>
 					</tr>
