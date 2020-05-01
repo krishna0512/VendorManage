@@ -581,11 +581,15 @@ class WorkerDetailView(PermissionRequiredMixin, DetailView):
 class WorkerUpdateView(PermissionRequiredMixin, UpdateView):
     model = Worker
     fields = [
-        'first_name','last_name','address',
+        'first_name','last_name','_username','address',
         'date_joined','photo'
     ]
     template_name_suffix = '_update_form'
     permission_required = ('expert.view_worker','expert.change_worker')
+
+    def form_valid(self, form):
+        form.instance._username = form.instance._username.lower()
+        return super().form_valid(form)
 
 class WorkerDeleteView(PermissionRequiredMixin, DeleteView):
     model = Worker
