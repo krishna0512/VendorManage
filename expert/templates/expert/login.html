@@ -6,30 +6,34 @@
 <div class="container">
 	<div class="row mt-4 pt-4">
 		<div class="col text-center mx-auto col-md-8 col-lg-6 col-xl-4">
-			<div class="card">
+			<div class="card {% if form.non_field_errors %}border border-danger{% endif %}">
 				<div class="card-header">
 					Expert Traders
 				</div>
 				<div class="card-body">
 					<form method="post">
 						{% csrf_token %}
-						{% for field in form %}
 						<div class="form-group row">
-							<label for="{{ field.id_for_label }}" class="col-4 col-form-label d-none">{{ field.label }}</label>
 							<div class="col">
-			                    {% if field.errors %}
-			                    <small class="form-text text-danger font-weight-bold">{{ field.errors }}</small>
-			                    {{ field|add_attr:"form-control border border-danger" }}
-			                    {% else %}
-								{{ field|add_attr:"form-control" }}
-			                    {% endif %}
-								{% if field.help_text %}
-								<small class="form-text text-muted">{{ field.help_text }}</small>
-								{% endif %}
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="fa fa-user"></i></span>
+									</div>
+									<input type="text" name="username" autofocus autocapitalize="none" maxlength="150" class="form-control" required id="id_username" placeholder="Username">
+								</div>
 							</div>
 						</div>
-						{% endfor %}
-						<button type="submit" class="btn btn-success">Submit</button>
+						<div class="form-group row">
+							<div class="col">
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="fa fa-key"></i></span>
+									</div>
+									<input type="password" name="password" class="form-control" required id="id_password" placeholder="Password">
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-success w-50"><i class="fa fa-sign-in"></i> Login</button>
 					</form>
 				</div>
 			</div>

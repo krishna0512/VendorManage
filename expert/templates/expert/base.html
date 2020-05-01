@@ -11,6 +11,27 @@
 				$("[id^=id_date]").datepicker({
 					dateFormat: "yy-mm-dd"
 				});
+				$('#sidebar-collapse').on('click', function(e) {
+					e.preventDefault();
+					$('#navbar-side').removeClass('d-block').hide('slow', function() {
+						$('#main_content').removeClass('col-9 col-md-10 col-xl-11 ml-auto').addClass('col ml-2');
+						$('#btn-sidebar-expand').show('fast');
+					});
+					sessionStorage.setItem('sidebar-expand', 'false');
+				})
+				$('#btn-sidebar-expand').on('click', function(e) {
+					e.preventDefault();
+					$(this).hide('fast', function() {
+						$('#navbar-side').addClass('d-block').show('slow');
+						$('#main_content').addClass('col-9 col-md-10 col-xl-11 ml-auto').removeClass('col ml-2');
+					});
+					sessionStorage.setItem('sidebar-expand','true');
+				});
+				if (sessionStorage.getItem('sidebar-expand') == 'false') {
+					$('#navbar-side').removeClass('d-block').hide();
+					$('#main_content').removeClass('col-9 col-md-10 col-xl-11 ml-auto').addClass('col ml-2');
+					$('#btn-sidebar-expand').show('fast');
+				}
 			});
 			window.addEventListener('resize', () => {
 				let vh = window.innerHeight * 0.01;
@@ -97,10 +118,13 @@
 		{% endblock %}
 		<div class="container-fluid">
 			<div class="row">
+				<div id="btn-sidebar-expand">
+					<span><i class="fa fa-chevron-right"></i></span>
+				</div>
 				{% block navbar-side %}
-				<nav class="col-md-2 col-xl-1 col-3 d-block bg-light sidebar">
+				<nav class="col-md-2 col-xl-1 col-3 d-block bg-light sidebar" id="navbar-side">
 					<div class="sidebar-sticky">
-						<ul class="nav flex-column text-center">
+						<ul class="nav flex-column text-center h-100">
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Kit</a>
 							</li>
@@ -110,24 +134,15 @@
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'challan' %}active{% endif %}" href="{% url 'expert:challan-list' %}">Challan</a>
 							</li>
-							<li class="nav-item">
+							<li class="nav-item active">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'invoice' %}active{% endif %}" href="{% url 'expert:invoice-list' %}">Invoice</a>
 							</li>
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">Reports (Mar)</a>
 							</li>
-							{% comment %}
-							TODO: edit the dropright so that this works correctly
-							<li class="nav-item dropright">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarReportDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Reports
-								</a>
-								<div class="dropdown-menu" aria-labelledby="navbarReportDropdown">
-									<a class="dropdown-item" href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">March 2020</a>
-									<a class="dropdown-item" href="{% url 'expert:report-monthly' year=2020 month='Apr' %}">April 2020</a>
-								</div>
+							<li class="nav-item mt-auto border-top">
+								<a class="nav-link" href="" id="sidebar-collapse"><i class="fa fa-chevron-left"></i></a>
 							</li>
-							{% endcomment %}
 						</ul>
 					</div>
 				</nav>
@@ -154,74 +169,94 @@
 		 */
 
 		.sidebar {
-		  position: fixed;
-		  top: 0;
-		  bottom: 0;
-		  left: 0;
-		  z-index: 100; /* Behind the navbar */
-		  padding: 0;
-		  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 100; /* Behind the navbar */
+			padding: 0;
+			box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
 		}
 
 		.sidebar-sticky {
-		  /* position: -webkit-sticky;
-		  position: sticky; */
-		  position: fixed;
-		  top: 48px; /* Height of navbar */
-		  /* top: calc(100vh - var(--vh, 1vh)*100 + 48px); */
-		  /* height: calc(100vh - 48px); */
-		  height: calc(var(--vh, 1vh)*100 - 48px);
-		  padding-top: .5rem;
-		  overflow-x: hidden;
-		  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+			/* position: -webkit-sticky;
+			position: sticky; */
+			position: fixed;
+			top: 48px; /* Height of navbar */
+			/* top: calc(100vh - var(--vh, 1vh)*100 + 48px); */
+			/* height: calc(100vh - 48px); */
+			height: calc(var(--vh, 1vh)*100 - 48px);
+			padding-top: .5rem;
+			overflow-x: hidden;
+			overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+		}
+
+		#btn-sidebar-expand {
+			position: fixed;
+			z-index: 100;
+			left: 0;
+			top: 48px;
+			height: calc(var(--vh, 1vh)*100 - 48px);
+			padding-left: 3px;
+			padding-right: 5px;
+		}
+		#btn-sidebar-expand:hover {
+			background-color: whitesmoke;
+		}
+		#btn-sidebar-expand span {
+			position: relative;
+			top: 50%;
+		}
+		#sidebar-collapse:hover {
+			border: 1px solid aquamarine;
 		}
 
 		.sidebar .nav-link {
-		  font-weight: 500;
-		  color: #333;
+			font-weight: 500;
+			color: #333;
 		}
 
 		.sidebar .nav-link .feather {
-		  margin-right: 4px;
-		  color: #999;
+			margin-right: 4px;
+			color: #999;
 		}
 
 		.sidebar .nav-link.active {
-		  color: #007bff;
+			color: #007bff;
 		}
 
 		.sidebar-heading {
-		  font-size: .75rem;
-		  text-transform: uppercase;
+			font-size: .75rem;
+			text-transform: uppercase;
 		}
 
 		/*
 		 * Navbar
 		 */
 		.bg-custom-2 {
-		  background-image: linear-gradient(15deg, #1f2122 30%, #61455c 100%);
+			background-image: linear-gradient(15deg, #1f2122 30%, #61455c 100%);
 		}
 
 		.navbar-brand {
-		  padding-top: .75rem;
-		  padding-bottom: .75rem;
-		  font-size: 1rem;
-		  background-color: rgba(0, 0, 0, .25);
-		  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+			padding-top: .75rem;
+			padding-bottom: .75rem;
+			font-size: 1rem;
+			background-color: rgba(0, 0, 0, .25);
+			box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
 		}
 
 		.form-control-dark {
-		  padding: .75rem 1rem;
-		  border-width: 0;
-		  border-radius: 0;
-		  color: #fff;
-		  background-color: rgba(255, 255, 255, .1);
-		  border-color: rgba(255, 255, 255, .1);
+			padding: .75rem 1rem;
+			border-width: 0;
+			border-radius: 0;
+			color: #fff;
+			background-color: rgba(255, 255, 255, .1);
+			border-color: rgba(255, 255, 255, .1);
 		}
 
 		.form-control-dark:focus {
-		  border-color: transparent;
-		  box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+			border-color: transparent;
+			box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 		}
 
 		/*
