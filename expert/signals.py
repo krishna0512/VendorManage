@@ -11,11 +11,11 @@ def all_cleanup_files(sender, instance, **kwargs):
         instance.cleanup()
 
 @receiver(post_save, sender=Worker)
-def save_user_profile(sender, instance, created, **kwargs):
+def create_user_for_worker(sender, instance, created, **kwargs):
     # If the user is not defined for the worker and you
     # have included the username in worker then create&update the user.
     if not instance.user and instance.username:
-        u = User.objects.create(username=instance.username)
+        u = User.objects.create(username=instance.username.lower())
         u.set_password(settings.WORKER_PASSWORD)
         g = Group.objects.get(name='BaseWorkers')
         u.groups.add(g)

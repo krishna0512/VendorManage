@@ -16,6 +16,7 @@ urlpatterns = [
     path('ajax/product/<int:pk>/complete/', views.ProductCompleteView.as_view(), name='product-complete'),
     path('ajax/product/<int:product_pk>/assignto/<int:worker_pk>/', views.ProductAssignView.as_view(), name='product-assign'),
     path('ajax/kit/<int:pk>/change_completion_date/', views.KitChangeCompletionDate.as_view(), name='kit-change-product-completion'),
+    path('ajax/validate/worker/username/', views.validate_create_worker_username, name='validate-create-worker-username'),
 
     path('kit/', views.KitListView.as_view(), name='kit-list'),
     path('kit/create/', views.KitCreateView.as_view(), name='kit-create'),

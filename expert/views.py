@@ -22,6 +22,13 @@ from random import random
 
 # Create your views here.
 
+def validate_create_worker_username(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': Worker.objects.filter(_username__iexact=username).exists()
+    }
+    return JsonResponse(data)
+
 def  send_email(request):
     ret = send_mail(
         subject='test',
@@ -539,11 +546,15 @@ class WorkerListView(PermissionRequiredMixin, ListView):
 class WorkerCreateView(PermissionRequiredMixin, CreateView):
     model = Worker
     fields = [
-        'first_name','last_name','address',
+        'first_name','last_name','_username','address',
         'date_joined','photo',
     ]
     template_name_suffix = '_create_form'
     permission_required = ('expert.view_worker','expert.add_worker')
+
+    def form_valid(self, form):
+        form.instance._username = form.instance._username.lower()
+        return super().form_valid(form)
 
 class WorkerDetailView(PermissionRequiredMixin, DetailView):
     model = Worker

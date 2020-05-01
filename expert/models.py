@@ -689,7 +689,7 @@ class Worker(models.Model):
 
     @property
     def username(self):
-        return self._username.strip().capitalize()
+        return self._username.strip().capitalize() if self._username else ''
 
     @username.setter
     def username(self, value):

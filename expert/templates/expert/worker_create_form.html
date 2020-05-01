@@ -9,6 +9,27 @@
 			e.preventDefault();
 			$('#btn-submit').click();
 		});
+		$('#id__username').change(function() {
+			let username = $(this).val();
+			let $this = $(this);
+			$.ajax({
+				url: "{% url 'expert:validate-create-worker-username' %}",
+				dataType: "json",
+				data: {
+					'username': username
+				},
+				success: function(result) {
+					if (result.is_taken) {
+						$this.addClass('border border-danger');
+						alert('A worker with this Username already exists');
+					}
+					else {
+						$this.removeClass('border border-danger');
+					}
+				}
+			});
+			console.log($(this).val());
+		});
 	});
 </script>
 {% endblock %}
@@ -22,7 +43,7 @@
 <div class="container d-flex justify-content-center">
 	<div class="col-lg-8">
 		<div class="heading text-center my-4 h3">Create New Worker</div>
-		<form method="post" enctype="multipart/form-data">
+		<form method="post" enctype="multipart/form-data" autocomplete="off">
 			{% csrf_token %}
 			{% for field in form %}
 			<div class="form-group row">
