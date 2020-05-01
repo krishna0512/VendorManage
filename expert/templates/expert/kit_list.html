@@ -2,38 +2,90 @@
 {% load static %}
 {% load humanize %}
 
+{% block custom_js %}
+<script>
+	$(function() {
+		var table = $('#table-kit-list').DataTable({
+			'ordering': false,
+			'conditionalPaging': true,
+			'searching': false,
+			"fnDrawCallback": function(settings) {
+				$(settings.nTHead).hide();
+			},
+			dom: '<"float-right"B>ltip',
+			buttons: [{
+				text: '<i class="fa fa-plus"></i> Add New',
+				className: 'btn btn-primary btn-sm font-italic',
+				action: function(e, dt, node, config) {
+					window.location.href = "{% url 'expert:kit-create' %}";
+				}
+			}],
+		});
+
+		$('#table-kit-list tbody').on('click', 'tr', function() {
+			var url = $(this).attr('data-href');
+			window.location.href = url;
+		})
+	});
+</script>
+{% endblock %}
+
+{% block custom_css %}
+<style>
+	#table-kit-list tbody td {
+		padding: 10px 25px;
+	}
+	#table-kit-list tbody tr:hover {
+		cursor: pointer;
+	}
+	ul.pagination > .paginate_button {
+		padding: 4px 2px!important;
+	}
+</style>
+{% endblock %}
+
 {% block main_content %}
 <div class="container py-0 pl-4 pl-lg-0">
 	<div class="p-3 h2 text-center m-0">
 		List of Kits
 	</div>
 	<div class="row mt-3">
-		<div class="list-group col-xl-6 col-lg-8 mx-auto font-italic">
-			{% for kit in kit_list %}
-				<a href="{{ kit.get_absolute_url }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" title="{{ kit.size }} Sq.Ft.">
-					<span class="font-weight-bold">{{ kit.number }}</span>
-					<span class="small text-secondary">{{ kit.date_received|naturalday|title }}</span>
-					<span>
-						{% if kit.quantity_detail.pending %}
-						<span class="badge badge-light badge-pill" title="Pending Products">{{ kit.quantity_detail.pending }}</span>
-						{% endif %}
-						{% if kit.quantity_detail.assigned %}
-						<span class="badge badge-warning badge-pill" title="Assigned Products">{{ kit.quantity_detail.assigned }}</span>
-						{% endif %}
-						{% if kit.quantity_detail.completed %}
-						<span class="badge badge-success badge-pill" title="Completed Products">{{ kit.quantity_detail.completed }}</span>
-						{% endif %}
-						{% if kit.quantity_detail.retured %}
-						<span class="badge badge-danger badge-pill" title="Returned Products">{{ kit.quantity_detail.returned }}</span>
-						{% endif %}
-						{% firstof kit.quantity_detail.pending kit.quantity_detail.assigned kit.quantity_detail.completed "check" as flag %}
-						{% if flag == 'check' %}
-						<span class="badge badge-primary badge-pill" title="Dispatched"><i class="fa fa-check"></i></span>
-						{% endif %}
-					</span>
-				</a>
-			{% endfor %}
-			<a href="{% url 'expert:kit-create' %}" class="list-group-item list-group-item-action text-center list-group-item-info"><i class="fa fa-plus fa-lg"></i> Add New</a>
+		<div class="col-lg-8 col-xl-6 mx-auto font-italic">
+			<table class="hover display row-border" id="table-kit-list">
+				<thead>
+					<tr>
+						<th></th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for kit in kit_list %}
+					<tr data-href="{{ kit.get_absolute_url }}">
+						<td class="font-weight-bold text-left">{{ kit.number }}</td>
+						<td class="small text-secondary text-center">{{ kit.date_received|naturalday|title }}</td>
+						<td class="text-right">
+							{% if kit.quantity_detail.pending %}
+							<span class="badge badge-light badge-pill" title="Pending Products">{{ kit.quantity_detail.pending }}</span>
+							{% endif %}
+							{% if kit.quantity_detail.assigned %}
+							<span class="badge badge-warning badge-pill" title="Assigned Products">{{ kit.quantity_detail.assigned }}</span>
+							{% endif %}
+							{% if kit.quantity_detail.completed %}
+							<span class="badge badge-success badge-pill" title="Completed Products">{{ kit.quantity_detail.completed }}</span>
+							{% endif %}
+							{% if kit.quantity_detail.retured %}
+							<span class="badge badge-danger badge-pill" title="Returned Products">{{ kit.quantity_detail.returned }}</span>
+							{% endif %}
+							{% firstof kit.quantity_detail.pending kit.quantity_detail.assigned kit.quantity_detail.completed "check" as flag %}
+							{% if flag == 'check' %}
+							<span class="badge badge-primary badge-pill" title="Dispatched"><i class="fa fa-check"></i></span>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div>
