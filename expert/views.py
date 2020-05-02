@@ -315,7 +315,6 @@ class KitChangeCompletionDate(PermissionRequiredMixin, SingleObjectMixin, View):
         kit.save()
         return JsonResponse({'date': date.strftime('%B %d, %Y')})
 
-# TODO: add a function in product model for completeing and uncompleting the product
 class KitUncompleteRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
     model = Kit
     permission_required = ('expert.view_kit','expert.view_product','expert.change_product',)
@@ -389,7 +388,6 @@ class ProductDeleteView(PermissionRequiredMixin, DeleteView):
 class ProductDayArchiveView(DayArchiveView):
     model = Product
     date_field = 'date_completed'
-    # TODO: check if allow_empty should be allowed or not
     allow_empty = True
     allow_future = True
     template_name_suffix = '_report_day'
@@ -407,7 +405,6 @@ class ProductDayArchiveView(DayArchiveView):
         #         ret['daily_work'] = 0.0
         #     worker_list.append(ret)
         # context['worker_list'] = worker_list
-        #TODO: Improve the worker_list to exclude the inactive worker somehow.
         context['worker_list'] = Worker.objects.all()
         return context
 
@@ -423,7 +420,6 @@ class ProductMonthArchiveView(PermissionRequiredMixin, MonthArchiveView):
         """Only allow the access to this page is the user is a superuser."""
         return self.request.user.is_superuser
 
-    # TODO: convert these methods to Manager methods of Product
     def get_product_completed(self, start_date, end_date):
         # ret = Product.objects.get_date_completed_range(start_date, end_date)
         # ret = ret.filter(status__in=['completed','dispatched'])
