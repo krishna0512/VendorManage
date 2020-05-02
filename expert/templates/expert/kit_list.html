@@ -59,20 +59,19 @@
 						<td class="font-weight-bold text-left">{{ kit.number }}</td>
 						<td class="small text-secondary text-center">{{ kit.date_received|naturalday|title }}</td>
 						<td class="text-right">
-							{% if kit.quantity_detail.pending %}
-							<span class="badge badge-light badge-pill" title="Pending Products">{{ kit.quantity_detail.pending }}</span>
+							{% if kit.products.pending.quantity %}
+							<span class="badge badge-light badge-pill" title="Pending Products">{{ kit.products.pending.quantity }}</span>
 							{% endif %}
-							{% if kit.quantity_detail.assigned %}
-							<span class="badge badge-warning badge-pill" title="Assigned Products">{{ kit.quantity_detail.assigned }}</span>
+							{% if kit.products.assigned.quantity %}
+							<span class="badge badge-warning badge-pill" title="Assigned Products">{{ kit.products.assigned.quantity }}</span>
 							{% endif %}
-							{% if kit.quantity_detail.completed %}
-							<span class="badge badge-success badge-pill" title="Completed Products">{{ kit.quantity_detail.completed }}</span>
+							{% if kit.products.remaining.completed.quantity %}
+							<span class="badge badge-success badge-pill" title="Completed Products">{{ kit.products.remaining.completed.quantity }}</span>
 							{% endif %}
-							{% if kit.quantity_detail.retured %}
-							<span class="badge badge-danger badge-pill" title="Returned Products">{{ kit.quantity_detail.returned }}</span>
+							{% if kit.remaining.retured.quantity %}
+							<span class="badge badge-danger badge-pill" title="Returned Products">{{ kit.products.remaining.returned.quantity }}</span>
 							{% endif %}
-							{% firstof kit.quantity_detail.pending kit.quantity_detail.assigned kit.quantity_detail.completed "check" as flag %}
-							{% if flag == 'check' %}
+							{% if kit.products.remaining.count == 0 %}
 							<span class="badge badge-primary badge-pill" title="Dispatched"><i class="fa fa-check"></i></span>
 							{% endif %}
 						</td>

@@ -29,6 +29,9 @@ class ProductQuerySet(models.QuerySet):
     def dispatched(self):
         return self.filter(dispatched=True)
 
+    def remaining(self):
+        return self.filter(dispatched=False)
+
     @property
     def quantity(self):
         """returns the sum of quantity of the products in filter"""
