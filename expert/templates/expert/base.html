@@ -85,6 +85,33 @@
 				transform: scale3d(1, 1, 1);
 				transition: transform 600ms;
 			}
+			.table-datatable {
+				border: 1px solid #ddd;
+				border-radius: 10px;
+			}
+			.table-datatable tbody tr:hover {
+				cursor: pointer;
+			}
+			.table-datatable tbody tr:first-child td:first-child {
+				border-top-left-radius: 10px;
+				-webkit-border-top-left-radius: 10px;
+				-mox-border-top-left-radius: 10px;
+			}
+			.table-datatable tbody tr:first-child td:last-child {
+				border-top-right-radius: 10px;
+				-webkit-border-top-right-radius: 10px;
+				-mox-border-top-right-radius: 10px;
+			}
+			.table-datatable tbody tr:last-child td:first-child {
+				border-bottom-left-radius: 10px;
+				-moz-border-bottom-left-radius: 10px;
+				-webkit-border-bottom-left-radius: 10px;
+			}
+			.table-datatable tbody tr:last-child td:last-child {
+				border-bottom-right-radius: 10px;
+				-webkit-border-bottom-right-radius: 10px;
+				-mox-border-bottom-right-radius: 10px;
+			}
 		</style>
 		{% block custom_css %}{% endblock %}
 		{% block custom_js %}{% endblock %}
@@ -157,11 +184,6 @@
 				</main>
 			</div>
 		</div>
-				<footer class="bg-dark text-light py-2 w-100">
-					<div class="text-center text-secondary">
-						<i class="fa fa-copyright"></i> Copyright Reserved. KT Software Solutions.
-					</div>
-				</footer>
 	</body>
 
 	<style>
@@ -170,20 +192,6 @@
 		}
 		body {
 			font-size: .75rem;
-		  /* font-size: .875rem; */
-		}
-		/* @media only screen and (min-width: 500px) {
-			body {
-				font-size: .875rem;
-			}
-		} */
-		/* Footer */
-		footer {
-			/* just behind the sidebar but above everything else */
-			z-index: 99;
-			position: fixed;
-			left: 0;
-			bottom: 0;
 		}
 		/*
 		 * Sidebar

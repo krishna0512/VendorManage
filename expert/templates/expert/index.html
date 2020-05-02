@@ -2,8 +2,27 @@
 {% load static %}
 {% load add_attr %}
 
+{% block custom_css %}
+<style>
+	footer {
+		/* just behind the sidebar but above everything else */
+		z-index: 99;
+		position: fixed;
+		left: 0;
+		bottom: 0;
+	}
+</style>
+{% endblock %}
+
 {% block main_content %}
 <div class="container text-center mt-4">
-	Some Home Page
+	<div class="heading h4">
+		JobWork Software by KT Software Solutions
+	</div>
 </div>
+<footer class="bg-dark text-light py-2 w-100">
+	<div class="text-center text-secondary">
+		<i class="fa fa-copyright"></i> Copyright Reserved. KT Software Solutions.
+	</div>
+</footer>
 {% endblock %}

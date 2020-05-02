@@ -24,12 +24,6 @@
 
 {% block custom_css %}
 <style>
-	#table-challan-list tbody td {
-		padding: 10px 25px;
-	}
-	#table-challan-list tbody tr:hover {
-		cursor: pointer;
-	}
 	ul.pagination > .paginate_button {
 		padding: 4px 2px!important;
 	}
@@ -43,7 +37,7 @@
     </div>
 	<div class="row mt-2">
 		<div class="col-lg-8 col-xl-6 mx-auto font-italic">
-			<table class="hover display row-border" id="table-challan-list">
+			<table class="hover display row-border table-datatable" id="table-challan-list">
 				<thead>
 					<tr>
 						<th></th>

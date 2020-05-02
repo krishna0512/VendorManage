@@ -32,12 +32,6 @@
 
 {% block custom_css %}
 <style>
-	#table-invoice-list tbody td {
-		padding: 10px 25px;
-	}
-	#table-invoice-list tbody tr:hover {
-		cursor: pointer;
-	}
 	ul.pagination > .paginate_button {
 		padding: 4px 2px!important;
 	}
@@ -51,7 +45,7 @@
 	</div>
 	<div class="row mt-2">
 		<div class="col-lg-8 col-xl-6 mx-auto font-italic">
-			<table class="hover display row-border" id="table-invoice-list">
+			<table class="hover display row-border table-datatable" id="table-invoice-list">
 				<thead>
 					<tr>
 						<th></th>
@@ -61,8 +55,8 @@
 				<tbody>
                     {% for invoice in invoice_list %}
                     <tr data-href="{{ invoice.get_absolute_url }}">
-                        <td class="font-weight-bold text-left">{{ invoice.number }}</td>
-                        <td class="small text-secondary text-center">{{ invoice.date_sent|naturalday|title }}</td>
+                        <td class="font-weight-bold text-center">{{ invoice.number }}</td>
+                        <td class="small text-secondary text-right">{{ invoice.date_sent|naturalday|title }}</td>
                     </tr>
 					{% endfor %}
 				</tbody>

@@ -31,12 +31,6 @@
 
 {% block custom_css %}
 <style>
-	#table-worker-list tbody td {
-		padding: 10px 25px;
-	}
-	#table-worker-list tbody tr:hover {
-		cursor: pointer;
-	}
 	ul.pagination > .paginate_button {
 		padding: 4px 2px!important;
 	}
@@ -50,7 +44,7 @@
 	</div>
 	<div class="row mt-2">
 		<div class="col-lg-8 col-xl-6 mx-auto font-italic">
-			<table class="hover display row-border" id="table-worker-list">
+			<table class="hover display row-border table-datatable" id="table-worker-list">
 				<thead>
 					<tr>
 						<th></th>
