@@ -1,0 +1,17 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="text-center mt-4">
+                <span class="h3 text-danger font-weight-bold">You Don't have permission to Access this Page</span>
+            </div>
+            <div class="text-center mt-3">
+                <a class="btn btn-info" href="{{ request.META.HTTP_REFERER }}">Go Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
