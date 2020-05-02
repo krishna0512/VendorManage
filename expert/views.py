@@ -580,6 +580,7 @@ class WorkerDetailView(PermissionRequiredMixin, DetailView):
                 }
             )
         context['data'] = ret
+        context['products_completed'] = worker.products_completed.order_by('-kit__number', '-date_completed')
         return context
 
 class WorkerUpdateView(PermissionRequiredMixin, UpdateView):

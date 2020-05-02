@@ -29,6 +29,34 @@
 	</div>
 	<div class="row">
 		<div class="col">
+			<div class="table-responsive">
+				<table class="table table-hover table-sm table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Kit #</th>
+							<th>Product #</th>
+							<th>Date</th>
+							<th>Size</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for product in products_completed %}
+						<tr>
+							<td>{{ forloop.counter }}</td>
+							<td>{{ product.kit.number }}</td>
+							<td>{{ product.order_number }}</td>
+							<td>{{ product.date_completed }}</td>
+							<td>{{ product.size }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
 			Contributions for the day
 			<div class="accordion" id="accordionExample">
 				{% for kit in data %}
