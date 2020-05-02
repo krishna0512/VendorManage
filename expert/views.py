@@ -581,6 +581,7 @@ class WorkerDetailView(PermissionRequiredMixin, DetailView):
             )
         context['data'] = ret
         context['products_completed'] = worker.products_completed.order_by('-kit__number', '-date_completed')
+        context['kit_list'] = Kit.objects.filter(products__in=context['products_completed']).distinct().order_by('-number')
         return context
 
 class WorkerUpdateView(PermissionRequiredMixin, UpdateView):

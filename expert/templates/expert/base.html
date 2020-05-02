@@ -1,4 +1,5 @@
 {% load static %}
+{% load has_group %}
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -11,10 +12,11 @@
 				$("[id^=id_date]").datepicker({
 					dateFormat: "yy-mm-dd"
 				});
-				$('#sidebar-collapse').on('click', function(e) {
+				$('#btn-sidebar-collapse').on('click', function(e) {
 					e.preventDefault();
 					$('#navbar-side').removeClass('d-block').hide('slow', function() {
 						$('#main_content').removeClass('col-9 col-md-10 col-xl-11 ml-auto').addClass('col ml-2');
+						$('#btn-sidebar-collapse').hide('fast');
 						$('#btn-sidebar-expand').show('fast');
 					});
 					sessionStorage.setItem('sidebar-expand', 'false');
@@ -24,13 +26,18 @@
 					$(this).hide('fast', function() {
 						$('#navbar-side').addClass('d-block').show('slow');
 						$('#main_content').addClass('col-9 col-md-10 col-xl-11 ml-auto').removeClass('col ml-2');
+						$('#btn-sidebar-collapse').show('fast');
 					});
 					sessionStorage.setItem('sidebar-expand','true');
 				});
 				if (sessionStorage.getItem('sidebar-expand') == 'false') {
 					$('#navbar-side').removeClass('d-block').hide();
 					$('#main_content').removeClass('col-9 col-md-10 col-xl-11 ml-auto').addClass('col ml-2');
+					$('#btn-sidebar-collapse').hide('fast');
 					$('#btn-sidebar-expand').show('fast');
+				}
+				else {
+					$('#btn-sidebar-expand').hide();
 				}
 			});
 			window.addEventListener('resize', () => {
@@ -137,6 +144,9 @@
 							{% if user.is_superuser %}
 							<a class="dropdown-item" href="{% url 'admin:index' %}">Admin page</a>
 							{% endif %}
+							{% if user|has_group:"BaseWorkers" %}
+							<a class="dropdown-item" href="{% url 'expert:worker-detail' pk=user.worker.id %}">Profile</a>
+							{% endif %}
 							<a class="dropdown-item" href="{% url 'expert:logout' %}">Logout</a>
 						</div>
 					</li>
@@ -149,6 +159,9 @@
 			<div class="row">
 				<div id="btn-sidebar-expand">
 					<span><i class="fa fa-chevron-right"></i></span>
+				</div>
+				<div id="btn-sidebar-collapse">
+					<span><i class="fa fa-chevron-left"></i></span>
 				</div>
 				{% block navbar-side %}
 				<nav class="col-md-2 col-xl-1 col-3 d-block bg-light sidebar" id="navbar-side">
@@ -171,9 +184,6 @@
 							</li>
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">Reports (Mar)</a>
-							</li>
-							<li class="nav-item mt-auto border-top">
-								<a class="nav-link" href="" id="sidebar-collapse"><i class="fa fa-chevron-left"></i></a>
 							</li>
 						</ul>
 					</div>
@@ -220,26 +230,22 @@
 			overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 		}
 
-		#btn-sidebar-expand {
+		#btn-sidebar-expand, #btn-sidebar-collapse {
 			position: fixed;
-			z-index: 100;
+			z-index: 101;
 			left: 0;
 			top: 48px;
 			height: calc(var(--vh, 1vh)*100 - 48px);
 			padding-left: 3px;
 			padding-right: 5px;
 		}
-		#btn-sidebar-expand:hover {
+		#btn-sidebar-expand:hover, #btn-sidebar-collapse:hover {
 			background-color: whitesmoke;
 		}
-		#btn-sidebar-expand span {
+		#btn-sidebar-expand span, #btn-sidebar-collapse span {
 			position: relative;
 			top: 50%;
 		}
-		#sidebar-collapse:hover {
-			border: 1px solid aquamarine;
-		}
-
 		.sidebar .nav-link {
 			font-weight: 500;
 			color: #333;

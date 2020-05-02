@@ -34,21 +34,30 @@
 					<thead>
 						<tr>
 							<th>#</th>
-							<th>Kit #</th>
 							<th>Product #</th>
 							<th>Date</th>
 							<th>Size</th>
 						</tr>
 					</thead>
 					<tbody>
+						{% for kit in kit_list %}
+						<tr>
+							<th colspan="4" class="text-center font-weight-bold h5">
+								<a href="{{ kit.get_absolute_url }}">{{ kit.number }}</a>
+							</th>
+						</tr>
 						{% for product in products_completed %}
+						{% if product.kit.number == kit.number %}
 						<tr>
 							<td>{{ forloop.counter }}</td>
-							<td>{{ product.kit.number }}</td>
-							<td>{{ product.order_number }}</td>
+							<td>
+								<a href="{{ product.get_absolute_url }}">{{ product.order_number }}</a>
+							</td>
 							<td>{{ product.date_completed }}</td>
 							<td>{{ product.size }}</td>
 						</tr>
+						{% endif %}
+						{% endfor %}
 						{% endfor %}
 					</tbody>
 				</table>
