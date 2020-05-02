@@ -23,14 +23,13 @@ urlpatterns = [
     path('kit/<slug:slug>/update/', views.KitUpdateView.as_view(), name='kit-update'),
     path('kit/<slug:slug>/view/', views.KitDetailView.as_view(), name='kit-detail'),
     path('kit/<slug:slug>/delete/', views.KitDeleteView.as_view(), name='kit-delete'),
+    path('kit/<int:pk>/uncomplete/', views.KitUncompleteRedirectView.as_view(), name='kit-uncomplete'),
 
     path('product/<int:pk>/update/', views.ProductUpdateView.as_view(), name='product-update'),
     path('product/create/<int:kit_number>/', views.ProductCreateView.as_view(), name='product-create'),
     path('product/<int:pk>/delete/', views.ProductDeleteView.as_view(), name='product-delete'),
     path('product/<int:pk>/view/', views.ProductDetailView.as_view(), name='product-detail'),
-
     path('product/<int:pk>/return/', views.ProductReturnRedirectView.as_view(), name='product-return'),
-    path('kit/<int:pk>/uncomplete/', views.KitUncompleteRedirectView.as_view(), name='kit-uncomplete'),
     # path('kit/<int:pk>/uncomplete/', views.kit_uncomplete, name='kit-uncomplete'),
 
     path('report/<int:year>/<str:month>/<int:day>/', views.ProductDayArchiveView.as_view(), name='report-daily'),

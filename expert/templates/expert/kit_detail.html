@@ -152,7 +152,6 @@ $(document).ready(function() {
 				</span>
 				<input type="hidden" id="datepicker_product_completion" data-href="{% url 'expert:kit-change-product-completion' pk=kit.id %}">
 			</div>
-			<div>Hello</div>
 		</div>
 		<table class="table table-sm table-hover table-striped text-center" id="product-table">
 			<thead class="bg-dark text-light font-weight-bold">
@@ -235,7 +234,7 @@ $(document).ready(function() {
             			    <button class="btn btn-sm btn-outline-danger dropdown-toggle" type="button" id="returndropdownbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Return Product"><i class="fa fa-recycle"></i></button>
             			    <div class="dropdown-menu" aria-labelledby="returndropdownbutton">
 								{% if product.is_dispatched %}
-								<a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=fault">Fault</a>
+								<a class="dropdown-item {% if product.is_returned %}disabled{% endif %}" href="{% url 'expert:product-return' pk=product.id %}?rr=fault">Fault</a>
 								{% else %}
             			        <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=unprocessed">UnProcessed</a>
             			        <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=semiprocessed">Semi-Processed</a>

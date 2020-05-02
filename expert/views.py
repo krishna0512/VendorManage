@@ -280,14 +280,14 @@ class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
             if self.request.user.has_perm('expert.change_product'):
                 # Yes, the worker has the permission to reassign the products.
                 worker = Worker.objects.get(id=self.kwargs['worker_pk'])
-                product.assign(worker.id)
+                product.assign(worker)
                 return JsonResponse({'assignedto': worker.username, 'refresh': False})
             else:
                 # No, worker does'nt have the permission to change the assignment.
                 # give a warning that product has already been assigned and refresh the page.
                 return JsonResponse({'assignedto': None, 'refresh': True})
         worker = Worker.objects.get(id=self.kwargs['worker_pk'])
-        product.assign(worker.id)
+        product.assign(worker)
         # TODO: serialize the Worker model so I can directly pass it here.
         return JsonResponse({'assignedto': worker.username, 'refresh': False})
 
@@ -343,7 +343,7 @@ class ChallanInitRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redire
             number=self._get_challan_number(),
         )
         for product in kit.products.all():
-            product.add_challan(challan.id)
+            product.add_challan(challan)
         challan.date_sent = max([i.date_completed for i in challan.products.all() if i.date_completed])
         challan.save()
         return challan.get_absolute_url()
@@ -667,10 +667,11 @@ class InvoiceChallanOperationView(PermissionRequiredMixin, SingleObjectMixin, Re
 
     def get_redirect_url(self, *args, **kwargs):
         invoice = self.get_object()
+        challan = Challan.objects.get(id=self.kwargs['challan_pk'])
         if self.kwargs['operation'] == 'add':
-            invoice.add_challan(self.kwargs['challan_pk'])
+            invoice.add_challan(challan)
         else:
-            invoice.remove_challan(self.kwargs['challan_pk'])
+            invoice.remove_challan(challan)
         return invoice.get_absolute_url()
 
 class InvoicePrintableView(PermissionRequiredMixin, DetailView):
