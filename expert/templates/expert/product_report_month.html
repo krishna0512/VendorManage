@@ -7,7 +7,7 @@
 	$(document).ready(function() {
 		var ctx = document.getElementById('report-monthly-chart').getContext('2d');
 		var config = {
-			type: 'line',
+			type: 'bar',
 			data: {
 				labels: {{ chart_data.date_list|safe }},
 				datasets: [{

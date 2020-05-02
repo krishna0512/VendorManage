@@ -411,12 +411,17 @@ class ProductDayArchiveView(DayArchiveView):
         context['worker_list'] = Worker.objects.all()
         return context
 
-class ProductMonthArchiveView(MonthArchiveView):
+class ProductMonthArchiveView(PermissionRequiredMixin, MonthArchiveView):
     model = Product
     date_field = 'date_completed'
     allow_empty = True
     allow_future = True
+    permission_required = ('only_superuser')
     template_name_suffix = '_report_month'
+
+    def has_permission(self):
+        """Only allow the access to this page is the user is a superuser."""
+        return self.request.user.is_superuser
 
     # TODO: convert these methods to Manager methods of Product
     def get_product_completed(self, start_date, end_date):
@@ -475,9 +480,6 @@ class ProductMonthArchiveView(MonthArchiveView):
         context['total_product_returned'] = kit_list.products().dispatched().returned().size
         context['total_product_received'] = kit_list.products().size
         context['total_product_dispatched'] = kit_list.products().dispatched().size
-        # context['total_product_completed'] = sum([i.size for i in r.filter(return_remark='')])
-        # context['total_product_returned'] = sum([i.size for i in r.exclude(return_remark='')])
-        # context['total_product_accepted'] = sum([i.size for i in r])
         try:
             context['product_completed_percent'] = context['total_product_completed']*100 // context['total_product_received']
             context['product_returned_percent'] = context['total_product_returned']*100 // context['total_product_received']
@@ -493,50 +495,8 @@ class ProductMonthArchiveView(MonthArchiveView):
                 'returned': worker.get_date_completed_product_range(start_date, end_date).returned().dispatched().size,
             })
         context['worker_list'] = a
-        print(a)
-        # d = start_date
-        # pc = []
-        # while d <= end_date:
-        #     x = Product.objects.filter(date_completed=d)
-        #     x = [i.size for i in x]
-        #     x = sum(x)
-        #     x = round(x, 2)
-        #     pc.append(x)
-        #     d += timedelta(days=1)
-        # chart_data['product_completed'] = str(pc)
-        # context['date_list_string'] = str(dl)
-        # data = [int(random()*100) for i in range(30)]
-        # context['data'] = str(data)
         context['chart_data'] = chart_data
         return context
-
-    # def get_context_data(self, *args, **kwargs):
-    #     context = super().get_context_data(*args, **kwargs)
-    #     context['worker_list'] = Worker.objects.all().order_by('first_name')
-    #     start_date = context['month']
-    #     end_date = context['next_month'] - timedelta(days=1)
-    #     data = []
-    #     dd = start_date
-    #     d_list = []
-    #     while dd <= end_date:
-    #         d_list.append(dd)
-    #         data.append(
-    #             {
-    #                 'date': dd,
-    #                 'contributions': [sum([i.size for i in worker.get_products_completed_on_date(dd)]) for worker in Worker.objects.all()]
-    #             }
-    #         )
-    #         data[-1]['contributions'].append(sum(data[-1]['contributions']))
-    #         dd += timedelta(days=1)
-    #     context['date_list'] = data
-    #     d_list = [str(i) for i in d_list]
-    #     print(str(d_list))
-    #     x = [0]*len(data[0]['contributions'])
-    #     from operator import add
-    #     for i in data:
-    #         x = list(map(add, x, i['contributions']))
-    #     context['worker_total'] = x
-    #     return context
 
 class ProductDetailView(PermissionRequiredMixin, DetailView):
     model = Product
