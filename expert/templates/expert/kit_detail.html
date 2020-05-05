@@ -152,7 +152,7 @@ $(document).ready(function() {
 				Product Completion Date -
 				<span class="font-weight-bold">
 					{% if kit.date_product_completion %}
-					{{ kit.date_product_completion|date:"N j, Y" }}
+					{{ kit.date_product_completion }}
 					{% else %}
 					{% now "N j, Y" %}
 					{% endif %}
