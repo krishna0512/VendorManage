@@ -1,6 +1,6 @@
 from django.urls import path
 
-from expert import views
+from expert.views import invoice as views
 
 urlpatterns = [
     path('', views.InvoiceListView.as_view(), name='invoice-list'),

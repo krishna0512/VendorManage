@@ -1,6 +1,6 @@
 from django.urls import path
 
-from expert import views
+from expert.views import kit as views
 
 urlpatterns = [
     path('', views.KitListView.as_view(), name='kit-list'),

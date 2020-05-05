@@ -1,6 +1,6 @@
 from django.urls import path
 
-from expert import views
+from expert.views import ajax as views
 
 urlpatterns = [
     path('invoice/<int:pk>/send_email/', views.email_invoice, name='email-invoice'),

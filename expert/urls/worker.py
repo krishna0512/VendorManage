@@ -1,6 +1,6 @@
 from django.urls import path
 
-from expert import views
+from expert.views import worker as views
 
 urlpatterns = [
     path('', views.WorkerListView.as_view(), name='worker-list'),

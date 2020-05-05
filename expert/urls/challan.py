@@ -1,6 +1,6 @@
 from django.urls import path
 
-from expert import views
+from expert.views import challan as views
 
 urlpatterns = [
     path('', views.ChallanListView.as_view(), name='challan-list'),

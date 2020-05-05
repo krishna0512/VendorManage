@@ -1,6 +1,6 @@
 from django.urls import path
 
-from expert import views
+from expert.views import product as views
 
 urlpatterns = [
     path('<int:pk>/update/', views.ProductUpdateView.as_view(), name='product-update'),
