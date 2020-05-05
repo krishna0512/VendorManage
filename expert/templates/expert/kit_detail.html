@@ -34,6 +34,11 @@
 		content: none;
 	}
 
+	.scrollable-dropdown-menu {
+		height: auto;
+		max-height: 250px;
+		overflow-x: hidden;
+	}
 </style>
 {% endblock %}
 
@@ -214,7 +219,7 @@ $(document).ready(function() {
 								{{ product.assignedto.username }}
 								{% endif %}
 							</button>
-							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton-{{ product.id }}">
+							<div class="dropdown-menu scrollable-dropdown-menu" aria-labelledby="dropdownMenuButton-{{ product.id }}">
 								{% for worker in worker_list %}
 								<a class="dropdown-item js-btn-product-assign" href="{% url 'expert:product-assign' product_pk=product.id worker_pk=worker.id %}">{{ worker.username }}</a>
 								{% endfor %}
