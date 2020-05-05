@@ -55,6 +55,8 @@ $(document).ready(function() {
 			success: function(result) {
 				$this.closest('td').prev().html('Completed');
 				$this.closest('td').prev().removeClass('bg-warning').addClass('bg-success text-light');
+				$this.closest('td').prev().prev().html(result['date_completed']);
+				$this.closest('td').prev().prev().prev().html(result['completedby']);
 				$this.addClass('disabled');
 				//remove the spinner and re-add the check icon
 				$this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-check');
@@ -173,7 +175,7 @@ $(document).ready(function() {
 							</div>
 						</div>
 					</th>
-					<th>Color</th>
+					<th class="text-left pl-5">Color</th>
 					<th>Assigned To</th>
 					<th>Completed By</th>
 					<th>Completion Date</th>
@@ -202,7 +204,7 @@ $(document).ready(function() {
 					<td>{{ product.quantity }}</td>
 					<td>{{ product.size }}</td>
 					<td>{{ product.get_fabric_display }}</td>
-					<td><span class="dot color-{{ product.color }} align-middle"></span> {{ product.get_color_display }}</td>
+					<td class="text-left pl-4"><span class="dot color-{{ product.color }} align-middle"></span> {{ product.get_color_display }}</td>
 					<td>
 						<div class="dropdown">
 							<button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ product.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -42,6 +42,11 @@ class ProductCompleteView(PermissionRequiredMixin, SingleObjectMixin, View):
 
     def post(self, *args, **kwargs):
         self.get_object().complete()
+        product = self.get_object()
+        return JsonResponse({
+            'date_completed': product.date_completed.strftime("%b %d, %Y"),
+            'completedby': product.completedby.username,
+        })
         return JsonResponse({'saved': True})
 
 @method_decorator(csrf_exempt, name='dispatch')
