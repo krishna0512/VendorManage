@@ -27,7 +27,7 @@ class Challan(models.Model):
         on_delete=models.CASCADE,
         help_text=_('The Invoice to which this challan belongs to')
     )
-    customer = models.OneToOneField(
+    customer = models.ForeignKey(
         'Customer',
         related_name='challans',
         on_delete=models.CASCADE,
