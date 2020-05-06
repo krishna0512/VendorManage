@@ -10,4 +10,5 @@ urlpatterns = [
     path('<slug:slug>/delete/', views.ChallanDeleteView.as_view(), name='challan-delete'),
     # url loading the gatepass 
     path('<int:pk>/gatepass/', views.challan_gatepass, name='challan-gatepass'),
+    path('<int:pk>/update/', views.ChallanUpdateView.as_view(), name='challan-update'),
 ]

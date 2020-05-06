@@ -27,6 +27,7 @@
         </div>
     </div>
 </li>
+<li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:challan-update' pk=challan.id %}"><i class="fa fa-pencil"></i> Edit</a></li>
 {% if challan.products.all.first.kit.jobwork_gatepass_processed %}
 <li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{{ challan.products.all.first.kit.jobwork_gatepass_processed.url }}" target="_blank"><i class="fa fa-download"></i> Gatepass</a> </li>
 {% elif challan.products.all.first.kit.jobwork_gatepass %}

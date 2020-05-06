@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, RedirectView
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 
 from ..models import Kit, Challan
 from ..forms import *
@@ -21,6 +21,14 @@ class ChallanDetailView(PermissionRequiredMixin, DetailView):
     model = Challan
     slug_field = 'number'
     permission_required = ('expert.view_challan','expert.view_product')
+
+
+class ChallanUpdateView(UpdateView):
+    model = Challan
+    template_name_suffix = '_update_form'
+    fields = [
+        'number','date_sent'
+    ]
 
 class ChallanPrintableView(PermissionRequiredMixin, DetailView):
     model = Challan
