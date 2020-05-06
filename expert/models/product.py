@@ -277,6 +277,18 @@ class Product(models.Model):
         self._size = round(value, 2)
 
     @property
+    def split_factors(self):
+        if self.quantity == 1:
+            return []
+        ret = []
+        a = 2
+        while a<=self.quantity:
+            if self.quantity%a==0:
+                ret.append(a)
+            a+=1
+        return ret
+
+    @property
     def is_pending(self):
         return self.status == 'pending'
     @property

@@ -8,4 +8,5 @@ urlpatterns = [
     path('<int:pk>/delete/', views.ProductDeleteView.as_view(), name='product-delete'),
     path('<int:pk>/view/', views.ProductDetailView.as_view(), name='product-detail'),
     path('<int:pk>/return/', views.ProductReturnRedirectView.as_view(), name='product-return'),
+    path('<int:pk>/split/', views.ProductSplitRedirectView.as_view(), name='product-split'),
 ]

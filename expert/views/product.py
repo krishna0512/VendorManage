@@ -11,7 +11,7 @@ from expert.forms import *
 class ProductUpdateView(PermissionRequiredMixin, UpdateView):
     model = Product
     fields = [
-        'order_number','quantity','size',
+        'order_number','quantity','_size',
         'fabric','color'
     ]
     template_name_suffix = '_update_form'
@@ -25,7 +25,7 @@ class ProductUpdateView(PermissionRequiredMixin, UpdateView):
 class ProductCreateView(PermissionRequiredMixin, CreateView):
     model = Product
     fields = [
-        'order_number','quantity','size',
+        'order_number','quantity','_size',
         'fabric','color','status','assignedto',
         'completedby','date_completed','return_remark'
     ]
@@ -82,3 +82,30 @@ class ProductReturnRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redi
         rr = self.request.GET.get('rr', '')
         product.return_product(rr)
         return product.kit.get_absolute_url()
+
+class ProductSplitRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
+    model = Product
+    permission_required = (
+        'expert.view_kit', 'expert.view_product',
+        'expert.change_product'
+    )
+
+    def get_redirect_url(self, *args, **kwargs):
+        product = self.get_object()
+        factor = int(self.request.GET.get('factor',1))
+        if factor==1 or product.quantity%factor or not product.is_pending or product.is_dispatched:
+            return product.kit.get_absolute_url()
+        # divide the product into factor parts.
+        for i in range(factor):
+            Product.objects.create(
+                order_number=product.order_number,
+                quantity=product.quantity//factor,
+                _size=round(product.size/factor, 2),
+                fabric=product.fabric,
+                color=product.color,
+                status=product.status,
+                kit=product.kit,
+            )
+        ret = product.kit.get_absolute_url()
+        product.delete()
+        return ret
