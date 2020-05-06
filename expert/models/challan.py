@@ -27,6 +27,14 @@ class Challan(models.Model):
         on_delete=models.CASCADE,
         help_text=_('The Invoice to which this challan belongs to')
     )
+    customer = models.OneToOneField(
+        'Customer',
+        related_name='challans',
+        on_delete=models.CASCADE,
+        null=True,
+        default=None,
+        help_text=_('The customer for against whom challan is drawn'),
+    )
 
     def get_total_quantity(self):
         return sum([i.quantity for i in self.products.filter(return_remark='')])
