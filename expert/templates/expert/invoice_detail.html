@@ -1,6 +1,16 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_css %}
+<style>
+    .scrollable-dropdown-menu {
+        height: auto;
+        max-height: 250px;
+        overflow-x: hidden;
+    }
+</style>
+{% endblock %}
+
 {% block custom_navbar %}
 <li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:invoice-printable' slug=invoice.number %}"><i class="fa fa-print"></i> Get Printable</a></li>
 <li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:invoice-update' slug=invoice.number %}"><i class="fa fa-pencil"></i> Edit</a></li>
@@ -27,9 +37,9 @@
                 <button class="list-group-item list-group-item-action list-group-item-info text-center dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Add New Challan
                 </button>
-                <div class="dropdown-menu list-group-item-action" aria-labelledby="dropdown1">
+                <div class="dropdown-menu list-group-item-action scrollable-dropdown-menu py-0 my-0" aria-labelledby="dropdown1">
                     {% for challan in challan_list %}
-                    <a href="{% url 'expert:invoice-add-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="mb-1 dropdown-item list-group-item list-group-item-action list-group-item-secondary">{{ challan.number }} ({{ challan.date_sent }})</a>
+                    <a href="{% url 'expert:invoice-add-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="dropdown-item list-group-item list-group-item-action">{{ challan.number }} ({{ challan.date_sent }})</a>
                     {% endfor %}
                 </div>
             </div>
