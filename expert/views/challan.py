@@ -89,6 +89,14 @@ class ChallanInitRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redire
         for product in kit.products.all():
             product.add_challan(challan)
         challan.date_sent = max([i.date_completed for i in challan.products.all() if i.date_completed])
+        # Auto select the default customer and if this doesnt exists 
+        # then select the most recently added customer.
+        if Customer.objects.exists():
+            if Customer.objects.filter(default=True).exists():
+                customer = Customer.objects.filter(default=True).first()
+            else:
+                customer = Customer.objects.all().order_by('-id').first()
+            challan.customer = customer
         challan.save()
         return challan.get_absolute_url()
 

@@ -42,6 +42,7 @@ class Customer(models.Model):
         verbose_name=_('IEC'),
         help_text=_('IEC Number of the customer as included in Challan'),
     )
+    default = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('expert:customer-detail', kwargs={'pk':self.id})

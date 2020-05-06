@@ -49,14 +49,18 @@
 				<thead>
 					<tr>
 						<th></th>
-						<!-- <th></th> -->
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
                     {% for customer in customer_list %}
                     <tr data-href="{{ customer.get_absolute_url }}">
-                        <td class="font-weight-bold text-center">{{ customer.name }}</td>
-                        <!-- <td class="small text-secondary text-right">{{ invoice.date_sent|naturalday|title }}</td> -->
+                        <td class="font-weight-bold text-left">{{ customer.name }}</td>
+                        <td class="text-right">
+							{% if customer.default %}
+							<span class="badge badge-success badge-pill">default</span>
+							{% endif %}
+                        </td>
                     </tr>
 					{% endfor %}
 				</tbody>
