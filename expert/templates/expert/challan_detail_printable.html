@@ -71,9 +71,9 @@
             </div>
             <div class="border">STATE CODE - 24 GUJ.</div>
             <div class="border">
-                To, <span class="font-weight-bold">Caterpillar Signs PVT LTD</span> (100% EOU)<br>
-                C-10, Electronics Estate, Sector - 25, GANDHINAGAR 382024 (Guj)<br>
-                GSTN No. 24AAECC4258M1ZH ; IEC : 0811008479
+                To, <span class="font-weight-bold">{{ challan.customer.name }}</span> (100% EOU)<br>
+                {{ challan.customer.address1 }}, {{ challan.customer.address2 }}<br>
+                GSTN No. {{ challan.customer.gstn }} ; IEC : {{ challan.customer.iec }}
             </div>
             <div class="border font-weight-bold">
                 FOR REF. No. {{ challan.products.first.kit.number }}/{{ challan.date_sent|date:"d.m.Y" }}

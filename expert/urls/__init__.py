@@ -16,6 +16,7 @@ urlpatterns = [
     path('kit/', include('expert.urls.kit')),
     path('product/', include('expert.urls.product')),
     path('challan/', include('expert.urls.challan')),
+    path('customer/', include('expert.urls.customer')),
     path('invoice/', include('expert.urls.invoice')),
     path('worker/', include('expert.urls.worker')),
 

@@ -1,0 +1,67 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block custom_js %}
+<script>
+	$(function() {
+		var table = $('#table-customer-list').DataTable({
+			'ordering': false,
+			'conditionalPaging': true,
+			'searching': false,
+			"fnDrawCallback": function(settings) {
+				$(settings.nTHead).hide();
+			},
+			dom: '<"float-right"B>ltip',
+			buttons: [{
+				text: '<i class="fa fa-plus"></i> Add New',
+				className: 'btn btn-info btn-sm font-italic',
+				action: function(e, dt, node, config) {
+					window.location.href = "{% url 'expert:customer-create' %}";
+				}
+			}],
+		});
+
+		$('#table-customer-list tbody').on('click', 'tr', function() {
+			var url = $(this).attr('data-href');
+			window.location.href = url;
+		})
+	});
+</script>
+{% endblock %}
+
+{% block custom_css %}
+<style>
+	ul.pagination > .paginate_button {
+		padding: 4px 2px!important;
+	}
+</style>
+{% endblock %}
+
+{% block main_content %}
+<div class="container py-0 pl-4 pl-lg-0">
+	<div class="px-3 h2 text-center m-0 py-1">
+		List of Customer
+	</div>
+	<div class="row mt-2">
+		<div class="col-lg-8 col-xl-6 mx-auto font-italic">
+			<table class="hover display row-border table-datatable" id="table-customer-list">
+				<thead>
+					<tr>
+						<th></th>
+						<!-- <th></th> -->
+					</tr>
+				</thead>
+				<tbody>
+                    {% for customer in customer_list %}
+                    <tr data-href="{{ customer.get_absolute_url }}">
+                        <td class="font-weight-bold text-center">{{ customer.name }}</td>
+                        <!-- <td class="small text-secondary text-right">{{ invoice.date_sent|naturalday|title }}</td> -->
+                    </tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}

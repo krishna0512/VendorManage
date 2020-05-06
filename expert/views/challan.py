@@ -27,7 +27,7 @@ class ChallanUpdateView(UpdateView):
     model = Challan
     template_name_suffix = '_update_form'
     fields = [
-        'number','date_sent'
+        'number','date_sent','customer'
     ]
 
 class ChallanPrintableView(PermissionRequiredMixin, DetailView):

@@ -1,0 +1,35 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block custom_css %}
+<style>
+    .scrollable-dropdown-menu {
+        height: auto;
+        max-height: 250px;
+        overflow-x: hidden;
+    }
+</style>
+{% endblock %}
+
+{% block custom_navbar %}
+<li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:customer-update' pk=customer.id %}"><i class="fa fa-pencil"></i> Edit</a></li>
+{% endblock %}
+
+{% block main_content %}
+<div class="container pt-4">
+    <div class="p-2 h3 text-center">
+        Overview of Customer {{ customer.name }}<br>
+    </div>
+    <div class="row pt-2 pl-1">
+        Name = {{ customer.name|title }}
+        <br>
+        Address: {{ customer.address1 }}
+        <br>
+        Email: {{ customer.email }}
+        <br>
+        GSTN: {{ customer.gstn }}
+        <br>
+        IEC: {{ customer.iec }}
+    </div>
+</div>
+{% endblock %}

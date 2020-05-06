@@ -43,7 +43,8 @@
             <div class="text-center">
                 Challan #: {{ challan.number }}<br>
                 For Ref. #: {{ challan.products.all.first.kit }}<br>
-                For Date: {{ challan.date_sent }}
+                For Date: {{ challan.date_sent }}<br>
+                To: {{ challan.customer }}
             </div>
         </div>
     </div>
