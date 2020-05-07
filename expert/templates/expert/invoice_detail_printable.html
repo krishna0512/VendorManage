@@ -113,11 +113,17 @@
     <div class="row">
         <div class="col-6">
             <div>
+                <div><b>To, {{ invoice.challans.all.0.customer.name }} (100% EOU)</b></div>
+                <div><small>{{ invoice.challans.all.0.customer.address1 }}</small></div>
+                <div><small>{{ invoice.challans.all.0.customer.address2 }}</small></div>
+                <div><small>GSTN: {{ invoice.challans.all.0.customer.gstn }}, IEC: {{ invoice.challans.all.0.customer.iec }}</small></div>
+            </div>
+            <!-- <div>
                 <div><b>To, Caterpillar Signs PVT LTD (100% EOU)</b></div>
                 <div><small>C-10, Electronics Estate, Sector-25, Gandhinagar</small></div>
                 <div><small>Gandhinagar-382024 (Guj.), S-Code 24</small></div>
                 <div><small>GSTN: 24AAECC4258M1ZH, IEC: 0811008479</small></div>
-            </div>
+            </div> -->
         </div>
         <div class="col-2"></div>
         <div class="col-4">
