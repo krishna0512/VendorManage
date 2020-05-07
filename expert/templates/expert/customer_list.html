@@ -17,7 +17,7 @@
 				text: '<i class="fa fa-plus"></i> Add New',
 				className: 'btn btn-info btn-sm font-italic',
 				action: function(e, dt, node, config) {
-					window.location.href = "{% url 'expert:customer-create' %}";
+					window.location.href = "{{ view.model.get_create_url }}";
 				}
 			}],
 		});
@@ -41,7 +41,7 @@
 {% block main_content %}
 <div class="container py-0 pl-4 pl-lg-0">
 	<div class="px-3 h2 text-center m-0 py-1">
-		List of Customer
+		List of Customers
 	</div>
 	<div class="row mt-2">
 		<div class="col-lg-8 col-xl-6 mx-auto font-italic">

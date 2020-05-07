@@ -50,8 +50,21 @@ class Customer(models.Model):
                 Customer.objects.filter(default=True).update(default=False)
         return super().save(*args, **kwargs)
 
+    @property
     def get_absolute_url(self):
-        return reverse('expert:customer-detail', kwargs={'pk':self.id})
+        return reverse('expert:customer-detail', kwargs={'pk': self.pk})
+
+    @property
+    def get_update_url(self):
+        return reverse('expert:customer-update', kwargs={'pk': self.pk})
+
+    @staticmethod
+    def get_list_url():
+        return reverse('expert:customer-list')
+
+    @staticmethod
+    def get_create_url():
+        return reverse('expert:customer-create')
 
     def __str__(self):
         return self.name.capitalize()

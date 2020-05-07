@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block custom_navbar %}
-<li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:customer-update' pk=customer.id %}"><i class="fa fa-pencil"></i> Edit</a></li>
+<li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{{ customer.get_update_url }}"><i class="fa fa-pencil"></i> Edit</a></li>
 {% endblock %}
 
 {% block main_content %}
