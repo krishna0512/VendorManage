@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
@@ -43,6 +43,12 @@ class Customer(models.Model):
         help_text=_('IEC Number of the customer as included in Challan'),
     )
     default = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.default:
+            with transaction.atomic():
+                Customer.objects.filter(default=True).update(default=False)
+        return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('expert:customer-detail', kwargs={'pk':self.id})
