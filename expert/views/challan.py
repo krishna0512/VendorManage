@@ -7,7 +7,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import DeleteView, UpdateView
 
-from ..models import Kit, Challan
+from ..models import Kit, Challan, Customer
 from ..forms import *
 from . import process
 
@@ -92,9 +92,11 @@ class ChallanInitRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redire
         # Auto select the default customer and if this doesnt exists 
         # then select the most recently added customer.
         if Customer.objects.exists():
+            customer = None
             if Customer.objects.filter(default=True).exists():
                 customer = Customer.objects.filter(default=True).first()
             else:
+                # selects the most recently added customer
                 customer = Customer.objects.all().order_by('-id').first()
             challan.customer = customer
         challan.save()
