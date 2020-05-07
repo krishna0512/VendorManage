@@ -74,6 +74,10 @@ $(document).ready(function() {
 				403: function() {
 					$this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-check');
 					alert('You dont have permission to Complete this Product.');
+				},
+				400: function() {
+					$this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-check');
+					alert('Server was not able to Complete this product.')
 				}
 			}
 		});
