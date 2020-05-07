@@ -12,8 +12,8 @@
 {% endblock %}
 
 {% block custom_navbar %}
-<li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:invoice-printable' slug=invoice.number %}"><i class="fa fa-print"></i> Get Printable</a></li>
-<li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{% url 'expert:invoice-update' slug=invoice.number %}"><i class="fa fa-pencil"></i> Edit</a></li>
+<li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{{ invoice.get_printable_url }}"><i class="fa fa-print"></i> Get Printable</a></li>
+<li class="nav-item"><a class="nav-link btn btn-sm btn-outline-primary mr-1" type="button" href="{{ invoice.get_update_url }}"><i class="fa fa-pencil"></i> Edit</a></li>
 {% endblock %}
 
 {% block main_content %}
@@ -30,7 +30,7 @@
                 <span class="font-weight-bold">{{ challan.number }}</span>
                 <span class="text-secondary small">{{ challan.date_sent }}</span>
                 <span>
-                    <a href="{% url 'expert:invoice-remove-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash fa-lg"></i></a>
+                    <a href="{% url 'invoice:remove-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash fa-lg"></i></a>
                 </span>
             </div>
             {% endfor %}
@@ -40,7 +40,7 @@
                 </button>
                 <div class="dropdown-menu list-group-item-action scrollable-dropdown-menu py-0 my-0" aria-labelledby="dropdown1">
                     {% for challan in challan_list %}
-                    <a href="{% url 'expert:invoice-add-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="d-flex dropdown-item list-group-item list-group-item-action">
+                    <a href="{% url 'invoice:add-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="d-flex dropdown-item list-group-item list-group-item-action">
                         <span>{{ challan.number }}</span>
                         <span class="ml-auto">{{ challan.date_sent }}</span>
                         <span class="ml-auto small text-secondary" style="font-size: .75rem;">{{ challan.customer.name }}</span>

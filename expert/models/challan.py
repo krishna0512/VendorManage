@@ -19,12 +19,12 @@ class Challan(models.Model):
         help_text=_('Date at which this challan is dispatched')
     )
     invoice = models.ForeignKey(
-        'Invoice',
+        'invoice.Invoice',
         null=True,
         default=None,
         blank=True,
         related_name='challans',
-        on_delete=models.CASCADE,
+        on_delete=models.SET_DEFAULT,
         help_text=_('The Invoice to which this challan belongs to')
     )
     customer = models.ForeignKey(

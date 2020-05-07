@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'customer.apps.CustomerConfig',
+    'invoice.apps.InvoiceConfig',
     'expert.apps.ExpertConfig',
     'django_extensions',
     'rest_framework',
@@ -74,6 +75,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'customer.context_processors.model',
+                'invoice.context_processors.model',
             ],
         },
     },

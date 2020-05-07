@@ -94,7 +94,21 @@ class Invoice(models.Model):
         return ret
 
     def get_absolute_url(self):
-        return reverse('expert:invoice-detail', kwargs={'slug': self.number})
+        return reverse('invoice:detail', kwargs={'slug': self.number})
+
+    def get_update_url(self):
+        return reverse('invoice:update', kwargs={'slug': self.number})
+
+    def get_printable_url(self):
+        return reverse('invoice:printable', kwargs={'slug': self.number})
+
+    @staticmethod
+    def get_list_url():
+        return reverse('invoice:list')
+
+    @staticmethod
+    def get_create_url():
+        return reverse('invoice:create')
 
     def __str__(self):
         return self.number

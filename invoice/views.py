@@ -4,8 +4,8 @@ from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView
 
-from ..models import Challan, Invoice
-from ..forms import *
+from expert.models import Challan, Invoice
+from .forms import InvoiceUpdateForm
 
 class InvoiceCreateView(PermissionRequiredMixin, CreateView):
     model = Invoice
@@ -32,6 +32,9 @@ class InvoiceListView(PermissionRequiredMixin, ListView):
     navigation = 'invoice'
     ordering = ['-number']
     permission_required = ('expert.view_invoice')
+
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
 
 class InvoiceDetailView(PermissionRequiredMixin, DetailView):
     model = Invoice
