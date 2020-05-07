@@ -20,6 +20,7 @@
 <div class="container pt-4">
     <div class="p-2 h3 text-center">
         Overview of Invoice {{ invoice.number }}<br>
+        <span class="small text-secondary">To: {{ invoice.challans.first.customer.name }}</span><br>
         <span class="text-secondary small">{{ invoice.date_sent }}</span>
     </div>
     <div class="row pt-2 pl-1">
@@ -39,7 +40,13 @@
                 </button>
                 <div class="dropdown-menu list-group-item-action scrollable-dropdown-menu py-0 my-0" aria-labelledby="dropdown1">
                     {% for challan in challan_list %}
-                    <a href="{% url 'expert:invoice-add-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="dropdown-item list-group-item list-group-item-action">{{ challan.number }} ({{ challan.date_sent }})</a>
+                    <a href="{% url 'expert:invoice-add-challan' invoice_pk=invoice.pk challan_pk=challan.pk %}" class="d-flex dropdown-item list-group-item list-group-item-action">
+                        <span>{{ challan.number }}</span>
+                        <span class="ml-auto">{{ challan.date_sent }}</span>
+                        <span class="ml-auto small text-secondary" style="font-size: .75rem;">{{ challan.customer.name }}</span>
+                    </a>
+                    {% empty %}
+                    <a class="dropdown-item list-group-item list-group-item-action text-center">No more Challans to show</a>
                     {% endfor %}
                 </div>
             </div>

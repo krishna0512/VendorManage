@@ -40,13 +40,23 @@ class InvoiceDetailView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['challan_list'] = Challan.objects.filter(invoice=None).order_by('-number')
+        challan_list = Challan.objects.filter(invoice=None)
+        # this further filters the challan list to only the challans
+        # that are compatible with challans already present in invoice.
+        if self.object.challans.exists():
+            challan_list = challan_list.filter(
+                customer=self.object.challans.first().customer
+            )
+        context['challan_list'] = challan_list.order_by('-number')
         return context
     
 class InvoiceChallanOperationView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
     model = Invoice
     pk_url_kwarg = 'invoice_pk'
-    permission_required = ('expert.view_invoice','expert.view_challan','expert.change_invoice','expert.change_challan')
+    permission_required = (
+        'expert.view_invoice', 'expert.view_challan',
+        'expert.change_invoice', 'expert.change_challan',
+    )
 
     def get_redirect_url(self, *args, **kwargs):
         invoice = self.get_object()

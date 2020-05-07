@@ -38,6 +38,8 @@ class Invoice(models.Model):
     def add_challan(self, challan):
         """ function to add a challan to self invoice and perform various calculations.
         """
+        # TODO: check for the condition if new challan added
+        # should have the same customer as the already added challans
         challan.invoice = self
         challan.save()
         self.save()

@@ -50,12 +50,14 @@
 					<tr>
 						<th></th>
 						<th></th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
                     {% for invoice in invoice_list %}
                     <tr data-href="{{ invoice.get_absolute_url }}">
-                        <td class="font-weight-bold text-center">{{ invoice.number }}</td>
+						<td class="font-weight-bold text-center">{{ invoice.number }}</td>
+						<td class="small text-secondary text-center">{{ invoice.challans.first.customer.name|default:"N/A" }}</td>
                         <td class="small text-secondary text-right">{{ invoice.date_sent|naturalday|title }}</td>
                     </tr>
 					{% endfor %}
