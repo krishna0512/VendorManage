@@ -1,6 +1,5 @@
 from .product import Product
 from .challan import Challan
-from .customer import Customer
 from .invoice import Invoice
 from .kit import Kit, kit_image_path
 from .worker import Worker, worker_image_path

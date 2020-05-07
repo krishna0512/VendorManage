@@ -28,9 +28,9 @@ class Challan(models.Model):
         help_text=_('The Invoice to which this challan belongs to')
     )
     customer = models.ForeignKey(
-        'Customer',
+        'customer.Customer',
         related_name='challans',
-        on_delete=models.CASCADE,
+        on_delete=models.SET_DEFAULT,
         null=True,
         default=None,
         help_text=_('The customer for against whom challan is drawn'),
