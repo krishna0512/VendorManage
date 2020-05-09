@@ -141,13 +141,13 @@ class Product(models.Model):
         related_name='products',
         help_text=_('Kit that this product belongs to.'),
     )
-    challan = models.ForeignKey(
-        'Challan',
+    challan = models.IntegerField(
+        # 'Challan',
         null=True,
         default=None,
         blank=True,
-        on_delete=models.SET_DEFAULT,
-        related_name='products',
+        # on_delete=models.SET_DEFAULT,
+        # related_name='products',
         help_text=_('Challan that this product is dispatched through')
     )
     assignedto = models.ForeignKey(
