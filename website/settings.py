@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'customer.apps.CustomerConfig',
     'invoice.apps.InvoiceConfig',
+    'worker.apps.WorkerConfig',
     'expert.apps.ExpertConfig',
     'django_extensions',
     'rest_framework',
