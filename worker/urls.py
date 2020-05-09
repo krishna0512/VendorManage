@@ -1,7 +1,6 @@
 from django.urls import path
 
-from expert.views import worker as views
-# from . import views
+from . import views
 
 app_name = 'worker'
 urlpatterns = [
