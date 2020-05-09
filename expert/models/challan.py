@@ -23,13 +23,13 @@ class Challan(models.Model):
         null=True,
         default=None,
         blank=True,
-        related_name='challans',
+        related_name='challans2',
         on_delete=models.SET_DEFAULT,
         help_text=_('The Invoice to which this challan belongs to')
     )
     customer = models.ForeignKey(
         'customer.Customer',
-        related_name='challans',
+        related_name='challans2',
         on_delete=models.SET_DEFAULT,
         null=True,
         default=None,
