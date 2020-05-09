@@ -55,7 +55,7 @@ class ChallanPrintableView(PermissionRequiredMixin, DetailView):
 class ChallanDeleteView(PermissionRequiredMixin, DeleteView):
     model = Challan
     slug_field = 'number'
-    success_url = reverse_lazy('expert:challan-list')
+    success_url = reverse_lazy('challan:list')
     permission_required = ('expert.view_challan','expert.delete_challan')
 
     def get(self, *args, **kwargs):
@@ -71,7 +71,7 @@ class ChallanDeleteView(PermissionRequiredMixin, DeleteView):
             product.remove_challan()
         return super().delete(request, *args, **kwargs)
 
-class ChallanInitRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
+class ChallanCreateRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
     model = Kit
     permission_required = ('expert.view_kit','expert.view_product','expert.view_challan','expert.add_challan', 'expert.change_product')
 

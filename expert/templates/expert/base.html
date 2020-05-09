@@ -177,7 +177,7 @@
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'customer' %}active{% endif %}" href="{{ Customer.get_list_url }}">Customer</a>
 							</li>
 							<li class="nav-item">
-								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'challan' %}active{% endif %}" href="{% url 'expert:challan-list' %}">Challan</a>
+								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'challan' %}active{% endif %}" href="{{ Challan.get_list_url }}">Challan</a>
 							</li>
 							<li class="nav-item active">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'invoice' %}active{% endif %}" href="{{ Invoice.get_list_url }}">Invoice</a>

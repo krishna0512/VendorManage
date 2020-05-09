@@ -62,9 +62,20 @@ class Challan(models.Model):
         return str(round(sum([i.size for i in self.products.exclude(return_remark='')]),2))
 
     def get_absolute_url(self):
-        return reverse(
-            'expert:challan-detail', kwargs={'slug': self.number}
-        )
+        return reverse('challan:detail', kwargs={'slug': self.number})
+
+    def get_printable_url(self):
+        return reverse('challan:printable', kwargs={'slug': self.number})
+
+    def get_delete_url(self):
+        return reverse('challan:delete', kwargs={'slug': self.number})
+
+    def get_update_url(self):
+        return reverse('challan:update', kwargs={'pk': self.pk})
+    
+    @staticmethod
+    def get_list_url():
+        return reverse('challan:list')
 
     def __str__(self):
         return '{} ({})'.format(self.number, self.date_sent)
