@@ -2,6 +2,7 @@
 
 from django.db import migrations, models
 import expert.models
+import worker.models
 
 
 class Migration(migrations.Migration):
@@ -29,7 +30,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='worker',
             name='photo',
-            field=models.ImageField(blank=True, help_text='Passport size profile picture for worker.', null=True, upload_to=expert.models.worker_image_path),
+            field=models.ImageField(blank=True, help_text='Passport size profile picture for worker.', null=True, upload_to=worker.models.worker_image_path),
         ),
         migrations.AlterField(
             model_name='kit',

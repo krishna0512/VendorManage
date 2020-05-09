@@ -150,25 +150,25 @@ class Product(models.Model):
         related_name='products',
         help_text=_('Challan that this product is dispatched through')
     )
-    assignedto = models.ForeignKey(
-        'Worker',
-        on_delete=models.SET_DEFAULT,
+    assignedto = models.IntegerField(
+        # 'Worker',
+        # on_delete=models.SET_DEFAULT,
         null=True,
         default=None,
         blank=True,
-        related_name='products_assigned',
+        # related_name='products_assigned',
         verbose_name=_('Assigned To'),
         help_text=_('Worker that is assigned to this product'),
     )
     #TODO: change the on_delete so that worker is not deleted if 
     # there are no products completed.
-    completedby = models.ForeignKey(
-        'Worker',
-        on_delete=models.SET_DEFAULT,
+    completedby = models.IntegerField(
+        # 'Worker',
+        # on_delete=models.SET_DEFAULT,
         null=True,
         default=None,
         blank=True,
-        related_name='products_completed',
+        # related_name='products_completed',
         verbose_name=_('Completed By'),
         help_text=_('worker that completed this product'),
     )

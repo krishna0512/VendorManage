@@ -6,7 +6,9 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-from expert.models import Kit, Product, Worker, Invoice
+from expert.models import Kit, Product
+from worker.models import Worker
+from invoice.models import Invoice
 from expert.forms import *
 
 def validate_create_worker_username(request):

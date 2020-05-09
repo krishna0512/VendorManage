@@ -7,7 +7,8 @@ from django.views.generic.list import MultipleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from expert.models import Kit, Product, Worker
+from expert.models import Kit, Product
+from worker.models import Worker
 from expert.forms import *
 
 class KitListView(PermissionRequiredMixin, ListView):
