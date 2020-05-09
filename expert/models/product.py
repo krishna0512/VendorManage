@@ -152,8 +152,9 @@ class Product(models.Model):
     )
     assignedto = models.ForeignKey(
         'Worker',
-        on_delete=models.CASCADE,
+        on_delete=models.SET_DEFAULT,
         null=True,
+        default=None,
         blank=True,
         related_name='products_assigned',
         verbose_name=_('Assigned To'),
@@ -163,8 +164,9 @@ class Product(models.Model):
     # there are no products completed.
     completedby = models.ForeignKey(
         'Worker',
-        on_delete=models.CASCADE,
+        on_delete=models.SET_DEFAULT,
         null=True,
+        default=None,
         blank=True,
         related_name='products_completed',
         verbose_name=_('Completed By'),
