@@ -145,7 +145,7 @@
 							<a class="dropdown-item" href="{% url 'admin:index' %}">Admin page</a>
 							{% endif %}
 							{% if user|has_group:"BaseWorkers" %}
-							<a class="dropdown-item" href="{% url 'expert:worker-detail' pk=user.worker.id %}">Profile</a>
+							<a class="dropdown-item" href="{{ user.worker.get_absolute_url }}">Profile</a>
 							{% endif %}
 							<a class="dropdown-item" href="{% url 'expert:logout' %}">Logout</a>
 						</div>
@@ -171,7 +171,7 @@
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Kit</a>
 							</li>
 							<li class="nav-item">
-								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{% url 'expert:worker-list' %}">Worker</a>
+								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{{ Worker.get_list_url }}">Worker</a>
 							</li>
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'customer' %}active{% endif %}" href="{{ Customer.get_list_url }}">Customer</a>

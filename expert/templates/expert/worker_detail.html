@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block custom_navbar %}
-<li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:worker-update' pk=worker.id %}"><i class="fa fa-pencil"></i> Edit</a></li>
-<li class="nav-item"><a class="nav-link btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:worker-delete' pk=worker.id %}"><i class="fa fa-trash"></i> Delete</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{{ worker.get_update_url }}"><i class="fa fa-pencil"></i> Edit</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-danger btn-sm mr-1" type="button" href="{{ worker.get_delete_url }}"><i class="fa fa-trash"></i> Delete</a></li>
 {% endblock %}
 
 {% block main_content %}

@@ -77,6 +77,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'customer.context_processors.model',
                 'invoice.context_processors.model',
+                'worker.context_processors.model',
             ],
         },
     },

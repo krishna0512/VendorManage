@@ -140,12 +140,21 @@ class Worker(models.Model):
         return self.fullname
 
     def get_absolute_url(self):
-        return reverse(
-            'expert:worker-detail',
-            kwargs={
-                'pk': self.id
-            }
-        )
+        return reverse('worker:detail', kwargs={'pk': self.pk})
+
+    def get_update_url(self):
+        return reverse('worker:update', kwargs={'pk': self.pk})
+
+    def get_delete_url(self):
+        return reverse('worker:delete', kwargs={'pk': self.pk})
+
+    @staticmethod
+    def get_list_url():
+        return reverse('worker:list')
+
+    @staticmethod
+    def get_create_url():
+        return reverse('worker:create')
 
     def cleanup(self):
         if self.photo:

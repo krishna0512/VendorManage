@@ -16,7 +16,6 @@ urlpatterns = [
     path('kit/', include('expert.urls.kit')),
     path('product/', include('expert.urls.product')),
     path('challan/', include('expert.urls.challan')),
-    path('worker/', include('expert.urls.worker')),
 
     path('report/<int:year>/<str:month>/<int:day>/', views.ProductDayArchiveView.as_view(), name='report-daily'),
     path('report/<int:year>/<str:month>/', views.ProductMonthArchiveView.as_view(), name='report-monthly'),

@@ -16,7 +16,7 @@
 				text: '<i class="fa fa-plus"></i> Add New',
 				className: 'btn btn-primary btn-sm font-italic',
 				action: function(e, dt, node, config) {
-					window.location.href = "{% url 'expert:worker-create' %}";
+					window.location.href = "{{ Worker.get_create_url }}";
 				}
 			}],
 		});

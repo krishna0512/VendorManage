@@ -66,7 +66,7 @@ class WorkerUpdateView(PermissionRequiredMixin, UpdateView):
 
 class WorkerDeleteView(PermissionRequiredMixin, DeleteView):
     model = Worker
-    success_url = reverse_lazy('expert:worker-list')
+    success_url = reverse_lazy('worker:list')
     permission_required = ('expert.view_worker','expert.delete_worker')
 
     def delete(self, request, *args, **kwargs):
