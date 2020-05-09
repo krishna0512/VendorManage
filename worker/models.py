@@ -174,9 +174,3 @@ def create_user_for_worker(sender, instance, created, **kwargs):
         u.save()
         instance.user = u
         instance.save()
-    # check for changes in username
-    # This Functionality is redundant because of property getter and setters.
-    # if instance.username != instance.user.username:
-    #     u = instance.user
-    #     u.username = instance.username
-    #     u.save()
