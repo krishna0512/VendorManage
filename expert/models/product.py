@@ -146,7 +146,7 @@ class Product(models.Model):
         null=True,
         default=None,
         blank=True,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_DEFAULT,
         related_name='products',
         help_text=_('Challan that this product is dispatched through')
     )
