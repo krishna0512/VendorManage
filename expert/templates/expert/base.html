@@ -39,6 +39,10 @@
 				else {
 					$('#btn-sidebar-expand').hide();
 				}
+				$('#sidebarreportdropdown').on('click', function() {
+					$(this).toggleClass('active');
+					$('.custom-dropdown').slideToggle('slow');
+				});
 			});
 			window.addEventListener('resize', () => {
 				let vh = window.innerHeight * 0.01;
@@ -165,7 +169,7 @@
 				</div>
 				{% block navbar-side %}
 				<nav class="col-md-2 col-xl-1 col-3 d-block bg-light sidebar" id="navbar-side">
-					<div class="sidebar-sticky">
+					<div class="sidebar-sticky col-md-2 col-xl-1 col-3 p-0 pt-2">
 						<ul class="nav flex-column text-center h-100">
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Kit</a>
@@ -182,12 +186,25 @@
 							<li class="nav-item active">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'invoice' %}active{% endif %}" href="{{ Invoice.get_list_url }}">Invoice</a>
 							</li>
-							<li class="nav-item">
-								<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Feb' %}">Reports (Feb)</a>
+							<li class="nav-item dropdown">
+								<a class="mx-2 nav-link dropdown-toggle" id="sidebarreportdropdown" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">
+									Reports
+								</a>
 							</li>
-							<li class="nav-item">
-								<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">Reports (Mar)</a>
-							</li>
+							<div class="custom-dropdown py-1" style="display: none; background-color: #f0f0f0;">
+								<li class="nav-item">
+									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2019 month='Dec' %}">Dec 2019</a>
+								</li>
+								<li class="nav-item">
+									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Jan' %}">Jan 2020</a>
+								</li>
+								<li class="nav-item">
+									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Feb' %}">Feb 2020</a>
+								</li>
+								<li class="nav-item">
+									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">Mar 2020</a>
+								</li>
+							</div>
 						</ul>
 					</div>
 				</nav>
