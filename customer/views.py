@@ -9,18 +9,30 @@ from django.views.generic.edit import DeleteView, UpdateView, CreateView
 
 from .models import Customer
 
-class CustomerListView(ListView):
+class CustomerListView(PermissionRequiredMixin, ListView):
     model = Customer
+    permission_required = (
+        'customer.view_customer',
+    )
 
-class CustomerDetailView(DetailView):
+class CustomerDetailView(PermissionRequiredMixin, DetailView):
     model = Customer
+    permission_required = (
+        'customer.view_customer',
+    )
 
-class CustomerCreateView(CreateView):
+class CustomerCreateView(PermissionRequiredMixin, CreateView):
     model = Customer
     fields = '__all__'
     template_name_suffix = '_create_form'
+    permission_required = (
+        'customer.view_customer', 'customer.add_customer',
+    )
 
-class CustomerUpdateView(UpdateView):
+class CustomerUpdateView(PermissionRequiredMixin, UpdateView):
     model = Customer
     fields = '__all__'
     template_name_suffix = '_update_form'
+    permission_required = (
+        'customer.view_customer', 'customer.change_customer',
+    )

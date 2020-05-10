@@ -12,7 +12,7 @@ from expert.forms import *
 class WorkerListView(PermissionRequiredMixin, ListView):
     queryset = Worker.objects.filter(active=True).order_by('first_name')
     navigation = ''
-    permission_required = ('expert.view_worker')
+    permission_required = ('worker.view_worker')
 
 class WorkerCreateView(PermissionRequiredMixin, CreateView):
     model = Worker
@@ -21,7 +21,7 @@ class WorkerCreateView(PermissionRequiredMixin, CreateView):
         'date_joined','photo',
     ]
     template_name_suffix = '_create_form'
-    permission_required = ('expert.view_worker','expert.add_worker')
+    permission_required = ('worker.view_worker','worker.add_worker')
 
     def form_valid(self, form):
         form.instance._username = form.instance._username.lower()
@@ -29,7 +29,7 @@ class WorkerCreateView(PermissionRequiredMixin, CreateView):
 
 class WorkerDetailView(PermissionRequiredMixin, DetailView):
     model = Worker
-    permission_required = ('expert.view_worker')
+    permission_required = ('worker.view_worker')
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -58,7 +58,7 @@ class WorkerUpdateView(PermissionRequiredMixin, UpdateView):
         'date_joined','photo'
     ]
     template_name_suffix = '_update_form'
-    permission_required = ('expert.view_worker','expert.change_worker')
+    permission_required = ('worker.view_worker','worker.change_worker')
 
     def form_valid(self, form):
         form.instance._username = form.instance._username.lower()
@@ -67,7 +67,7 @@ class WorkerUpdateView(PermissionRequiredMixin, UpdateView):
 class WorkerDeleteView(PermissionRequiredMixin, DeleteView):
     model = Worker
     success_url = reverse_lazy('worker:list')
-    permission_required = ('expert.view_worker','expert.delete_worker')
+    permission_required = ('worker.view_worker','worker.delete_worker')
 
     def delete(self, request, *args, **kwargs):
         """

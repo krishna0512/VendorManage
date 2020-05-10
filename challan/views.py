@@ -7,7 +7,8 @@ from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import DeleteView, UpdateView
 
-from expert.models import Kit, Challan
+from expert.models import Kit
+from .models import Challan
 from customer.models import Customer
 from . import process
 
@@ -15,26 +16,29 @@ class ChallanListView(PermissionRequiredMixin, ListView):
     model = Challan
     navigation = 'challan'
     ordering = ['-number']
-    permission_required = ('expert.view_challan')
+    permission_required = ('challan.view_challan')
 
 class ChallanDetailView(PermissionRequiredMixin, DetailView):
     model = Challan
     slug_field = 'number'
-    permission_required = ('expert.view_challan','expert.view_product')
+    permission_required = ('challan.view_challan','expert.view_product')
 
 
-class ChallanUpdateView(UpdateView):
+class ChallanUpdateView(PermissionRequiredMixin, UpdateView):
     model = Challan
     template_name_suffix = '_update_form'
     fields = [
         'number','date_sent','customer'
     ]
+    permission_required = (
+        'challan.view_challan', 'challan.change_challan',
+    )
 
 class ChallanPrintableView(PermissionRequiredMixin, DetailView):
     model = Challan
     slug_field = 'number'
     template_name_suffix = '_detail_printable'
-    permission_required = ('expert.view_challan','expert.view_product')
+    permission_required = ('challan.view_challan','expert.view_product')
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -55,7 +59,7 @@ class ChallanDeleteView(PermissionRequiredMixin, DeleteView):
     model = Challan
     slug_field = 'number'
     success_url = reverse_lazy('challan:list')
-    permission_required = ('expert.view_challan','expert.delete_challan')
+    permission_required = ('challan.view_challan','challan.delete_challan')
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
@@ -72,7 +76,7 @@ class ChallanDeleteView(PermissionRequiredMixin, DeleteView):
 
 class ChallanCreateRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
     model = Kit
-    permission_required = ('expert.view_kit','expert.view_product','expert.view_challan','expert.add_challan', 'expert.change_product')
+    permission_required = ('expert.view_kit','expert.view_product','challan.view_challan','challan.add_challan', 'expert.change_product')
 
     def _get_challan_number(self):
         if not Challan.objects.all().exists():

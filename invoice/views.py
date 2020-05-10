@@ -4,14 +4,15 @@ from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView
 
-from expert.models import Challan, Invoice
+from .models import Invoice
+from challan.models import Challan
 from .forms import InvoiceUpdateForm
 
 class InvoiceCreateView(PermissionRequiredMixin, CreateView):
     model = Invoice
     fields = '__all__'
     template_name_suffix = '_create_form'
-    permission_required = ('expert.view_invoice','expert.add_invoice')
+    permission_required = ('invoice.view_invoice','invoice.add_invoice')
 
     def get_initial(self, *args, **kwargs):
         initial = super().get_initial(*args, **kwargs)
@@ -31,7 +32,7 @@ class InvoiceListView(PermissionRequiredMixin, ListView):
     model = Invoice
     navigation = 'invoice'
     ordering = ['-number']
-    permission_required = ('expert.view_invoice')
+    permission_required = ('invoice.view_invoice')
 
     def get(self, *args, **kwargs):
         return super().get(*args, **kwargs)
@@ -39,7 +40,7 @@ class InvoiceListView(PermissionRequiredMixin, ListView):
 class InvoiceDetailView(PermissionRequiredMixin, DetailView):
     model = Invoice
     slug_field = 'number'
-    permission_required = ('expert.view_invoice','expert.view_challan')
+    permission_required = ('invoice.view_invoice','challan.view_challan')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -57,8 +58,8 @@ class InvoiceChallanOperationView(PermissionRequiredMixin, SingleObjectMixin, Re
     model = Invoice
     pk_url_kwarg = 'invoice_pk'
     permission_required = (
-        'expert.view_invoice', 'expert.view_challan',
-        'expert.change_invoice', 'expert.change_challan',
+        'invoice.view_invoice', 'challan.view_challan',
+        'invoice.change_invoice', 'challan.change_challan',
     )
 
     def get_redirect_url(self, *args, **kwargs):
@@ -74,7 +75,7 @@ class InvoicePrintableView(PermissionRequiredMixin, DetailView):
     model = Invoice
     slug_field = 'number'
     template_name_suffix = '_detail_printable'
-    permission_required = ('expert.view_invoice','expert.view_challan')
+    permission_required = ('invoice.view_invoice','challan.view_challan')
 
     def get_context_date(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -87,7 +88,7 @@ class InvoiceUpdateView(PermissionRequiredMixin, UpdateView):
     form_class = InvoiceUpdateForm
     template_name_suffix = '_update_form'
     slug_field = 'number'
-    permission_required = ('expert.view_invoice','expert.change_invoice')
+    permission_required = ('invoice.view_invoice','invoice.change_invoice')
 
     def form_valid(self, form):
         print(form.instance.number)
