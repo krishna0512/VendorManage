@@ -111,12 +111,13 @@ class Worker(models.Model):
         if end_date is None:
             end_date = start_date + timedelta(months=1) - timedelta(days=1)
         # TODO: figure out something without having to import kit and products
-        kit_list = Kit.objects.get_date_received_range(start_date, end_date)
-        ret = Product.objects.filter(completedby=self, kit__in=kit_list)
+        ret = self.products_completed.filter(kit__date_received__gte=start_date, kit__date_received__lte=end_date)
+        # kit_list = Kit.objects.get_date_received_range(start_date, end_date)
+        # ret = Product.objects.filter(completedby=self, kit__in=kit_list)
         return ret
 
     def get_total_contribution(self):
-        return round(sum([i.size for i in self.products_completed.all()]),2)
+        return self.products_completed.all().size
 
     def get_approx_contribution_badge(self):
         x = self.get_total_contribution()
@@ -136,10 +137,10 @@ class Worker(models.Model):
         return self.products_completed.all().filter(date_completed=date)
 
     def __repr__(self):
-        return '<Worker: {}>'.format(self.first_name.lower())
+        return '<Worker: {}>'.format(self.username)
 
     def __str__(self):
-        return self.fullname
+        return self.username
 
     def get_absolute_url(self):
         return reverse('worker:detail', kwargs={'pk': self.pk})
