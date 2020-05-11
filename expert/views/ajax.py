@@ -11,6 +11,10 @@ from worker.models import Worker
 from invoice.models import Invoice
 from expert.forms import *
 
+def search(request):
+    print('Hello')
+    return JsonResponse({'saved': True})
+
 def validate_create_worker_username(request):
     username = request.GET.get('username', None)
     data = {
