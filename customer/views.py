@@ -11,6 +11,7 @@ from .models import Customer
 
 class CustomerListView(PermissionRequiredMixin, ListView):
     model = Customer
+    navigation = 'customer'
     permission_required = (
         'customer.view_customer',
     )

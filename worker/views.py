@@ -11,7 +11,7 @@ from expert.forms import *
 
 class WorkerListView(PermissionRequiredMixin, ListView):
     queryset = Worker.objects.filter(active=True).order_by('first_name')
-    navigation = ''
+    navigation = 'worker'
     permission_required = ('worker.view_worker')
 
 class WorkerCreateView(PermissionRequiredMixin, CreateView):
