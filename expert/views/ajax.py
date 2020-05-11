@@ -13,7 +13,18 @@ from expert.forms import *
 
 def search(request):
     print('Hello')
-    return JsonResponse({'saved': True})
+    ret = []
+    query = request.GET.get('query', None)
+    if query is None:
+        return JsonResponse({'suggestions': []})
+    a = Product.objects.filter(order_number__icontains=query)
+    for i in a:
+        ret.append({
+            'value': '{} ({})'.format(i.order_number.upper(), i.size),
+            'data': {'category': '{} ({})'.format(i.kit.number, i.kit.date_received.strftime('%b %d, %Y'))},
+            'url': i.get_absolute_url(),
+        })
+    return JsonResponse({'suggestions': ret})
 
 def validate_create_worker_username(request):
     username = request.GET.get('username', None)
