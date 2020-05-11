@@ -123,6 +123,14 @@
 				-webkit-border-bottom-right-radius: 10px;
 				-mox-border-bottom-right-radius: 10px;
 			}
+			.dataTables_paginate li.paginate_button {
+				transition: all 0.2s ease-in-out;
+			}
+			.dataTables_paginate li.paginate_button:not(.disabled):hover {
+				background: none!important;
+				border: none!important;
+				transform: scale(1.35);
+			}
 		</style>
 		{% block custom_css %}{% endblock %}
 		{% block custom_js %}{% endblock %}
@@ -235,6 +243,7 @@
 				margin-right: 0.25rem;
 			}
 		}
+
 
 		/*
 		 * Sidebar
