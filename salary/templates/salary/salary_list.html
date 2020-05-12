@@ -3,6 +3,7 @@
 
 {% block custom_navbar %}
 {% if worker %}
+<li class="nav-item"><a class="nav-link btn btn-outline-success btn-sm mr-1" type="button" href="{{ Salary.get_create_url }}{% if worker %}?worker_pk={{ worker.pk }}{% endif %}"><i class="fa fa-add"></i> Add New</a></li>
 <li class="nav-item"><a class="nav-link btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ worker.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a></li>
 {% endif %}
 {% endblock %}
@@ -21,7 +22,8 @@
                         <th>Date Generated</th>
                         <th>Date From</th>
                         <th>Date To</th>
-                        <th>Product Size</th>
+                        <th>Completed Products</th>
+                        <th>Returned Products</th>
                         <th>Rate</th>
                         <th>Amount</th>
                     </tr>
@@ -33,9 +35,10 @@
                         <td>{{ salary.date_generated }}</td>
                         <td>{{ salary.date_from }}</td>
                         <td>{{ salary.date_to }}</td>
-                        <td>{{ salary.products.size }}</td>
+                        <td>{{ salary.products.completed.size }}</td>
+                        <td>{{ salary.products.returned.size }}</td>
                         <td>{{ salary.get_rate }}</td>
-                        <td>{{ salary.amount }}</td>
+                        <td class="font-weight-bold">{{ salary.amount }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

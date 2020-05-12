@@ -11,6 +11,10 @@ from dateutil.relativedelta import relativedelta as timedelta
 
 # Create your models here.
 
+class SalaryQuerySet(models.QuerySet):
+    def active(self):
+        pass
+
 class Salary(models.Model):
     date_generated = models.DateField(
         auto_now_add=True,
@@ -46,10 +50,24 @@ class Salary(models.Model):
         max_digits=7,
         decimal_places=2,
     )
+    objects = SalaryQuerySet.as_manager()
 
     @staticmethod
     def get_list_url():
         return reverse('salary:list')
+
+    @staticmethod
+    def get_create_url():
+        return reverse('salary:create')
+
+    def products(self):
+        return self.worker.products_completed.get_date_completed_range(self.date_from, self.date_to)
+
+    def populate_amount(self):
+        cs = self.products().completed().size
+        rs = self.products().returned().size
+        self.amount = (cs-rs) * float(self._variable_rate)
+        self.save()
 
     def get_rate(self):
         if self._fixed_rate:
