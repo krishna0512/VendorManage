@@ -1,0 +1,46 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+
+{% block custom_navbar %}
+{% if worker %}
+<li class="nav-item"><a class="nav-link btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ worker.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a></li>
+{% endif %}
+{% endblock %}
+
+{% block main_content %}
+<div class="container py-0 pl-4 pl-lg-0">
+	<div class="px-3 h2 text-center m-0 py-1">
+		List of Salary
+	</div>
+	<div class="row mt-2">
+		<div class="col mx-auto">
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Worker</th>
+                        <th>Date Generated</th>
+                        <th>Date From</th>
+                        <th>Date To</th>
+                        <th>Product Size</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for salary in salary_list %}
+                    <tr>
+                        <td>{{ salary.worker.username }}</td>
+                        <td>{{ salary.date_generated }}</td>
+                        <td>{{ salary.date_from }}</td>
+                        <td>{{ salary.date_to }}</td>
+                        <td>{{ salary.products.size }}</td>
+                        <td>{{ salary.get_rate }}</td>
+                        <td>{{ salary.amount }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+		</div>
+	</div>
+</div>
+{% endblock %}

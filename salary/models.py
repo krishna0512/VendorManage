@@ -46,3 +46,13 @@ class Salary(models.Model):
         max_digits=7,
         decimal_places=2,
     )
+
+    @staticmethod
+    def get_list_url():
+        return reverse('salary:list')
+
+    def get_rate(self):
+        if self._fixed_rate:
+            return '{} / Day'.format(self._fixed_rate)
+        else:
+            return '{} / Sq.Ft.'.format(self._variable_rate)
