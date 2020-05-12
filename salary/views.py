@@ -68,3 +68,6 @@ class SalaryCreateView(CreateView):
             initial['_fixed_rate'] = w.fixed_rate
             initial['_variable_rate'] = w.variable_rate
         return initial
+
+class SalaryDetailView(DetailView):
+    model = Salary

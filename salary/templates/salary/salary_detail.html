@@ -1,0 +1,80 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+{% block custom_navbar %}
+<li class="nav-item"><a class="nav-link btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ Salary.get_list_url }}?worker_pk={{ salary.worker.pk }}"><i class="fa fa-arrow-left"></i> Back</a></li>
+{% endblock %}
+
+{% block main_content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <p>Rate = {{ salary.get_rate }}</p>
+            <p>Amount = {{ salary.amount }}</p>
+        </div>
+    </div>
+	<div class="row">
+		<div class="col">
+			<div class="table-responsive">
+                <center class="font-weight-bold" style="font-size: 1.4rem;">Product Table</center>
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Kit #</th>
+                            <th>Product #</th>
+                            <th>Date</th>
+                            <th>Qty</th>
+                            <th>Size</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7" class="text-center font-weight-bold">Completed</td>
+                        </tr>
+                        {% for product in salary.products.completed %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ product.kit.number }}</td>
+                            <td>{{ product.order_number }}</td>
+                            <td>{{ product.date_completed }}</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>{{ product.size }}</td>
+                            <td>{{ product.size|mul:salary.variable_rate|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="4" class="text-center">Total</td>
+                            <td>{{ salary.products.completed.quantity }}</td>
+                            <td>{{ salary.products.completed.size }}</td>
+                            <td>{{ salary.products.completed.size|mul:salary.variable_rate|floatformat:2 }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" class="text-center font-weight-bold">Returned</td>
+                        </tr>
+                        {% for product in salary.products.returned %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ product.kit.number }}</td>
+                            <td>{{ product.order_number }}</td>
+                            <td>{{ product.date_completed }}</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>{{ product.size }}</td>
+                            <td>-{{ product.size|mul:salary.variable_rate|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="4" class="text-center">Total</td>
+                            <td>{{ salary.products.returned.quantity }}</td>
+                            <td>{{ salary.products.returned.size }}</td>
+                            <td>-{{ salary.products.returned.size|mul:salary.variable_rate|floatformat:2 }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+		</div>
+	</div>
+</div>
+{% endblock %}

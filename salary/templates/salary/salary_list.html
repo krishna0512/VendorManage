@@ -1,6 +1,17 @@
 {% extends 'expert/base.html' %}
 {% load static %}
 
+{% block custom_js %}
+<script>
+    $(function() {
+		$('#table-salary-list tbody').on('click', 'tr', function() {
+			var url = $(this).attr('data-href');
+			window.location.href = url;
+		});
+    });
+</script>
+{% endblock %}
+
 {% block custom_navbar %}
 {% if worker %}
 <li class="nav-item"><a class="nav-link btn btn-outline-success btn-sm mr-1" type="button" href="{{ Salary.get_create_url }}{% if worker %}?worker_pk={{ worker.pk }}{% endif %}"><i class="fa fa-add"></i> Add New</a></li>
@@ -15,7 +26,7 @@
 	</div>
 	<div class="row mt-2">
 		<div class="col mx-auto">
-            <table class="table table-bordered table-striped table-hover">
+            <table class="table table-bordered table-striped table-hover" id="table-salary-list">
                 <thead>
                     <tr>
                         <th>Worker</th>
@@ -30,7 +41,7 @@
                 </thead>
                 <tbody>
                     {% for salary in salary_list %}
-                    <tr>
+                    <tr data-href="{{ salary.get_absolute_url }}">
                         <td>{{ salary.worker.username }}</td>
                         <td>{{ salary.date_generated }}</td>
                         <td>{{ salary.date_from }}</td>

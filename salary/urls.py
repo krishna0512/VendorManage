@@ -6,4 +6,5 @@ app_name = 'salary'
 urlpatterns = [
     path('', views.SalaryListView.as_view(), name='list'),
     path('create/', views.SalaryCreateView.as_view(), name='create'),
+    path('<int:pk>/view/', views.SalaryDetailView.as_view(), name='detail'),
 ]

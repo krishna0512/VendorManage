@@ -52,6 +52,9 @@ class Salary(models.Model):
     )
     objects = SalaryQuerySet.as_manager()
 
+    def get_absolute_url(self):
+        return reverse('salary:detail', kwargs={'pk': self.pk})
+
     @staticmethod
     def get_list_url():
         return reverse('salary:list')
@@ -61,7 +64,7 @@ class Salary(models.Model):
         return reverse('salary:create')
 
     def products(self):
-        return self.worker.products_completed.get_date_completed_range(self.date_from, self.date_to)
+        return self.worker.products_completed.get_date_completed_range(self.date_from, self.date_to).order_by('date_completed')
 
     def populate_amount(self):
         cs = self.products().completed().size
@@ -74,3 +77,7 @@ class Salary(models.Model):
             return '{} / Day'.format(self._fixed_rate)
         else:
             return '{} / Sq.Ft.'.format(self._variable_rate)
+
+    @property
+    def variable_rate(self):
+        return self._variable_rate
