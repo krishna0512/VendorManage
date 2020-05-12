@@ -24,6 +24,7 @@ urlpatterns = [
     path('invoice/', include('invoice.urls')),
     path('worker/', include('worker.urls')),
     path('challan/', include('challan.urls')),
+    path('salary/', include('salary.urls')),
     # path('expert/', include('expert.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
