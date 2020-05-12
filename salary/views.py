@@ -13,9 +13,12 @@ from worker.models import Worker
 
 # Create your views here.
 
-class SalaryListView(ListView):
+class SalaryListView(PermissionRequiredMixin, ListView):
     model = Salary
     ordering = ('-date_to')
+    permission_required = (
+        'salary.view_salary',
+    )
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -30,13 +33,16 @@ class SalaryListView(ListView):
             kwargs['worker'] = Worker.objects.get(pk=wpk)
         return super().get_context_data(*args, **kwargs)
 
-class SalaryCreateView(CreateView):
+class SalaryCreateView(PermissionRequiredMixin, CreateView):
     model = Salary
     template_name_suffix = '_create_form'
     fields = [
         'worker', 'date_from', 'date_to',
         '_fixed_rate', '_variable_rate',
     ]
+    permission_required = (
+        'salary.add_salary', 'salary.view_salary',
+    )
     success_url = reverse_lazy('salary:list')
 
     def get_context_data(self, *args, **kwargs):
@@ -64,5 +70,8 @@ class SalaryCreateView(CreateView):
             initial['_variable_rate'] = w.variable_rate
         return initial
 
-class SalaryDetailView(DetailView):
+class SalaryDetailView(PermissionRequiredMixin, DetailView):
     model = Salary
+    permission_required = (
+        'salary.view_salary',
+    )
