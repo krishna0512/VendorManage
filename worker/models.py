@@ -69,10 +69,12 @@ class Worker(models.Model):
         verbose_name=_('Mobile #'),
         help_text=('10-digit mobile number of the worker without leading zero(s)'),
     )
-    fixed_rate = models.IntegerField(
-        default=0,
-        verbose_name=_('Monthly Salary'),
-        help_text=_('Total Monthly salary (without decimal places)'),
+    fixed_rate = models.DecimalField(
+        default=0.0,
+        max_digits=6,
+        decimal_places=2,
+        verbose_name=_('Daily Salary'),
+        help_text=_('Total Daily salary (without decimal places)'),
     )
     variable_rate = models.DecimalField(
         max_digits=4,
