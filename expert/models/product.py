@@ -43,6 +43,12 @@ class ProductQuerySet(models.QuerySet):
             return 0.0
         return round(sum([i.size for i in self.all()]), 2)
 
+    @property
+    def value(self):
+        if not self.exists():
+            return 0
+        return round(sum([i.value for i in self.all()]), 2)
+
 class Product(models.Model):
     COLOR_CHOICES = [
         ('black','Black'),
@@ -72,6 +78,12 @@ class Product(models.Model):
         ('fab', 'Cover Fab'),
         ('clear', 'Cover Clear'),
     ]
+    FABRIC_COST = {
+        'max': 10.31,
+        'tuff': 12.54,
+        'fab': 0.0,
+        'clear': 0.0,
+    }
     STATUS_CHOICES = [
         ('pending','Pending'),
         ('assigned','Assigned'),
@@ -245,6 +257,8 @@ class Product(models.Model):
         if self.is_dispatched and rr != 'fault' or self.is_returned and rr=='fault':
             # you cannot return a product with un/semi/mistake if product is already dispatched
             return False
+        if rr != 'fault':
+            self.uncomplete()
         self.return_remark = rr
         self.status = 'returned'
         self.save()
@@ -277,6 +291,11 @@ class Product(models.Model):
         if value < 0:
             raise ValueError("Size cannot be negative")
         self._size = round(value, 2)
+
+    @property
+    def value(self):
+        cost = self.FABRIC_COST[self.fabric]
+        return round(cost * self.size, 2)
 
     @property
     def split_factors(self):
