@@ -3,6 +3,7 @@
 
 {% block custom_navbar %}
 <li class="nav-item"><a class="nav-link btn btn-outline-info btn-sm mr-1" type="button" href="{{ Salary.get_list_url }}?worker_pk={{ worker.pk }}"><i class="fa fa-money"></i> Salary</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-success btn-sm mr-1" type="button" href="{{ Salary.get_create_url }}?worker_pk={{ worker.pk }}"><i class="fa fa-plus"></i> Add New</a></li>
 <li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{{ worker.get_update_url }}"><i class="fa fa-pencil"></i> Edit</a></li>
 <li class="nav-item"><a class="nav-link btn btn-outline-danger btn-sm mr-1" type="button" href="{{ worker.get_delete_url }}"><i class="fa fa-trash"></i> Delete</a></li>
 {% endblock %}

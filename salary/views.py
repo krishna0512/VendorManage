@@ -22,10 +22,13 @@ class SalaryListView(PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        wpk = self.request.GET.get('worker_pk', None)
-        if wpk:
-            queryset = queryset.filter(worker__pk=wpk)
-        return queryset
+        if self.request.user.is_staff:
+            wpk = self.request.GET.get('worker_pk', None)
+            if wpk:
+                queryset = queryset.filter(worker__pk=wpk)
+            return queryset
+        else:
+            return queryset.filter(worker__pk=self.request.user.worker.pk)
 
     def get_context_data(self, *args, **kwargs):
         wpk = self.request.GET.get('worker_pk', None)
@@ -75,3 +78,12 @@ class SalaryDetailView(PermissionRequiredMixin, DetailView):
     permission_required = (
         'salary.view_salary',
     )
+
+    def has_permission(self):
+        ret = super().has_permission()
+        if self.request.user.is_staff:
+            # give the permission to vendor assuming its a staff
+            return ret
+        else:
+            # else worker can only access his/her salary details
+            return ret and self.request.user.worker == self.get_object().worker
