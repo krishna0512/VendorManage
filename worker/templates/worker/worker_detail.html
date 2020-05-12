@@ -24,6 +24,13 @@
 			<small>Joined since - {{ worker.date_joined }}</small>
 			<br>
 			<span>{{ worker.address }}</span>
+			{% if worker.fixed_rate %}
+			<br>
+			<span>Fixed Rate -- <i class="fa fa-inr"></i>{{ worker.fixed_rate }} / Month</span>
+			{% else %}
+			<br>
+			<span>Rate -- <i class="fa fa-inr"></i>{{ worker.variable_rate }} / Sq.Ft.</span>
+			{% endif %}
 		</div>
 	</div>
 	<div class="row">

@@ -46,7 +46,7 @@ class WorkerUpdateView(PermissionRequiredMixin, UpdateView):
     model = Worker
     fields = [
         'first_name','last_name','_username','address',
-        'date_joined','photo'
+        'date_joined','photo', 'fixed_rate', 'variable_rate',
     ]
     template_name_suffix = '_update_form'
     permission_required = ('worker.view_worker','worker.change_worker')

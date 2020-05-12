@@ -69,6 +69,19 @@ class Worker(models.Model):
         verbose_name=_('Mobile #'),
         help_text=('10-digit mobile number of the worker without leading zero(s)'),
     )
+    fixed_rate = models.IntegerField(
+        default=0,
+        verbose_name=_('Monthly Salary'),
+        help_text=_('Total Monthly salary (without decimal places)'),
+    )
+    variable_rate = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        # TODO: retrieve the default rate from settings.
+        default=2.5,
+        verbose_name=_('SqFt Rate'),
+        help_text=_('Rate of the worker per Sq.Ft.'),
+    )
     photo = models.ImageField(
         upload_to=worker_image_path,
         null=True,
