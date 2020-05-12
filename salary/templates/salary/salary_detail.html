@@ -62,14 +62,14 @@
                             <td>{{ product.date_completed }}</td>
                             <td>{{ product.quantity }}</td>
                             <td>{{ product.size }}</td>
-                            <td>-{{ product.size|mul:salary.variable_rate|floatformat:2 }}</td>
+                            <td>-{{ product.value }}</td>
                         </tr>
                         {% endfor %}
                         <tr>
                             <td colspan="4" class="text-center">Total</td>
                             <td>{{ salary.products.returned.quantity }}</td>
                             <td>{{ salary.products.returned.size }}</td>
-                            <td>-{{ salary.products.returned.size|mul:salary.variable_rate|floatformat:2 }}</td>
+                            <td>-{{ salary.products.returned.value }}</td>
                         </tr>
                     </tbody>
                 </table>

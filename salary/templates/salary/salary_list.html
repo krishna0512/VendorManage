@@ -14,7 +14,7 @@
 
 {% block custom_navbar %}
 {% if worker %}
-<li class="nav-item"><a class="nav-link btn btn-outline-success btn-sm mr-1" type="button" href="{{ Salary.get_create_url }}{% if worker %}?worker_pk={{ worker.pk }}{% endif %}"><i class="fa fa-add"></i> Add New</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-success btn-sm mr-1" type="button" href="{{ Salary.get_create_url }}{% if worker %}?worker_pk={{ worker.pk }}{% endif %}"><i class="fa fa-plus"></i> Add New</a></li>
 <li class="nav-item"><a class="nav-link btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ worker.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a></li>
 {% endif %}
 {% endblock %}

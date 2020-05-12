@@ -45,10 +45,6 @@ class SalaryCreateView(CreateView):
             kwargs['worker'] = Worker.objects.get(pk=wpk)
         return super().get_context_data(*args, **kwargs)
 
-    def form_valid(self, form):
-        form.instance.populate_amount()
-        return super().form_valid(form)
-
     def get_initial(self):
         initial = super().get_initial()
         wpk = self.request.GET.get('worker_pk', None)
@@ -61,8 +57,7 @@ class SalaryCreateView(CreateView):
             else:
                 df = w.date_joined
             dt = df + timedelta(months=1)
-            dt = date(dt.year, dt.month, 1)
-            dt -= timedelta(days=1)
+            dt = date(dt.year, dt.month, 1) - timedelta(days=1)
             initial['date_from'] = df
             initial['date_to'] = dt
             initial['_fixed_rate'] = w.fixed_rate
