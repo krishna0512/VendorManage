@@ -31,25 +31,16 @@ class WorkerDetailView(PermissionRequiredMixin, DetailView):
     model = Worker
     permission_required = ('worker.view_worker')
 
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        ret = []
-        worker = self.object
-        kit_number_list = list(set([i.kit.number for i in worker.products_completed.all()]))
-        kit_list = Kit.objects.filter(number__in=kit_number_list).order_by('-date_received')
-        # kit_list = [Kit.objects.get(number=i) for i in kit_number_list]
-        for i in kit_list:
-            ret.append(
-                {
-                    'object': i,
-                    'total_kit_contribution': sum([j.size for j in i.products.filter(completedby=worker)]),
-                    'products_attached': i.products.filter(completedby=worker)
-                }
-            )
-        context['data'] = ret
-        context['products_completed'] = worker.products_completed.order_by('-kit__number', '-date_completed')
-        context['kit_list'] = Kit.objects.filter(products__in=context['products_completed']).distinct().order_by('-number')
-        return context
+    def has_permission(self):
+        """Give the permission for a user to access his/her own page"""
+        ret = super().has_permission()
+        return ret or self.request.user.worker.pk == self.kwargs['pk']
+
+    def get_context_data(self, **kwargs):
+        kwargs['product_list'] = self.object.products_completed.order_by(
+            '-kit__number', '-date_completed'
+        )
+        return super().get_context_data(**kwargs)
 
 class WorkerUpdateView(PermissionRequiredMixin, UpdateView):
     model = Worker

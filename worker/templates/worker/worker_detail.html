@@ -39,14 +39,14 @@
 						</tr>
 					</thead>
 					<tbody>
-						{% for kit in kit_list %}
+						{% for product in product_list %}
+						{% ifchanged product.kit.id %}
 						<tr>
 							<th colspan="4" class="text-center font-weight-bold h5">
-								<a href="{{ kit.get_absolute_url }}">{{ kit.number }}</a>
+								<a href="{{ product.kit.get_absolute_url }}">{{ product.kit.number }}</a>
 							</th>
 						</tr>
-						{% for product in products_completed %}
-						{% if product.kit.number == kit.number %}
+						{% endifchanged %}
 						<tr>
 							<td>{{ forloop.counter }}</td>
 							<td>
@@ -55,39 +55,9 @@
 							<td>{{ product.date_completed }}</td>
 							<td>{{ product.size }}</td>
 						</tr>
-						{% endif %}
-						{% endfor %}
 						{% endfor %}
 					</tbody>
 				</table>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col">
-			Contributions for the day
-			<div class="accordion" id="accordionExample">
-				{% for kit in data %}
-				<div class="card">
-					<div class="card-header" id="heading-{{ kit.object.number }}">
-						<h2 class="mb-0">
-							<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{ kit.object.number }}" aria-expanded="true" aria-controls="collapse-{{ kit.object.number }}">
-								{{ kit.object.number }}-{{ kit.products_attached.count }} ({{ kit.object.date_received }}) -- {{ kit.total_kit_contribution|floatformat:2 }}
-							</button>
-						</h2>
-					</div>
-
-					<div id="collapse-{{ kit.object.number }}" class="collapse hide" aria-labelledby="heading-{{ kit.object.number }}" data-parent="#accordionExample">
-						<div class="card-body">
-							<ul>
-								{% for product in kit.products_attached %}
-								<li>{{ product.order_number }} - {{ product.size }}</li>
-								{% endfor %}
-							</ul>
-						</div>
-					</div> 
-				</div>
-				{% endfor %}
 			</div>
 		</div>
 	</div>
