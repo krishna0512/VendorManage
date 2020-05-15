@@ -49,20 +49,5 @@
             </table>
         </div>
     </div>
-    {# TODO: Change the dropdown so that if product is already returned then it displays change the return remark #}
-    <div class="row">
-        <div class="col">
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="returndropdownbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Return Product
-                </button>
-                <div class="dropdown-menu" aria-labelledby="returndropdownbutton">
-                    <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=unprocessed">UnProcessed</a>
-                    <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=semiprocessed">Semi-Processed</a>
-                    <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=mistake">Cutting Mistake</a>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 {% endblock %}

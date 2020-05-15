@@ -12,14 +12,14 @@ class ProductUpdateView(PermissionRequiredMixin, UpdateView):
     model = Product
     fields = [
         'order_number','quantity','_size',
-        'fabric','color'
+        'fabric','color', 'completedby'
     ]
     template_name_suffix = '_update_form'
     permission_required = ('expert.view_product','expert.change_product')
 
     def form_valid(self, form):
-        if form.instance.return_remark:
-            form.instance.status = 'returned'
+        if form.instance.assignedto != form.instance.completedby:
+            form.instance.assignedto = form.instance.completedby
         return super().form_valid(form)
 
 class ProductCreateView(PermissionRequiredMixin, CreateView):
