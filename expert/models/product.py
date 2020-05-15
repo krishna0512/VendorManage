@@ -326,4 +326,10 @@ class Product(models.Model):
         return self.dispatched
 
     def get_absolute_url(self):
-        return reverse('expert:product-detail', kwargs={'pk':self.id})
+        return reverse('expert:product-detail', kwargs={'pk':self.pk})
+
+    def get_complete_url(self):
+        return reverse('expert:product-complete', kwargs={'pk': self.pk})
+
+    def get_uncomplete_url(self):
+        return reverse('expert:product-uncomplete', kwargs={'pk': self.pk})

@@ -53,6 +53,25 @@ def email_invoice(request, pk):
     return JsonResponse({'response': 'Email sent to {ret} Users'})
 
 @method_decorator(csrf_exempt, name='dispatch')
+class ProductUncompleteView(PermissionRequiredMixin, SingleObjectMixin, View):
+    model = Product
+    permission_required = (
+        'expert.view_kit', 'expert.view_product', 
+        'expert.change_product',
+    )
+
+    def post(self, *args, **kwargs):
+        if self.get_object().uncomplete():
+            product = self.get_object()
+            return JsonResponse({
+                'id': product.id,
+                'complete_url': product.get_complete_url(),
+                'success': True,
+            })
+        else:
+            return JsonResponse({}, status=400)
+
+@method_decorator(csrf_exempt, name='dispatch')
 class ProductCompleteView(PermissionRequiredMixin, SingleObjectMixin, View):
     model = Product
     permission_required = ('expert.view_kit','expert.view_product','expert.complete_product',)
@@ -61,6 +80,7 @@ class ProductCompleteView(PermissionRequiredMixin, SingleObjectMixin, View):
         if self.get_object().complete():
             product = self.get_object()
             return JsonResponse({
+                'uncomplete_url': product.get_uncomplete_url(),
                 'date_completed': product.date_completed.strftime("%b %d, %Y"),
                 'completedby': product.completedby.username,
             })
