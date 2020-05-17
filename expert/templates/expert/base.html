@@ -53,7 +53,20 @@
 					onSelect: function(s) {
 						location.href = s.url;
 					},
-				})
+				});
+				$('.ajax-validate').change(function(e) {
+					$.ajax({
+						type: "POST",
+						async: true,
+						data: $(this).parent().serialize(),
+						url: $('#complainttype').attr('data-onchange'),
+						success: (result) => {
+							$('#id_to').val(result["to"]);
+							$('#id_subject').val(result["subject"]);
+							$('#id_message').val(result['message']);
+						},
+					});
+				});
 			});
 			window.addEventListener('resize', () => {
 				let vh = window.innerHeight * 0.01;
@@ -197,11 +210,52 @@
 				border: none!important;
 				transform: scale(1.35);
 			}
+			
+			#complaintmodal form .form-control {
+				margin-top: 3px;
+			}
 		</style>
 		{% block custom_css %}{% endblock %}
 		{% block custom_js %}{% endblock %}
 	</head>
 	<body>
+		<div class="modal fade" id="complaintmodal" tabindex="-1" role="dialog" aria-labelledby="complaintmodaltitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="complaintmodaltitle">Register Complaint</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+            			<form class="px-4" id="js-complaint-form" action="{% url 'expert:send-email' %}" method="POST">
+							{% csrf_token %}
+							<select id="complainttype" name="ctype" class="form-control mb-1 ajax-validate" data-onchange="{% url 'expert:complaint-detail' %}">
+								<option value="0">---</option>
+								<option value="1">Incomplete Kit</option>
+							</select>
+							<select id="id_kit_list" name="kit_list" class="form-control mb-1 ajax-validate">
+								<option value="0">Kit List<option>
+								{% for kit in Kit.get_all %}
+								<option value="{{ kit.id }}">{{ kit.number }}</option>
+								{% endfor %}
+							</select>
+							<input name="product_number" id="id_product_number" type="text" class="form-control mb-1 ajax-validate" placeholder="Product Number">
+							<input name="product_qty" id="id_product_qty" type="number" class="form-control mb-1 ajax-validate" placeholder="Product Quantity">
+							<input name="product_size" id="id_product_size" type="text" class="form-control mb-1 ajax-validate" placeholder="Product Size">
+							<input name="product_color" id="id_product_color" type="text" class="form-control mb-3 ajax-validate" placeholder="Product Color">
+							<input name="from" type="text" class="form-control" id="id_from" value="kt.krishna.tulsyan@gmail.com" required readonly>
+            			    <input name="to" type="text" class="form-control" id="id_to" placeholder="Receiptent List (comma seperated)" required>
+            			    <input type="text" name="subject" class="form-control" id="id_subject" placeholder="Subject">
+            			    <textarea type="text" name="message" class="form-control" id="id_message" placeholder="Message" required rows="10"></textarea>
+            			    <button type="submit" class="btn btn-success my-2 w-100">Send</button>
+            			</form>
+					</div>
+					<div class="modal-footer"></div>
+				</div>
+			</div>
+		</div>
 		<div id="loader">
 			<div id="spinner"></div>
 		</div>
@@ -222,8 +276,8 @@
 						<a id="navbaruserdropdown" class="nav-link btn btn-sm btn-outline-primary mr-1 dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> {{ user.username|title }}</a>
 						<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbaruserdropdown">
 							<a class="dropdown-item" href="">Hi, {{ user.username|title }}</a>
-							{% if user.is_superuser %}
-							<a class="dropdown-item" href="{% url 'admin:index' %}">Admin page</a>
+							{% if user.is_staff %}
+							<a class="dropdown-item" data-toggle="modal" data-target="#complaintmodal">Complaint</a>
 							{% endif %}
 							{% if user|has_group:"BaseWorkers" %}
 							<a class="dropdown-item" href="{{ user.worker.get_absolute_url }}">Profile</a>
@@ -252,7 +306,7 @@
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Kit</a>
 							</li>
 							<li class="nav-item">
-								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{{ Worker.get_list_url }}">StichMen</a>
+								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{{ Worker.get_list_url }}">Worker</a>
 							</li>
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'salary' %}active{% endif %}" href="{{ Salary.get_list_url }}">Salary</a>

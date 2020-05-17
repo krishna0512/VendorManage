@@ -25,6 +25,71 @@ from expert.forms import *
 class IndexTemplateView(LoginRequiredMixin, TemplateView):
     template_name='expert/index.html'
 
+@csrf_exempt
+def complaint_detail(request):
+    n = int(request.POST.get('ctype', 0))
+    kit_id = str(request.POST.get('kit_list', 0))
+    kit = None
+    try:
+        kit = Kit.objects.get(id=kit_id)
+    except Exception:
+        pass
+    to = []
+    subject = ''
+    message = ''
+    pnumber = str(request.POST.get('product_number', ''))
+    pqty = str(request.POST.get('product_qty', ''))
+    psize = str(request.POST.get('product_size', ''))
+    pcolor = str(request.POST.get('product_color', ''))
+    if n==1 and kit:
+        to += ['expertcovers2020@gmail.com', 'anjutulsyan19@gmail.com']
+        subject = "Short Receipt of Materials"
+        message = ''.join([
+            "Dear Sir,\n\n",
+            "In Ref to Kit no: {} dated {}, for {} pcs totaling {} Sq.Ft.\n".format(
+                kit.number,
+                kit.date_received.strftime('%d/%m/%Y'),
+                kit.products.all().quantity,
+                kit.products.all().size,
+            ),
+            "We have not received {} pcs of {} color Order no. {} for {} Sq.ft.\n".format(
+                pqty,
+                pcolor.capitalize(),
+                pnumber.upper(),
+                psize,
+            ),
+            "We acknowledge the receipt of {} Pcs for {} Sq.Ft.\n\n".format(
+                kit.products.all().quantity - int(pqty if pqty else 0),
+                kit.products.all().size - float(psize if psize else 0),
+            ),
+            "Regards,\n",
+            "Vinayak Tulsyan"
+        ])
+    return JsonResponse({
+        'to': to,
+        'subject': subject,
+        'message': message,
+    })
+
+class SendEmailView(RedirectView):
+
+    def get_redirect_url(self):
+        _from = str(self.request.POST.get('from')).strip()
+        to = str(self.request.POST.get('to')).strip().split(',')
+        to = [i.strip() for i in to]
+        subject = str(self.request.POST.get('subject')).strip()
+        message = str(self.request.POST.get('message')).strip()
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=_from,
+            recipient_list=to,
+            fail_silently=False,
+        )
+        print(_from)
+        print(to)
+        return reverse('expert:index')
+
 def  send_email(request):
     ret = send_mail(
         subject='test',

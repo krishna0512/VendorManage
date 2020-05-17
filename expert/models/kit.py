@@ -115,6 +115,10 @@ class Kit(models.Model):
                 'slug': self.number
             }
         )
+    
+    @staticmethod
+    def get_all():
+        return Kit.objects.all()
 
     @property
     def size(self):
