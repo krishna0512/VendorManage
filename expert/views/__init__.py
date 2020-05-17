@@ -127,6 +127,7 @@ class ProductMonthArchiveView(PermissionRequiredMixin, MonthArchiveView):
         context['total_product_returned'] = kit_list.products().dispatched().returned().size
         context['total_product_received'] = kit_list.products().size
         context['total_product_dispatched'] = kit_list.products().dispatched().size
+        context['average_qty_product'] = round(kit_list.products().size / kit_list.products().count(), 2)
         try:
             context['product_completed_percent'] = context['total_product_completed']*100 // context['total_product_received']
             context['product_returned_percent'] = context['total_product_returned']*100 // context['total_product_received']

@@ -63,7 +63,7 @@
 		<div class="card-deck mx-3 text-center">
 			<div class="card border border-primary shadow">
 				<div class="card-header bg-primary text-light">
-					Kits Received
+					Lots Received
 				</div>
 				<div class="card-body">
 					<p class="card-text">{{ kit_list.count }}</p>
@@ -74,7 +74,16 @@
 					Products Received
 				</div>
 				<div class="card-body">
-					<p class="card-text">{{ total_product_received|floatformat:2 }} Sq.Ft.</p>
+					<p class="card-text">{{ total_product_received|floatformat:2 }} Sq.Ft.
+					({{ kit_list.products.count }} Pcs)</p>
+				</div>
+			</div>
+			<div class="card border border-primary shadow">
+				<div class="card-header bg-primary text-light">
+					Avg. Size
+				</div>
+				<div class="card-body">
+					<p class="card-text">{{ average_qty_product|floatformat:2 }} Sq.ft</p>
 				</div>
 			</div>
 			<div class="card border border-warning shadow">

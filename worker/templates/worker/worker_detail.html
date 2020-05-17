@@ -26,6 +26,15 @@
 			<small>Joined since - {{ worker.date_joined }}</small>
 			<br>
 			<span>{{ worker.address }}</span>
+			<br>
+			{% if worker.aadhar_number %}
+			<span>Aadhar Number -- {{ worker.aadhar_number }}</span>
+			{% endif %}
+			<br>
+			{% if worker.mobile_number %}
+			<span><i class="fa fa-mobile"></i> Mobile -- {{ worker.mobile_number }}</span>
+			<br>
+			{% endif %}
 			<!-- {% if worker.fixed_rate %}
 			<br>
 			<span>Fixed Rate -- <i class="fa fa-inr"></i>{{ worker.fixed_rate }} / Month</span>
