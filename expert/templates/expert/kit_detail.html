@@ -222,11 +222,11 @@ $(document).ready(function() {
 								Fabric<i class="fa fa-filter ml-2"></i>
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownstatussort">
-								<a class="dropdown-item" href="?{% url_replace filters='' %}">All</a>
-								<a class="dropdown-item" href="?{% url_replace filters='fabric:max' %}">Max</a>
-								<a class="dropdown-item" href="?{% url_replace filters='fabric:tuff' %}">Tuff</a>
-								<a class="dropdown-item" href="?{% url_replace filters='fabric:fab' %}">Fab</a>
-								<a class="dropdown-item" href="?{% url_replace filters='fabric:clear' %}">Clear</a>
+								<a class="dropdown-item" href="?{% url_replace filters='' page=1 %}">All</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:max' page=1 %}">Max</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:tuff' page=1 %}">Tuff</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:fab' page=1 %}">Fab</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:clear' page=1 %}">Clear</a>
 							</div>
 						</div>
 					</th>
@@ -240,12 +240,12 @@ $(document).ready(function() {
 								Status<i class="fa fa-filter ml-2"></i>
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownstatussort">
-								<a class="dropdown-item" href="?{% url_replace filters='' %}">All</a>
-								<a class="dropdown-item" href="?{% url_replace filters='status:pending' %}">Pending</a>
-								<a class="dropdown-item" href="?{% url_replace filters='status:assigned' %}">Assigned</a>
-								<a class="dropdown-item" href="?{% url_replace filters='status:completed' %}">Completed</a>
-								<a class="dropdown-item" href="?{% url_replace filters='status:dispatched' %}">Dispatched</a>
-								<a class="dropdown-item" href="?{% url_replace filters='status:returned' %}">Returned</a>
+								<a class="dropdown-item" href="?{% url_replace filters='' page=1 %}">All</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:pending' page=1 %}">Pending</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:assigned' page=1 %}">Assigned</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:completed' page=1 %}">Completed</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:dispatched' page=1 %}">Dispatched</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:returned' page=1 %}">Returned</a>
 							</div>
 						</div>
 					</th>
