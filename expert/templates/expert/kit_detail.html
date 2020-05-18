@@ -263,13 +263,16 @@ $(document).ready(function() {
 					<td>
 						<div class="dropdown">
 							<button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ product.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								{% if product.status == 'pending' %}
+								{% if product.is_pending %}
 								Assign To
 								{% else %}
 								{{ product.assignedto.username }}
 								{% endif %}
 							</button>
 							<div class="dropdown-menu scrollable-dropdown-menu" aria-labelledby="dropdownMenuButton-{{ product.id }}">
+								{% if product.is_assigned %}
+								<a class="dropdown-item" href="{% url 'expert:product-assign' product_pk=product.pk worker_pk=0 %}">---</a>
+								{% endif %}
 								{% for worker in worker_list %}
 								<a class="dropdown-item js-btn-product-assign" href="{% url 'expert:product-assign' product_pk=product.id worker_pk=worker.id %}">{{ worker.username }}</a>
 								{% endfor %}

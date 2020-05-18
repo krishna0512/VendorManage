@@ -227,6 +227,15 @@ class Product(models.Model):
         self.save()
         return True
 
+    def unassign(self):
+        if self.is_assigned:
+            self.assignedto = None
+            self.status = 'pending'
+            print('saving product pending')
+            self.save()
+            return True
+        return False
+
     def complete(self):
         """TODO: refactor the method to use Exceptions"""
         if not self.assignedto or (self.kit.date_product_completion and self.kit.date_product_completion > date.today()):

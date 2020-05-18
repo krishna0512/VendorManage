@@ -5,9 +5,11 @@ from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from expert.models import Kit
 from .models import Worker
 from expert.forms import *
+
+import logging
+logger = logging.getLogger(__name__)
 
 class WorkerListView(PermissionRequiredMixin, ListView):
     queryset = Worker.objects.filter(active=True).order_by('first_name')
@@ -67,6 +69,7 @@ class WorkerDeleteView(PermissionRequiredMixin, DeleteView):
         only it should be rendered inactive.
         """
         self.object = self.get_object()
+        logger.info('Deleting the Worker: {}'.format(self.object.username))
         success_url = self.get_success_url()
         self.object.active = False
         self.object.save()

@@ -12,7 +12,8 @@ class ProductUpdateView(PermissionRequiredMixin, UpdateView):
     model = Product
     fields = [
         'order_number','quantity','_size',
-        'fabric','color', 'completedby'
+        'fabric','color', 'assignedto', 'completedby',
+        'status'
     ]
     template_name_suffix = '_update_form'
     permission_required = ('expert.view_product','expert.change_product')

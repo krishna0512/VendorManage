@@ -76,7 +76,7 @@
                 GSTN No. {{ challan.customer.gstn }} ; IEC : {{ challan.customer.iec }}
             </div>
             <div class="border font-weight-bold">
-                FOR REF. No. {{ challan.products.first.kit.number }}/{{ challan.date_sent|date:"d.m.Y" }}
+                FOR REF. No. {{ challan.products.first.kit.number }}/{{ challan.products.first.kit.date_received|date:"d.m.Y" }}
             </div>
         </div>
         <div class="col-5">

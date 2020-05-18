@@ -9,8 +9,6 @@ from django.conf import settings
 from datetime import date
 from dateutil.relativedelta import relativedelta as timedelta
 
-from expert.models import Kit, Product
-
 def worker_image_path(instance, filename):
     return 'Worker/{}/{}'.format(instance.first_name.lower(), filename)
 
@@ -127,8 +125,6 @@ class Worker(models.Model):
             end_date = start_date + timedelta(months=1) - timedelta(days=1)
         # TODO: figure out something without having to import kit and products
         ret = self.products_completed.filter(kit__date_received__gte=start_date, kit__date_received__lte=end_date)
-        # kit_list = Kit.objects.get_date_received_range(start_date, end_date)
-        # ret = Product.objects.filter(completedby=self, kit__in=kit_list)
         return ret
 
     def get_total_contribution(self):

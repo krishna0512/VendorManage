@@ -1,10 +1,12 @@
-from datetime import datetime, date
+from django.shortcuts import redirect
 from django.http import JsonResponse
 from django.views import View
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+
+from datetime import datetime, date
 
 from expert.models import Kit, Product
 from worker.models import Worker
@@ -90,9 +92,16 @@ class ProductCompleteView(PermissionRequiredMixin, SingleObjectMixin, View):
 @method_decorator(csrf_exempt, name='dispatch')
 class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
     model = Product
-    http_method_names = ['post']
+    http_method_names = ['get', 'post']
     pk_url_kwarg = 'product_pk'
     permission_required = ('expert.view_kit','expert.view_product','expert.assign_product',)
+
+    def get(self, *args, **kwargs):
+        product = self.get_object()
+        if self.kwargs['worker_pk'] == 0:
+            print('unassigning product')
+            product.unassign()
+        return redirect(product.kit.get_absolute_url())
 
     def post(self, *args, **kwargs):
         product = self.get_object()
@@ -101,6 +110,10 @@ class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
             # check if worker has the permission to reassign product using change_product perm
             if self.request.user.has_perm('expert.change_product'):
                 # Yes, the worker has the permission to reassign the products.
+                # if the worker_pk is 0 then we have to change the product to pending
+                if self.kwargs['worker_pk'] == 0:
+                    product.unassign()
+                    return redirect(product.kit.get_absolute_url())
                 worker = Worker.objects.get(id=self.kwargs['worker_pk'])
                 product.assign(worker)
                 return JsonResponse({'assignedto': worker.username, 'refresh': False})
