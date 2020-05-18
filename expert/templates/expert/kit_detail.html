@@ -73,11 +73,6 @@
 $(document).ready(function() {
 	// $('#product-table').DataTable();
 
-	$('#print').on('click', function(e) {
-		e.preventDefault();
-		$('#btn-sidebar-collapse').click();
-	});
-
 	$('a.js-btn-product-uncomplete').on('click', function(e) {
 		/*
 			This solution doesnt work at the moment because after the uncomplete successds
@@ -246,7 +241,6 @@ $(document).ready(function() {
 						<a class="dropdown-item" href="?paginate_by=100">100</a>
 					</div>
 				</div>
-				<button class="btn btn-sm btn-primary" id="print">Print</button>
 			</div>
 		</div>
 		<table class="table table-sm table-hover table-striped text-center" id="product-table">
@@ -371,8 +365,8 @@ $(document).ready(function() {
 			<tfoot>
 				<tr>
 					<th></th>
-					<th class="border border-success">{{ product_list.quantity }}</th>
-					<th class="border border-success">{{ product_list.size }} SqFt.</th>
+					<th class="border border-success">{{ total_product_quantity }}</th>
+					<th class="border border-success">{{ total_product_size }} SqFt.</th>
 					<th></th>
 					<th></th>
 					<th></th>

@@ -150,9 +150,13 @@ class KitDetailView(PermissionRequiredMixin, DetailView, MultipleObjectMixin):
             # are completedby or assignedto the particular worker.
             q = Q(status='pending') | Q(assignedto=self.request.user.worker) | Q(completedby=self.request.user.worker)
             object_list = object_list.filter(filterq & q)
+        tpq = object_list.quantity
+        tps = object_list.size
         context = super().get_context_data(object_list=object_list, **kwargs)
         context['worker_list'] = worker_list
         context['product_list'] = context['object_list']
+        context['total_product_size'] = tps
+        context['total_product_quantity'] = tpq
         return context
 
 class KitDeleteView(PermissionRequiredMixin, DeleteView):
