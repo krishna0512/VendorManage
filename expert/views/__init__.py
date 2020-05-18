@@ -83,7 +83,7 @@ class SendEmailView(RedirectView):
         if settings.SENDGRID_API_KEY:
             sg = sendgrid.SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
             from_email = mail.Email('kt.krishna.tulsyan@gmail.com')
-            to_email = mail.Email('anjutulsyan19@gmail.com')
+            to_email = mail.To('anjutulsyan19@gmail.com')
             subject = str(self.request.POST.get('subject')).strip()
             message = str(self.request.POST.get('message')).strip()
             content = mail.Content('text/plain', message)
