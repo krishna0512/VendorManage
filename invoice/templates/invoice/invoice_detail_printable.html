@@ -89,11 +89,11 @@
     <div class="row">
         <div class="col-6">
             <div>
-                <div><b>EXPERT<span><img class="img-fluid" width="40" height="40" src="{% static 'expert/images/logo.png' %}"></span>TRADERS</b></div>
-                <div><small>J-142, Sumel-6, Dhudheshwar, AHM-4 (GUJ)</small></div>
-                <div><small class="font-italic">expertcovers2020@gmail.com</small></div>
-                <div><small>Ph No. 9839085886</small></div>
-                <div><small>GSTN: 24AAPPT3833R1ZT / S-Code 24</small></div>
+                <div class="h4"><b>EXPERT<span><img class="img-fluid" width="40" height="40" src="{% static 'expert/images/logo.png' %}"></span>TRADERS</b></div>
+                <div>J-142, Sumel-6, Dhudheshwar, AHM-4 (GUJ)</div>
+                <div>expertcovers2020@gmail.com</div>
+                <div>Ph No. 9839085886</div>
+                <div>GSTN: 24AAPPT3833R1ZT / S-Code 24</div>
             </div>
         </div>
         <div class="col-2"></div>
@@ -105,15 +105,15 @@
                 </tr>
                 <tr>
                     <td>Date</td>
-                    <td>{{ invoice.date_sent|date:"M j, Y" }}</td>
+                    <td class="font-weight-bold">{{ invoice.date_sent|date:"M j, Y" }}</td>
                 </tr>
                 <tr>
                     <td>Dispatched Through</td>
-                    <td>Tempo</td>
+                    <td class="font-weight-bold">Tempo</td>
                 </tr>
                 <tr>
                     <td>Motor V.No.</td>
-                    <td>{{ invoice.motor_vehicle_number }}</td>
+                    <td class="font-weight-bold">{{ invoice.motor_vehicle_number }}</td>
                 </tr>
             </table>
         </div>
@@ -122,9 +122,9 @@
         <div class="col-6">
             <div>
                 <div><b>To, {{ invoice.challans.first.customer.name }} (100% EOU)</b></div>
-                <div><small>{{ invoice.challans.first.customer.address1 }}</small></div>
-                <div><small>{{ invoice.challans.first.customer.address2 }}</small></div>
-                <div><small>GSTN: {{ invoice.challans.first.customer.gstn }}, IEC: {{ invoice.challans.first.customer.iec }}</small></div>
+                <div>{{ invoice.challans.first.customer.address1 }}</div>
+                <div>{{ invoice.challans.first.customer.address2 }}</div>
+                <div>GSTN: {{ invoice.challans.first.customer.gstn }}, IEC: {{ invoice.challans.first.customer.iec }}</div>
             </div>
         </div>
         <div class="col-2"></div>
@@ -132,19 +132,19 @@
             <table class="table table-sm table-bordered">
                 <tr>
                     <td>Destination</td>
-                    <td>{{ invoice.destination }}</td>
+                    <td class="font-weight-bold">{{ invoice.destination }}</td>
                 </tr>
                 <tr>
                     <td>Supplier's Ref</td>
-                    <td></td>
+                    <td class="font-weight-bold"></td>
                 </tr>
                 <tr>
                     <td>Mode of Payment</td>
-                    <td>7 Days</td>
+                    <td class="font-weight-bold">7 Days</td>
                 </tr>
                 <tr>
                     <td>EWay Bill No.</td>
-                    <td></td>
+                    <td class="font-weight-bold"></td>
                 </tr>
             </table>
         </div>
@@ -323,9 +323,9 @@
         </div>
         <div class="col"></div>
         <div class="col"></div>
-        <div class="col">
+        <!-- <div class="col">
             <img src="{% static 'expert/images/sign_vinayak.jpg' %}" alt="Vinayak Sign" width="200">
-        </div>
+        </div> -->
     </div>
     <div class="row mt-1">
         <div class="col text-center small">
