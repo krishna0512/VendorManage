@@ -231,7 +231,6 @@ class Product(models.Model):
         if self.is_assigned:
             self.assignedto = None
             self.status = 'pending'
-            print('saving product pending')
             self.save()
             return True
         return False

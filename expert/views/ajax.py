@@ -99,7 +99,6 @@ class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
     def get(self, *args, **kwargs):
         product = self.get_object()
         if self.kwargs['worker_pk'] == 0:
-            print('unassigning product')
             product.unassign()
         return redirect(product.kit.get_absolute_url())
 
