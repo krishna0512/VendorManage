@@ -108,6 +108,10 @@ class KitDetailView(PermissionRequiredMixin, DetailView, MultipleObjectMixin):
     paginate_by = 10
     permission_required = ('expert.view_kit','expert.view_product')
 
+    def get(self, *args, **kwargs):
+        self.paginate_by = self.request.GET.get('paginate_by', 10) or 10
+        return super().get(*args, **kwargs)
+
     def apply_filters(self, queryset, filters):
         def filter_status(q, s):
             if s=='dispatched':

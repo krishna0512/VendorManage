@@ -43,6 +43,28 @@
 		max-height: 250px;
 		overflow-x: hidden;
 	}
+
+	@media print {
+		main {
+			font-size: 17px;
+		}
+		#btn-sidebar-collapse, #btn-sidebar-expand,
+		#product-table tbody tr td:last-child, 
+		#product-table thead tr th:last-child,
+		.table-header > div {
+			display: none;
+		}
+		#product-table tbody td.status {
+			background-color: transparent;
+			color: black!important;
+		}
+		#product-table td.assignedto button {
+			border: none;
+		}
+		#product-table td.assignedto button::after {
+			content: none;
+		}
+	}
 </style>
 {% endblock %}
 
@@ -50,6 +72,11 @@
 <script>
 $(document).ready(function() {
 	// $('#product-table').DataTable();
+
+	$('#print').on('click', function(e) {
+		e.preventDefault();
+		$('#btn-sidebar-collapse').click();
+	});
 
 	$('a.js-btn-product-uncomplete').on('click', function(e) {
 		/*
@@ -197,7 +224,7 @@ $(document).ready(function() {
 	<div class="heading text-center h3 mt-3 mb-0 pb-0">Overview of KIT {{ kit.number }}</div>
 	<div class="text-center small mb-2">{{ kit.date_received }}</div>
 	<div class="mt-1 table-responsive">
-		<div class="d-flex">
+		<div class="d-flex table-header">
 			<div class="mr-auto text-muted">
 				Product Completion Date -
 				<span class="font-weight-bold">
@@ -208,6 +235,18 @@ $(document).ready(function() {
 					{% endif %}
 				</span>
 				<input type="hidden" id="datepicker_product_completion" data-href="{% url 'expert:kit-change-product-completion' pk=kit.id %}">
+			</div>
+			<div>
+				<div class="dropdown d-inline">
+					<button class="btn btn-sm btn-outline-info dropdown-toggle" id="dropdownnumberrecords" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"># Records</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownnumberrecords">
+						<a class="dropdown-item" href="?paginate_by=10">10</a>
+						<a class="dropdown-item" href="?paginate_by=25">25</a>
+						<a class="dropdown-item" href="?paginate_by=50">50</a>
+						<a class="dropdown-item" href="?paginate_by=100">100</a>
+					</div>
+				</div>
+				<button class="btn btn-sm btn-primary" id="print">Print</button>
 			</div>
 		</div>
 		<table class="table table-sm table-hover table-striped text-center" id="product-table">
@@ -260,7 +299,7 @@ $(document).ready(function() {
 					<td>{{ product.size }}</td>
 					<td>{{ product.get_fabric_display }}</td>
 					<td class="text-left pl-4"><span class="dot color-{{ product.color }} align-middle"></span> {{ product.get_color_display }}</td>
-					<td>
+					<td class="assignedto">
 						<div class="dropdown">
 							<button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ product.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								{% if product.is_pending %}
@@ -283,6 +322,7 @@ $(document).ready(function() {
 					<td>{{ product.date_completed }}</td>
 					<td class="
 					js-td-status
+					status
 					{% if product.is_assigned %}bg-warning
 					{% elif product.is_dispatched %}bg-dark text-light
 					{% elif product.is_completed %}bg-success text-light
