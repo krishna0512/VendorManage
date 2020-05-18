@@ -88,8 +88,8 @@ class SendEmailView(RedirectView):
             message = str(self.request.POST.get('message')).strip()
             content = mail.Content('text/plain', message)
             logger.error('{}\n{}\n'.format(from_email, to_email))
-            mail = mail.Mail(from_email, subject, to_email, content)
-            response = sg.client.mail.send.post(request_body=mail.get())
+            m = mail.Mail(from_email=from_email, to_emails=to_email, subject=subject, plain_text_content=content)
+            response = sg.client.mail.send.post(request_body=m.get())
         else:
             _from = str(self.request.POST.get('from')).strip()
             to = str(self.request.POST.get('to')).strip().split(',')
