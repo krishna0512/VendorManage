@@ -36,8 +36,13 @@
     .dropdown-form .form-control {
         margin-bottom: 6px;
     }
-    main {
-        font-size: 17px;
+    @media print {
+        main {
+            font-size: 17px;
+        }
+        #btn-sidebar-expand, #btn-sidebar-collapse {
+            display: none;
+        }
     }
 </style>
 {% endblock %}

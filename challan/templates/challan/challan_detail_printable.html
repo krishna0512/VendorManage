@@ -30,8 +30,13 @@
     .color-triplicate {
         color: #e3ce30;
     }
-    main {
-        font-size: 17px;
+    @media print {
+        main {
+            font-size: 17px;
+        }
+        #btn-sidebar-expand, #btn-sidebar-collapse {
+            display: none;
+        }
     }
 </style>
 {% endblock %}
@@ -40,7 +45,7 @@
 <div class="container border">
     <div class="row">
         <div class="col-10">
-            <center class="h2 mt-1">Expert<span><img class="img-fluid" width="60" height="60" src="{% static 'expert/images/logo.png' %}"></span>Traders</center>
+            <center class="h2 mt-1" style="font-size: 2.5rem;">Expert<span><img class="img-fluid" width="60" height="60" src="{% static 'expert/images/logo.png' %}"></span>Traders</center>
             <center class="small">J-142, 1st Floor, Sumel-6, Dhudheshwar, Ahmedabad-380004</center>
             <center class="small"><u>expertcovers2020@gmail.com</u> <b>9839085886</b>, 9660589909</center>
             <center class="small">GSTN: 24AAPPT3833R1ZT</center>
@@ -70,7 +75,7 @@
     <div class="row">
         <div class="col-7">
             <div class="border">
-                Challan No. <b>{{ challan.number }}/19-20</b>
+                Challan No. <b>{{ challan.number }}/20-21</b>
             </div>
             <div class="border">STATE CODE - 24 GUJ.</div>
             <div class="border">
@@ -86,19 +91,19 @@
             <table class="table table-bordered table-sm">
                 <tr>
                     <td>Despatched through</td>
-                    <td>Tempo</td>
+                    <td class="font-weight-bold">Tempo</td>
                 </tr>
                 <tr>
                     <td>Vehicle No.</td>
-                    <td>GJ-18-AU-4157</td>
+                    <td class="font-weight-bold">GJ-18-AU-4157</td>
                 </tr>
                 <tr>
                     <td>Date/Time</td>
-                    <td>{{ challan.date_sent | date:"d.m.Y" }}</td>
+                    <td class="font-weight-bold">{{ challan.date_sent | date:"d.m.Y" }}</td>
                 </tr>
                 <tr>
                     <td>Destination No.</td>
-                    <td>Gandhinagar</td>
+                    <td class="font-weight-bold">Gandhinagar</td>
                 </tr>
                 <tr>
                     <td>Invoice No.</td>
@@ -218,15 +223,12 @@
         <div class="col-2"></div>
     </div>
     <div class="row mt-4">
-        <div class="col"></div>
         <div class="col">
             <center class="border">Receivers sign and stamp</center>
         </div>
-        <div class="col"></div>
         <div class="col">
             <center class="border">Expert Traders</center>
         </div>
-        <div class="col"></div>
     </div>
     <div class="row mt-3">
         <div class="col text-center small">
