@@ -22,7 +22,9 @@ from invoice.models import Invoice
 from expert.forms import *
 
 import sendgrid
-from sendgrid.helpers.mail import *
+from sendgrid.helpers import mail
+import logging
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -80,13 +82,13 @@ class SendEmailView(RedirectView):
     def get_redirect_url(self):
         if settings.SENDGRID_API_KEY:
             sg = sendgrid.SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
-            from_email = Email("kt.krishna.tulsyan@gmail.com")
-            to_email = Email('anjutulsyan19@gmail.com')
+            from_email = mail.Email('kt.krishna.tulsyan@gmail.com')
+            to_email = mail.Email('anjutulsyan19@gmail.com')
             subject = str(self.request.POST.get('subject')).strip()
             message = str(self.request.POST.get('message')).strip()
-            content = Content('text/plain', message)
-            print(from_email, to_email)
-            mail = Mail(from_email, subject, to_email, content)
+            content = mail.Content('text/plain', message)
+            logger.error('{}\n{}\n'.format(from_email, to_email))
+            mail = mail.Mail(from_email, subject, to_email, content)
             response = sg.client.mail.send.post(request_body=mail.get())
         else:
             _from = str(self.request.POST.get('from')).strip()
