@@ -14,11 +14,15 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.dates import MonthArchiveView, DayArchiveView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.conf import settings
 
 from expert.models import Kit, Product, Challan
 from worker.models import Worker
 from invoice.models import Invoice
 from expert.forms import *
+
+import sendgrid
+from sendgrid.helpers.mail import *
 
 # Create your views here.
 
@@ -74,20 +78,31 @@ def complaint_detail(request):
 class SendEmailView(RedirectView):
 
     def get_redirect_url(self):
-        _from = str(self.request.POST.get('from')).strip()
-        to = str(self.request.POST.get('to')).strip().split(',')
-        to = [i.strip() for i in to]
-        subject = str(self.request.POST.get('subject')).strip()
-        message = str(self.request.POST.get('message')).strip()
-        send_mail(
-            subject=subject,
-            message=message,
-            from_email=_from,
-            recipient_list=to,
-            fail_silently=False,
-        )
-        print(_from)
-        print(to)
+        if settings.SENDGRID_API_KEY:
+            sg = sendgrid.SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
+            from_email = Email("kt.krishna.tulsyan@gmail.com")
+            to_email = Email('anjutulsyan19@gmail.com')
+            subject = str(self.request.POST.get('subject')).strip()
+            message = str(self.request.POST.get('message')).strip()
+            content = Content('text/plain', message)
+            print(from_email, to_email)
+            mail = Mail(from_email, subject, to_email, content)
+            response = sg.client.mail.send.post(request_body=mail.get())
+        else:
+            _from = str(self.request.POST.get('from')).strip()
+            to = str(self.request.POST.get('to')).strip().split(',')
+            to = [i.strip() for i in to]
+            subject = str(self.request.POST.get('subject')).strip()
+            message = str(self.request.POST.get('message')).strip()
+            send_mail(
+                subject=subject,
+                message=message,
+                from_email=_from,
+                recipient_list=to,
+                fail_silently=False,
+            )
+            print(_from)
+            print(to)
         return reverse('expert:index')
 
 def  send_email(request):
