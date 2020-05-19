@@ -46,6 +46,19 @@
                     <td>{{ product.get_return_remark_display }}</td>
                 </tr>
                 {% endif %}
+                {% if product.is_dispatched %}
+                <tr class="text-center">
+                    <th colspan="2">Dispatch Details</th>
+                </tr>
+                <tr>
+                    <td>Dispatched Date</td>
+                    <td>{{ product.challan.date_sent }}</td>
+                </tr>
+                <tr>
+                    <td>Via Challan</td>
+                    <td><a href="{{ product.challan.get_absolute_url }}">{{ product.challan.number }}</a></td>
+                </tr>
+                {% endif %}
             </table>
         </div>
     </div>
