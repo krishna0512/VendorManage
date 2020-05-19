@@ -10,6 +10,15 @@
 		<script>
 			$(window).on('load', function() {
 				$('#loader').fadeOut('slow');
+				var hammer = new Hammer(window);
+				hammer.on('panleft', function(e) {
+					e.preventDefault();
+					$('#btn-sidebar-collapse').click();
+				});
+				hammer.on('panright', function(e) {
+					e.preventDefault();
+					$('#btn-sidebar-expand').click();
+				});
 			})
 			$(function() {
 				$("[id^=id_date]").datepicker({
