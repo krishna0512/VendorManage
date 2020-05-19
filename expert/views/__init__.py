@@ -20,9 +20,12 @@ from expert.models import Kit, Product, Challan
 from worker.models import Worker
 from invoice.models import Invoice
 from expert.forms import *
+from helper.mail import Mail
 
 import sendgrid
 from sendgrid.helpers import mail
+from tempfile import TemporaryDirectory
+import os
 import logging
 logger = logging.getLogger(__name__)
 
@@ -38,6 +41,12 @@ def complaint_detail(request):
     kit = None
     try:
         kit = Kit.objects.get(id=kit_id)
+    except Exception:
+        pass
+    challan = None
+    try:
+        challan_id = str(request.POST.get('challan_list', 0))
+        challan = Challan.objects.get(id=challan_id)
     except Exception:
         pass
     to = []
@@ -71,6 +80,18 @@ def complaint_detail(request):
             "Regards,\n",
             "Vinayak Tulsyan"
         ])
+    elif n==2 and challan:
+        to += ['kt.krishna.tulsyan@gmail.com', 'anjutulsyan19@gmail.com']
+        subject = 'Challan Delivery Report'
+        message = ''.join([
+            'Dear Shailash Bhai,\n\n',
+            'Attached is the latest copy of the challan sent for details given below as delivered to bharat bhai:\n',
+            'Date - {}\n'.format(challan.date_sent.strftime('%d/%m/%Y')),
+            'Challan No - {}\n'.format(challan.number),
+            'Challan Qty - {}\n'.format(challan.products.all().quantity),
+            'Challan Size - {}\n\n'.format(challan.products.all().size),
+            'Thanks & Regards,\nVinayak Tulsyan'
+        ])
     return JsonResponse({
         'to': to,
         'subject': subject,
@@ -80,43 +101,17 @@ def complaint_detail(request):
 class SendEmailView(RedirectView):
 
     def get_redirect_url(self):
-        if settings.SENDGRID_API_KEY:
-            sg = sendgrid.SendGridAPIClient(api_key=settings.SENDGRID_API_KEY)
-            from_email = mail.Email('kt.krishna.tulsyan@gmail.com')
-            to_email = mail.To('anjutulsyan19@gmail.com')
-            subject = str(self.request.POST.get('subject')).strip()
-            message = str(self.request.POST.get('message')).strip()
-            content = mail.Content('text/plain', message)
-            logger.error('{}\n{}\n'.format(from_email, to_email))
-            m = mail.Mail(from_email=from_email, to_emails=to_email, subject=subject, plain_text_content=content)
-            response = sg.client.mail.send.post(request_body=m.get())
-        else:
-            _from = str(self.request.POST.get('from')).strip()
-            to = str(self.request.POST.get('to')).strip().split(',')
-            to = [i.strip() for i in to]
-            subject = str(self.request.POST.get('subject')).strip()
-            message = str(self.request.POST.get('message')).strip()
-            send_mail(
-                subject=subject,
-                message=message,
-                from_email=_from,
-                recipient_list=to,
-                fail_silently=False,
-            )
-            print(_from)
-            print(to)
+        m = Mail(
+            to=[
+                ('kt.krishna.tulsyan@gmail.com', 'Krishna Tulsyan'),
+            ],
+            subject=self.request.POST.get('subject', ''),
+            message=self.request.POST.get('message', ''),
+        )
+        if 'challan_pdf' in self.request.FILES:
+            m.add_attachment(self.request.FILES['challan_pdf'])
+        m.send()
         return reverse('expert:index')
-
-def  send_email(request):
-    ret = send_mail(
-        subject='test',
-        message='Hi, This is a test message from Auto Django.',
-        from_email='kt.krishna.tulsyan@gmail.com',
-        recipient_list=['expertcovers2020@gmail.com'],
-        fail_silently=False
-    )
-    return JsonResponse({'response': 'Email sent to {ret} Users'})
-
 
 class ProductDayArchiveView(DayArchiveView):
     model = Product

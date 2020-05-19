@@ -54,6 +54,23 @@
 						location.href = s.url;
 					},
 				});
+				$('.ajax-validate').hide();
+				$('#complainttype').change(function(e) {
+					if ($(this).val() == 1) {
+						$('#id_kit_list').show();
+						$('.product-input').show();
+						$('#id_challan_list').hide();
+						$('#id_challan_pdf').prop('required', false);
+						$('#id_challan_pdf').hide();
+					}
+					else if ($(this).val() == 2) {
+						$('#id_kit_list').hide();
+						$('.product-input').hide();
+						$('#id_challan_list').show();
+						$('#id_challan_pdf').show();
+						$('#id_challan_pdf').prop('required', true);
+					}
+				});
 				$('.ajax-validate').change(function(e) {
 					$.ajax({
 						type: "POST",
@@ -229,11 +246,12 @@
 						</button>
 					</div>
 					<div class="modal-body">
-            			<form class="px-4" id="js-complaint-form" action="{% url 'expert:send-email' %}" method="POST">
+            			<form class="px-4" id="js-complaint-form" action="{% url 'expert:send-email' %}" method="POST" enctype="multipart/form-data">
 							{% csrf_token %}
-							<select id="complainttype" name="ctype" class="form-control mb-1 ajax-validate" data-onchange="{% url 'expert:complaint-detail' %}">
+							<select id="complainttype" name="ctype" class="form-control mb-1" data-onchange="{% url 'expert:complaint-detail' %}">
 								<option value="0">---</option>
 								<option value="1">Incomplete Kit</option>
+								<option value="2">Challan Report</option>
 							</select>
 							<select id="id_kit_list" name="kit_list" class="form-control mb-1 ajax-validate">
 								<option value="0">Kit List<option>
@@ -241,14 +259,22 @@
 								<option value="{{ kit.id }}">{{ kit.number }}</option>
 								{% endfor %}
 							</select>
-							<input name="product_number" id="id_product_number" type="text" class="form-control mb-1 ajax-validate" placeholder="Product Number">
-							<input name="product_qty" id="id_product_qty" type="number" class="form-control mb-1 ajax-validate" placeholder="Product Quantity">
-							<input name="product_size" id="id_product_size" type="text" class="form-control mb-1 ajax-validate" placeholder="Product Size">
-							<input name="product_color" id="id_product_color" type="text" class="form-control mb-3 ajax-validate" placeholder="Product Color">
+							<select id="id_challan_list" name="challan_list" class="form-control mb-1 ajax-validate">
+								<option value="0">Challan List</option>
+								{% for challan in Challan.get_all %}
+								<option value="{{ challan.id }}">{{ challan.number }}</option>
+								{% endfor %}
+							</select>
+							<input name="product_number" id="id_product_number" type="text" class="form-control mb-1 ajax-validate product-input" placeholder="Product Number">
+							<input name="product_qty" id="id_product_qty" type="number" class="form-control mb-1 ajax-validate product-input" placeholder="Product Quantity">
+							<input name="product_size" id="id_product_size" type="text" class="form-control mb-1 ajax-validate product-input" placeholder="Product Size">
+							<input name="product_color" id="id_product_color" type="text" class="form-control mb-3 ajax-validate product-input" placeholder="Product Color">
 							<input name="from" type="text" class="form-control" id="id_from" value="kt.krishna.tulsyan@gmail.com" required readonly>
             			    <input name="to" type="text" class="form-control" id="id_to" placeholder="Receiptent List (comma seperated)" required>
             			    <input type="text" name="subject" class="form-control" id="id_subject" placeholder="Subject">
-            			    <textarea type="text" name="message" class="form-control" id="id_message" placeholder="Message" required rows="10"></textarea>
+							<textarea type="text" name="message" class="form-control mb-1" id="id_message" placeholder="Message" required rows="10"></textarea>
+							<label for="id_challan_pdf">Select Challan PDF (size < 5MB)</label>
+							<input type="file" name="challan_pdf" id="id_challan_pdf" class="form-control-file" accept=".pdf">
             			    <button type="submit" class="btn btn-success my-2 w-100">Send</button>
             			</form>
 					</div>

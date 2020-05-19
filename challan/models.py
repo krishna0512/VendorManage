@@ -36,6 +36,10 @@ class Challan(models.Model):
         help_text=_('The customer for against whom challan is drawn'),
     )
 
+    @staticmethod
+    def get_all():
+        return Challan.objects.all()
+
     def get_total_quantity(self):
         return sum([i.quantity for i in self.products.filter(return_remark='')])
 
