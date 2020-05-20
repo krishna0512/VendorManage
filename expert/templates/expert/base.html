@@ -100,6 +100,16 @@
 			});
 		</script>
 		<style>
+			main {
+				margin-bottom: 60px;
+			}
+			main > footer {
+				/* just behind the sidebar but above everything else */
+				z-index: 101;
+				position: fixed;
+				left: 0;
+				bottom: 0;
+			}
 			.autocomplete-suggestions {
 				margin-top: 6px;
 				overflow-x: hidden;
@@ -297,10 +307,10 @@
 		{% block navbar-top %}
 		<nav class="navbar navbar-dark sticky-top bg-custom-2 flex-md-nowrap p-0 shadow navbar-expand-md" id="navbar-top">
 			<a class="navbar-brand col-2 col-sm-3 col-md-2 mr-0 text-center" href="{% url 'expert:index' %}">
-				<img src="{% static 'expert/images/logo_transparent.png' %}" alt="KTS Logo" width="80" class="img-fluid">
+				<img src="{% static 'expert/images/logo.png' %}" alt="KTS Logo" width="35" class="img-fluid">
 			</a>
-			<!-- <input class="form-control form-control-dark d-none d-sm-block col mr-auto" type="text" placeholder="Search" aria-label="Search" id="search"> -->
-			<span class="mx-auto text-right" style="color: white; width: 400px; font-size: 20px;">Expert <img class="img-fluid" src="{% static 'expert/images/logo.png' %}" width="40" height="40"> Traders</span>
+			<input class="form-control form-control-dark d-none d-sm-block col mr-auto" type="text" placeholder="Search" aria-label="Search" id="search">
+			<!-- <span class="mx-auto text-right" style="color: white; width: 400px; font-size: 20px;">Expert <img class="img-fluid" src="{% static 'expert/images/logo.png' %}" width="40" height="40"> Traders</span> -->
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbartopcontent" aria-controls="navbartopcontent" aria-expanded="false" aria-label="Toggle Top Navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -387,6 +397,14 @@
 				{% endblock %}
 				<main role="main" class="col-9 ml-auto col-md-10 col-xl-11 pt-3 px-0 px-xl-4" id="main_content">
 					{% block main_content %}{% endblock %}
+					<footer class="bg-dark text-light py-2 w-100">
+						<div class="text-center text-secondary align-middle">
+							<span style="color: white; font-size: 17px;" class="font-weight-bold">
+								<img class="img-fluid" width="40" height="40" src="{% static 'expert/images/logo_transparent.png' %}"> KTS
+							</span>
+							<i class="fa fa-copyright"></i> Copyright Reserved. KT Software Solutions.
+						</div>
+					</footer>
 				</main>
 			</div>
 		</div>
