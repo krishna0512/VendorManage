@@ -338,14 +338,14 @@
 					<div class="sidebar-sticky col-md-2 col-xl-1 col-3 p-0 pt-2">
 						<ul class="nav flex-column text-center h-100">
 							<li class="nav-item">
-								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Kit</a>
+								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Lot</a>
 							</li>
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{{ Worker.get_list_url }}">StitchMen</a>
 							</li>
-							<li class="nav-item">
+							<!-- <li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'salary' %}active{% endif %}" href="{{ Salary.get_list_url }}">Salary</a>
-							</li>
+							</li> -->
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'customer' %}active{% endif %}" href="{{ Customer.get_list_url }}">Customer</a>
 							</li>
@@ -361,6 +361,12 @@
 								</a>
 							</li>
 							<div class="custom-dropdown py-1" style="display: none; background-color: #f0f0f0;">
+								<li class="nav-item">
+									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2019 month='Dec' %}">Dec 2019</a>
+								</li>
+								<li class="nav-item">
+									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Jan' %}">Jan 2020</a>
+								</li>
 								<li class="nav-item">
 									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Feb' %}">Feb 2020</a>
 								</li>
