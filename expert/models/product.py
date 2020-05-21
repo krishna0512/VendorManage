@@ -89,7 +89,7 @@ class Product(models.Model):
         ('assigned','Assigned'),
         ('completed','Completed'),
         # This status is for when product is added to challan and dispatched.
-        ('dispatched','Dispatched'),
+        # ('dispatched','Dispatched'),
         ('returned','Returned'),
     ]
     RETURN_REMARK_CHOICES = [
@@ -232,7 +232,7 @@ class Product(models.Model):
         return super().save(*args, **kwargs)
 
     def assign(self, worker=None):
-        if self.dispatched or worker is None:
+        if self.is_dispatched or worker is None:
             return False
         self.assignedto = worker
         self.completedby = None
