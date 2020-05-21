@@ -97,6 +97,7 @@ class Product(models.Model):
         ('unprocessed', 'UnProcessed'),
         ('semiprocessed', 'Semi-Processed'),
         ('mistake', 'Cutting Mistake'),
+        ('damaged', 'Damaged Goods'),
         ('fault', 'Fault'),
     ]
 
@@ -274,7 +275,7 @@ class Product(models.Model):
         return True
 
     def return_product(self, rr=None):
-        if rr is None or rr not in ['unprocessed','semiprocessed','mistake','fault']:
+        if rr is None or rr not in ['unprocessed','semiprocessed','mistake','damaged','fault']:
             return False
         if self.is_dispatched and rr != 'fault' or self.is_returned and rr=='fault':
             # you cannot return a product with un/semi/mistake if product is already dispatched

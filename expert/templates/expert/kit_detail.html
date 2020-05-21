@@ -349,6 +349,7 @@ $(document).ready(function() {
             			        <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=unprocessed">UnProcessed</a>
             			        <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=semiprocessed">Semi-Processed</a>
 								<a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=mistake">Cutting Mistake</a>
+								<a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=damaged">Damaged Goods</a>
 								{% endif %}
             			    </div>
             			</div>
