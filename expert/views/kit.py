@@ -7,6 +7,8 @@ from django.views.generic.list import MultipleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
+from datetime import datetime, date
+
 from expert.models import Kit, Product
 from worker.models import Worker
 from expert.forms import *
@@ -72,19 +74,25 @@ class KitCreateView(PermissionRequiredMixin, CreateView):
                     return col
 
         data = data.strip().split('\n')
+        date_received = date_return = None
         for row in data:
             r = row.strip().split('\t')
             r = [i.strip() for i in r]
             Product.objects.create(
                 order_number=r[0].upper(),
-                quantity=int(r[1]),
-                size=float(r[2]),
-                fabric=_select_fabric(r[3]),
-                color=_select_color(r[4]),
-                # fabric=r[3].split()[1].lower(),
-                # color=r[4].lower(),
+                date_shipped=datetime.strptime(r[2], '%d-%b-%y').date(),
+                name=r[3],
+                quantity=int(r[4]),
+                size=float(r[5]),
+                fabric=_select_fabric(r[6]),
+                color=_select_color(r[7]),
                 kit=self.object,
             )
+            date_received = datetime.strptime(r[8], '%d-%b-%Y').date()
+            date_return = datetime.strptime(r[9], '%d-%b-%Y').date()
+        self.object.date_received = date_received
+        self.object.date_return = date_return
+        self.object.save()
 
     def form_valid(self, form):
         response = super().form_valid(form)

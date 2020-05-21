@@ -114,6 +114,13 @@ class Product(models.Model):
         verbose_name=_('Order Number'),
         help_text=_('Number of order e.g. COV27622'),
     )
+    name = models.CharField(
+        max_length=200,
+        default='',
+        blank=True,
+        verbose_name=_('Product Name'),
+        help_text=_('Verbose product name as received from supervisor'),
+    )
     quantity = models.PositiveSmallIntegerField(
         default=1,
         blank=False,
@@ -190,6 +197,13 @@ class Product(models.Model):
         blank=True,
         verbose_name=_('Date of Completion'),
         help_text=_('Date at which worker completed with this product in format (YYYY-MM-DD)'),
+    )
+    date_shipped = models.DateField(
+        # auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name=_('Shipping Date'),
+        help_text=_('Date at which Product is to be shipped to customer in format (YYYY-MM-DD).'),
     )
     #TODO: change the status of the product if return_remark is changed in updateView?
     return_remark = models.CharField(

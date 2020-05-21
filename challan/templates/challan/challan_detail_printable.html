@@ -119,12 +119,15 @@
                     <tr class="text-center">
                         <th>SL</th>
                         <th>Order No.</th>
-                        <th>Kit No.</th>
-                        <th>Sub Kit</th>
+                        <th>Vendor Name</th>
+                        <th>Order Shipping Date</th>
+                        <th>Product name</th>
                         <th>Qty</th>
                         <th>Sq.Ft</th>
                         <th>Fabric</th>
                         <th>Color</th>
+                        <th>To give Vendor date</th>
+                        <th>Target return date</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -133,12 +136,15 @@
                     <tr class="text-center">
                         <td>{{ forloop.counter }}</td>
                         <td>{{ product.order_number }}</td>
-                        <td>{{ product.kit.number }}</td>
-                        <td></td>
+                        <td>Dhudheshwar Expert</td>
+                        <td>{{ product.date_shipped }}</td>
+                        <td>{{ product.name }}</td>
                         <td>{{ product.quantity }}</td>
                         <td>{{ product.size }}</td>
                         <td>{{ product.get_fabric_display }}</td>
                         <td>{{ product.get_color_display }}</td>
+                        <td>{{ product.kit.date_received }}</td>
+                        <td>{{ product.kit.date_return }}</td>
                     </tr>
                     {% endif %}
                     {% endfor %}
@@ -149,8 +155,11 @@
                         <th></th>
                         <th></th>
                         <th></th>
+                        <th></th>
                         <th class="border text-center"><b>{{ challan.get_total_quantity }}</b></th>
                         <th class="border text-center"><b>{{ challan.get_total_size }}</b></th>
+                        <th></th>
+                        <th></th>
                         <th></th>
                         <th></th>
                     </tr>

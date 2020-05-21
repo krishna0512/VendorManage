@@ -51,6 +51,13 @@ class Kit(models.Model):
         verbose_name=_('Date Received'),
         help_text=_('Date at which KIT is received in format (YYYY-MM-DD).'),
     )
+    date_return = models.DateField(
+        # auto_now_add=True,
+        null=True,
+        blank=True,
+        verbose_name=_('Expected Return Date'),
+        help_text=_('Date at which KIT is expected to be returned in format (YYYY-MM-DD).'),
+    )
     date_product_completion = models.DateField(
         null=True,
         blank=True,
