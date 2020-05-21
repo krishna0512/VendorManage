@@ -145,8 +145,6 @@
                     </tr>
                     {% endif %}
                     {% endfor %}
-                </tbody>
-                <tfoot>
                     <tr>
                         <th></th>
                         <th></th>
@@ -160,7 +158,22 @@
                         <th></th>
                         <th></th>
                     </tr>
-                </tfoot>
+                </tbody>
+                <!-- <tfoot>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th class="border text-center"><b>{{ challan.get_total_quantity }}</b></th>
+                        <th class="border text-center"><b>{{ challan.get_total_size }}</b></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </tfoot> -->
             </table>
         </div>
     </div>
