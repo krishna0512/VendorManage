@@ -42,7 +42,7 @@
         <div class="col heading h5">
             <div class="text-center">
                 Challan #: {{ challan.number }}<br>
-                For Ref. #: {{ challan.products.all.first.kit }}<br>
+                For Ref #. <a href="{{ challan.products.first.kit.get_absolute_url }}">{{ challan.products.first.kit.number }}</a><br>
                 For Date: {{ challan.date_sent }}<br>
                 To: {{ challan.customer }}
             </div>

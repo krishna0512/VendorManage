@@ -1,4 +1,8 @@
 from datetime import date
+import requests
+import logging
+logger = logging.getLogger(__name__)
+
 from django.shortcuts import redirect
 from django.core.files import File
 from django.urls import reverse_lazy
@@ -109,7 +113,8 @@ class ChallanCreateRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redi
 
 def challan_gatepass(request, pk):
     challan = Challan.objects.get(id=pk)
-    img = challan.products.all().first().kit.jobwork_gatepass.path
+    img = challan.products.all().first().kit.jobwork_gatepass.url
+    print('processing the gatepass image @ {}'.format(img))
     data = {
         'date': challan.date_sent.strftime('%d/%m/%Y'),
         'max_size': str(challan.get_total_size_by_fabric()['max']),
@@ -118,6 +123,7 @@ def challan_gatepass(request, pk):
         'tuff_qty': sum([i.quantity for i in challan.products.filter(fabric='tuff', return_remark='')]),
     }
     _, img = process.main(img, data=data)
+    print('Processed gatepass stored @ {}'.format(img))
     # tmp_dir = TemporaryDirectory(prefix='images')
     # out_image_path = os.path.join(tmp_dir.name, 'gatepass_processed.jpg')
     # cv.imwrite(out_image_path, img)
@@ -126,4 +132,5 @@ def challan_gatepass(request, pk):
     kit = challan.products.all().first().kit
     kit.jobwork_gatepass_processed.save('gatepass_processed.jpg', File(f))
     kit.save()
+    f.close()
     return redirect(kit.jobwork_gatepass_processed.url)

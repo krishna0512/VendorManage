@@ -2,6 +2,7 @@ import cv2 as cv
 import numpy as np
 # import matplotlib.pyplot as plt
 from tempfile import TemporaryDirectory
+import requests
 import os
 
 def get_last_box(binary, right):
@@ -18,8 +19,13 @@ def get_last_box(binary, right):
     left = binary.shape[1]//2
     return left, top, right, bottom
 
-def main(input_image_path, data=None):
+def main(input_image_url, data=None):
     # image = cv.imread('test2.jpg')
+    image = requests.get(input_image_url)
+    tmp_dir = TemporaryDirectory(prefix='images')
+    input_image_path = os.path.join(tmp_dir.name, os.path.basename(input_image_url))
+    with open(input_image_path, 'wb') as f:
+        f.write(image.content)
     image = cv.imread(input_image_path)
     gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
     _, binary = cv.threshold(gray, 100, 255, cv.THRESH_BINARY)
@@ -66,7 +72,7 @@ def main(input_image_path, data=None):
     y = b-(b-t)//3
     # print(x,y)
     test = cv.putText(test, data['date'], (x,y), cv.FONT_HERSHEY_SIMPLEX, 3, (0,0,0), 4, cv.LINE_AA)
-    tmp_dir = TemporaryDirectory(prefix='images')
+    # tmp_dir = TemporaryDirectory(prefix='images')
     out_image_path = os.path.join(tmp_dir.name, 'test.jpg')
     cv.imwrite(out_image_path, test)
     return (tmp_dir, out_image_path)
