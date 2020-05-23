@@ -51,7 +51,7 @@
                         <td class="font-weight-bold text-left">{{ challan.number }}</td>
                         <td class="small text-secondary text-center">{{ challan.date_sent|naturalday|title }}</td>
                         <td class="text-right">
-                            <span class="badge badge-success badge-pill">{{ challan.products.all.count }}</span>
+                            <span class="badge badge-success badge-pill">{{ challan.products.all.quantity }}</span>
                         </td>
                     </tr>
 					{% endfor %}
