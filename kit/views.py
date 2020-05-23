@@ -1,11 +1,15 @@
 from datetime import date
 from django.db.models import Q
+from django.http import JsonResponse
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, RedirectView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.list import MultipleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 from datetime import datetime, date
 
@@ -19,6 +23,7 @@ class KitListView(PermissionRequiredMixin, ListView):
     navigation = 'kit'
     ordering = ['-number']
     permission_required = ('expert.view_kit')
+    template_name = 'kit/kit_list.html'
 
 class KitCreateView(PermissionRequiredMixin, CreateView):
     model = Kit
@@ -185,3 +190,17 @@ class KitUncompleteRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redi
         for product in kit.products.all():
             product.uncomplete()
         return kit.get_absolute_url()
+
+@method_decorator(csrf_exempt, name='dispatch')
+class KitChangeCompletionDate(PermissionRequiredMixin, SingleObjectMixin, View):
+    model = Kit
+    http_method_names = ['post']
+    permission_required = ('expert.view_kit','expert.view_product','expert.change_kit',)
+
+    def post(self, *args, **kwargs):
+        kit = self.get_object()
+        date = self.request.POST.get('date',None)
+        date = datetime.strptime(date, '%Y-%m-%d').date()
+        kit.date_product_completion = date
+        kit.save()
+        return JsonResponse({'date': date.strftime('%B %d, %Y')})

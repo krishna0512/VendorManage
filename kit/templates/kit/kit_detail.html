@@ -208,11 +208,11 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block custom_navbar %}
-<li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{% url 'expert:kit-update' slug=kit.number %}"><i class="fa fa-pencil"></i> Edit</a></li>
-<li class="nav-item"><a class="nav-link btn btn-outline-danger btn-sm mr-1" type="button" href="{% url 'expert:kit-delete' kit.number %}"><i class="fa fa-trash"></i> Delete</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{{ kit.get_update_url }}"><i class="fa fa-pencil"></i> Edit</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-danger btn-sm mr-1" type="button" href="{{ kit.get_delete_url }}"><i class="fa fa-trash"></i> Delete</a></li>
 <li class="nav-item"><a class="nav-link btn btn-outline-info btn-sm mr-1" type="button" href="{% url 'expert:product-create' kit_number=kit.number %}"><i class="fa fa-plus"></i> Add New</a></li>
 <li class="nav-item"><a class="nav-link btn btn-outline-success btn-sm mr-1" type="button" href="{% url 'challan:create' pk=kit.id %}">Make Challan</a></li>
-<li class="nav-item"><a class="nav-link btn btn-outline-warning btn-sm mr-1" {% if kit.get_completed_quantity == 0 %}disbaled{% endif %} type="button" href="{% url 'expert:kit-uncomplete' pk=kit.id %}"><i class="fa fa-ban"></i> Uncomplete</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-warning btn-sm mr-1" {% if kit.get_completed_quantity == 0 %}disbaled{% endif %} type="button" href="{{ kit.get_uncomplete_url }}"><i class="fa fa-ban"></i> Uncomplete</a></li>
 {% endblock %}
 
 {% block main_content %}
@@ -230,7 +230,7 @@ $(document).ready(function() {
 					{% now "N j, Y" %}
 					{% endif %}
 				</span>
-				<input type="hidden" id="datepicker_product_completion" data-href="{% url 'expert:kit-change-product-completion' pk=kit.id %}">
+				<input type="hidden" id="datepicker_product_completion" data-href="{{ kit.get_change_completion_date_url }}">
 			</div>
 			<div>
 				<div class="dropdown d-inline">

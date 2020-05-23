@@ -115,13 +115,33 @@ class Kit(models.Model):
     def __str__(self):
         return str(self.number)
 
+    @staticmethod
+    def get_list_url():
+        return reverse('kit:list')
+
+    @staticmethod
+    def get_create_url():
+        return reverse('kit:create')
+
     def get_absolute_url(self):
         return reverse(
-            'expert:kit-detail',
+            'kit:detail',
             kwargs={
                 'slug': self.number
             }
         )
+
+    def get_update_url(self):
+        return reverse('kit:update', kwargs={'slug': self.number})
+
+    def get_delete_url(self):
+        return reverse('kit:delete', kwargs={'slug': self.number})
+
+    def get_uncomplete_url(self):
+        return reverse('kit:uncomplete', kwargs={'pk': self.pk})
+
+    def get_change_completion_date_url(self):
+        return reverse('kit:change-completion-date', kwargs={'pk': self.pk})
     
     @staticmethod
     def get_all():

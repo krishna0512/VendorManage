@@ -168,7 +168,7 @@
 					<div class="sidebar-sticky">
 						<ul class="nav flex-column text-center h-100">
 							<li class="nav-item">
-								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{% url 'expert:kit-list' %}">Kit</a>
+								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'kit' %}active{% endif %}" href="{{ kit.get_list_url }}">Kit</a>
 							</li>
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{% url 'expert:worker-list' %}">Worker</a>

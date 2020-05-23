@@ -124,17 +124,3 @@ class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
         product.assign(worker)
         # TODO: serialize the Worker model so I can directly pass it here.
         return JsonResponse({'assignedto': worker.username, 'refresh': False})
-
-@method_decorator(csrf_exempt, name='dispatch')
-class KitChangeCompletionDate(PermissionRequiredMixin, SingleObjectMixin, View):
-    model = Kit
-    http_method_names = ['post']
-    permission_required = ('expert.view_kit','expert.view_product','expert.change_kit',)
-
-    def post(self, *args, **kwargs):
-        kit = self.get_object()
-        date = self.request.POST.get('date',None)
-        date = datetime.strptime(date, '%Y-%m-%d').date()
-        kit.date_product_completion = date
-        kit.save()
-        return JsonResponse({'date': date.strftime('%B %d, %Y')})
