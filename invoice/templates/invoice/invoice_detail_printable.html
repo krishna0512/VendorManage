@@ -1,5 +1,6 @@
 {% extends 'expert/base.html' %}
 {% load static %}
+{% load humaize %}
 
 {# blocks changes so that invoice is printed normally without the side navbar interfering #}
 {% block custom_js %}
@@ -208,13 +209,13 @@
                         <td>Total</td>
                         <td></td>
                         <td>{{ invoice.get_total_quantity }}</td>
-                        <td>{{ invoice.get_total_size_by_fabric.max }}</td>
-                        <td>{{ invoice.get_total_size_by_fabric.tuff }}</td>
-                        <td>{{ invoice.get_total_size_by_fabric.fab }}</td>
-                        <td>{{ invoice.get_total_size_by_fabric.clear }}</td>
-                        <td>{{ invoice.get_total_size }}</td>
+                        <td>{{ invoice.get_total_size_by_fabric.max|intcomma }}</td>
+                        <td>{{ invoice.get_total_size_by_fabric.tuff|intcomma }}</td>
+                        <td>{{ invoice.get_total_size_by_fabric.fab|intcomma }}</td>
+                        <td>{{ invoice.get_total_size_by_fabric.clear|intcomma }}</td>
+                        <td>{{ invoice.get_total_size|intcomma }}</td>
                         <td></td>
-                        <td>{{ invoice.get_total_value }}</td>
+                        <td>{{ invoice.get_total_value|intcomma }}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -224,7 +225,7 @@
                         <td></td>
                         <td colspan="4">Add: CGST</td>
                         <td>6%</td>
-                        <td>{{ invoice.get_total_tax.cgst }}</td>
+                        <td>{{ invoice.get_total_tax.cgst|intcomma }}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -234,7 +235,7 @@
                         <td></td>
                         <td colspan="4">Add: SGST</td>
                         <td>6%</td>
-                        <td>{{ invoice.get_total_tax.sgst }}</td>
+                        <td>{{ invoice.get_total_tax.sgst|intcomma }}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -251,7 +252,7 @@
                             Amount Chargeble (in words)<br>
                             <b>{{ invoice.get_total_amount.words|title }} Rupees Only</b>
                         </td>
-                        <td class="font-weight-bold align-middle h6">{{ invoice.get_total_amount.amount }}</td>
+                        <td class="font-weight-bold align-middle h6">{{ invoice.get_total_amount.amount|intcomma }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -276,20 +277,20 @@
                 </tr>
                 <tr>
                     <td>998822</td>
-                    <td>{{ invoice.get_total_value }}</td>
+                    <td>{{ invoice.get_total_value|intcomma }}</td>
                     <td>6%</td>
-                    <td>{{ invoice.get_total_tax.cgst }}</td>
+                    <td>{{ invoice.get_total_tax.cgst|intcomma }}</td>
                     <td>6%</td>
-                    <td>{{ invoice.get_total_tax.sgst }}</td>
-                    <td rowspan="2" class="font-weight-bold align-middle h6">{{ invoice.get_total_tax.total }}</td>
+                    <td>{{ invoice.get_total_tax.sgst|intcomma }}</td>
+                    <td rowspan="2" class="font-weight-bold align-middle h6">{{ invoice.get_total_tax.total|intcomma }}</td>
                 </tr>
                 <tr class="font-weight-bold">
                     <td>Total</td>
-                    <td>{{ invoice.get_total_value }}</td>
+                    <td>{{ invoice.get_total_value|intcomma }}</td>
                     <td></td>
-                    <td>{{ invoice.get_total_tax.cgst }}</td>
+                    <td>{{ invoice.get_total_tax.cgst|intcomma }}</td>
                     <td></td>
-                    <td>{{ invoice.get_total_tax.sgst }}</td>
+                    <td>{{ invoice.get_total_tax.sgst|intcomma }}</td>
                 </tr>
                 <tr>
                     <td colspan="7">

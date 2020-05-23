@@ -1,5 +1,6 @@
 {% extends 'expert/base.html' %}
 {% load static %}
+{% load humanize %}
 {% load url_replace %}
 
 {% block custom_css %}
@@ -367,7 +368,7 @@ $(document).ready(function() {
 				<tr>
 					<th></th>
 					<th class="border border-success">{{ total_product_quantity }}</th>
-					<th class="border border-success">{{ total_product_size }} SqFt.</th>
+					<th class="border border-success">{{ total_product_size|intcomma }} SqFt.</th>
 					<th></th>
 					<th></th>
 					<th></th>

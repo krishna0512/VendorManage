@@ -1,5 +1,6 @@
 {% extends 'expert/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block custom_js %}
 <script>
@@ -91,7 +92,7 @@
 					Products Received
 				</div>
 				<div class="card-body">
-					<p class="card-text">{{ total_product_received|floatformat:2 }} Sq.Ft.
+					<p class="card-text">{{ total_product_received|floatformat:2|intcomma }} Sq.Ft.
 					({{ kit_list.products.count }} Pcs)</p>
 				</div>
 			</div>
@@ -108,7 +109,7 @@
 					Products Completed ({{ product_completed_percent }}%)
 				</div>
 				<div class="card-body">
-					<p class="card-text">{{ total_product_completed|floatformat:2 }} Sq.Ft.</p>
+					<p class="card-text">{{ total_product_completed|floatformat:2|intcomma }} Sq.Ft.</p>
 				</div>
 			</div>
 			<div class="card border border-danger shadow">
@@ -116,7 +117,7 @@
 					Products Returned ({{ product_returned_percent }}%)
 				</div>
 				<div class="card-body">
-					<p class="card-text">{{ total_product_returned|floatformat:2 }} Sq.Ft.</p>
+					<p class="card-text">{{ total_product_returned|floatformat:2|intcomma }} Sq.Ft.</p>
 				</div>
 			</div>
 		</div>
@@ -147,10 +148,10 @@
 						<td class="text-left">{{ forloop.counter }}</td>
 						<td><a href="{{ kit.get_absolute_url }}">{{ kit.number }}</a></td>
 						<td>{{ kit.date_received }}</td>
-						<td>{{ kit.size }}</td>
-						<td>{{ kit.products.completed.dispatched.size }}</td>
-						<td>{{ kit.products.dispatched.returned.size }}</td>
-						<td>{{ kit.products.dispatched.size }}</td>
+						<td>{{ kit.size|intcomma }}</td>
+						<td>{{ kit.products.completed.dispatched.size|intcomma }}</td>
+						<td>{{ kit.products.dispatched.returned.size|intcomma }}</td>
+						<td>{{ kit.products.dispatched.size|intcomma }}</td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -159,10 +160,10 @@
 						<th></th>
 						<th></th>
 						<th></th>
-						<th>{{ total_product_received|floatformat:2 }}</th>
-						<th>{{ total_product_completed|floatformat:2 }}</th>
-						<th>{{ total_product_returned|floatformat:2 }}</th>
-						<th>{{ total_product_dispatched|floatformat:2 }}</th>
+						<th>{{ total_product_received|floatformat:2|intcomma }}</th>
+						<th>{{ total_product_completed|floatformat:2|intcomma }}</th>
+						<th>{{ total_product_returned|floatformat:2|intcomma }}</th>
+						<th>{{ total_product_dispatched|floatformat:2|intcomma }}</th>
 					</tr>
 				</tfoot>
 			</table>
@@ -187,8 +188,8 @@
 					<tr>
 						<td class="text-left">{{ forloop.counter }}</td>
 						<td><a href="{{ data.worker.get_absolute_url }}">{{ data.worker.username }}</a></td>
-						<td>{{ data.completed }}</td>
-						<td>{{ data.returned }}</td>
+						<td>{{ data.completed|intcomma }}</td>
+						<td>{{ data.returned|intcomma }}</td>
 					</tr>
 					{% endfor %}
 				</tbody>

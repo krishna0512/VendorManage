@@ -1,5 +1,6 @@
 {% extends 'expert/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {# blocks changes so that challan is printed normally without the side navbar interfering #}
 {% block custom_js %}
@@ -204,7 +205,7 @@
                 <tr>
                     <th>Total</th>
                     <td><b>{{ challan.get_total_quantity }}</b></td>
-                    <td><b>{{ challan.get_total_size }}</b></td>
+                    <td><b>{{ challan.get_total_size|intcomma }}</b></td>
                 </tr>
             </table>
         </div>
@@ -231,7 +232,7 @@
                     <tr>
                         <td></td>
                         <th>{{ challan.get_return_quantity }}</th>
-                        <th>{{ challan.get_return_size }}</th>
+                        <th>{{ challan.get_return_size|intcomma }}</th>
                         <td></td>
                         <td></td>
                         <td></td>
