@@ -4,7 +4,8 @@ import django.db.models.fields as models
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta as timedelta
 
-from expert.models import Kit, Worker, Product
+from expert.models import Worker, Product
+from kit.models import Kit
 
 class KitModelTest(TestCase):
     @classmethod

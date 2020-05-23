@@ -7,7 +7,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import DeleteView, UpdateView
 
-from expert.models import Kit
+from kit.models import Kit
 from .models import Challan
 from customer.models import Customer
 from . import process

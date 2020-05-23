@@ -16,7 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.conf import settings
 
-from expert.models import Kit, Product, Challan
+from expert.models import Product, Challan
+from kit.models import Kit
 from worker.models import Worker
 from invoice.models import Invoice
 from expert.forms import *

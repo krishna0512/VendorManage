@@ -2,6 +2,7 @@
 
 from django.db import migrations, models
 import expert.models
+import kit.models
 
 
 class Migration(migrations.Migration):
@@ -14,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='kit',
             name='original_kit_summary',
-            field=models.ImageField(blank=True, help_text='Upload the jpg of the original/unmodified image of kit summary', null=True, upload_to=expert.models.kit_image_path, verbose_name='Original KIT Image'),
+            field=models.ImageField(blank=True, help_text='Upload the jpg of the original/unmodified image of kit summary', null=True, upload_to=kit.models.kit_image_path, verbose_name='Original KIT Image'),
         ),
     ]

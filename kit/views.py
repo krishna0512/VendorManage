@@ -13,7 +13,8 @@ from django.utils.decorators import method_decorator
 
 from datetime import datetime, date
 
-from expert.models import Kit, Product
+from expert.models import Product
+from .models import Kit
 from worker.models import Worker
 from expert.forms import *
 

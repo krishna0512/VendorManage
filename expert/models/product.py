@@ -155,10 +155,10 @@ class Product(models.Model):
         help_text=_('Status of the Product'),
     )
     dispatched = models.BooleanField(default=False)
-    kit = models.ForeignKey(
-        'Kit',
-        on_delete=models.CASCADE,
-        related_name='products',
+    kit = models.IntegerField(
+        # 'Kit',
+        # on_delete=models.CASCADE,
+        # related_name='products',
         help_text=_('Kit that this product belongs to.'),
     )
     challan = models.ForeignKey(

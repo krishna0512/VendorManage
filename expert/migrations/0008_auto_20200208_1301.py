@@ -3,6 +3,7 @@
 from django.db import migrations, models
 import expert.models
 import worker.models
+import kit.models
 
 
 class Migration(migrations.Migration):
@@ -15,17 +16,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='kit',
             name='ewaybill',
-            field=models.ImageField(blank=True, help_text='GSTN E-Way Bill that came with the kit', null=True, upload_to=expert.models.kit_image_path, verbose_name='E-Way Bill'),
+            field=models.ImageField(blank=True, help_text='GSTN E-Way Bill that came with the kit', null=True, upload_to=kit.models.kit_image_path, verbose_name='E-Way Bill'),
         ),
         migrations.AddField(
             model_name='kit',
             name='jobwork_challan',
-            field=models.ImageField(blank=True, help_text='Upload the jpg/png image of the jobwork challan that came with kit.', null=True, upload_to=expert.models.kit_image_path, verbose_name='Jobwork Challan Image'),
+            field=models.ImageField(blank=True, help_text='Upload the jpg/png image of the jobwork challan that came with kit.', null=True, upload_to=kit.models.kit_image_path, verbose_name='Jobwork Challan Image'),
         ),
         migrations.AddField(
             model_name='kit',
             name='jobwork_gatepass',
-            field=models.ImageField(blank=True, help_text='Upload the original jpg/png of the jobwork gatepass that came with kit', null=True, upload_to=expert.models.kit_image_path, verbose_name='Jobwork Gate Pass'),
+            field=models.ImageField(blank=True, help_text='Upload the original jpg/png of the jobwork gatepass that came with kit', null=True, upload_to=kit.models.kit_image_path, verbose_name='Jobwork Gate Pass'),
         ),
         migrations.AddField(
             model_name='worker',

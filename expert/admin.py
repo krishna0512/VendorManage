@@ -11,7 +11,6 @@ admin.site.index_title = 'Expert Traders Models'
 admin.site.site_title = 'Expert Traders'
 
 admin.site.register(Product)
-admin.site.register(Kit)
 admin.site.register(Worker)
 
 admin.site.site_url = reverse_lazy('expert:index')

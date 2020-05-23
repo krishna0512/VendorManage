@@ -1,7 +1,6 @@
-from expert.models import Kit, Product
+from expert.models import Product
 
 def model(request):
     return {
-        'Kit': Kit,
         'Product': Product,
     }

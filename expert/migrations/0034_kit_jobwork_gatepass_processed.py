@@ -2,6 +2,7 @@
 
 from django.db import migrations, models
 import expert.models
+import kit.models
 
 
 class Migration(migrations.Migration):
@@ -14,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='kit',
             name='jobwork_gatepass_processed',
-            field=models.ImageField(blank=True, help_text='The field for storing the gate pass after it is processed', null=True, upload_to=expert.models.kit_image_path, verbose_name='Jobwork GatePass (Processed)'),
+            field=models.ImageField(blank=True, help_text='The field for storing the gate pass after it is processed', null=True, upload_to=kit.models.kit_image_path, verbose_name='Jobwork GatePass (Processed)'),
         ),
     ]
