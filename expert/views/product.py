@@ -13,8 +13,7 @@ class ProductUpdateView(PermissionRequiredMixin, UpdateView):
     model = Product
     fields = [
         'order_number','quantity','_size',
-        'fabric','color', 'assignedto', 'completedby',
-        'status'
+        'fabric','color', 'remark',
     ]
     template_name_suffix = '_update_form'
     permission_required = ('expert.view_product','expert.change_product')
@@ -29,7 +28,7 @@ class ProductCreateView(PermissionRequiredMixin, CreateView):
     fields = [
         'order_number','quantity','_size',
         'fabric','color','status','assignedto',
-        'completedby','date_completed','return_remark'
+        'completedby','date_completed','return_remark', 'remark',
     ]
     template_name_suffix = '_create_form'
     permission_required = ('expert.view_product','expert.add_product')

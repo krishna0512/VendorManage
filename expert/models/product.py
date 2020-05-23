@@ -215,6 +215,13 @@ class Product(models.Model):
         verbose_name=_('Return Remarks'),
         help_text=_('Select the appropriate remark for returned products'),
     )
+    remark = models.CharField(
+        max_length=300,
+        blank=True,
+        default='',
+        verbose_name=_('Remark'),
+        help_text=_('Additional remark for the Product')
+    )
     creation_timestamp = models.DateTimeField(
         auto_now_add=True,
     )
