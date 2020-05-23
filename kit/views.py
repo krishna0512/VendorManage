@@ -24,7 +24,6 @@ class KitListView(PermissionRequiredMixin, ListView):
     navigation = 'kit'
     ordering = ['-number']
     permission_required = ('expert.view_kit')
-    template_name = 'kit/kit_list.html'
 
 class KitCreateView(PermissionRequiredMixin, CreateView):
     model = Kit

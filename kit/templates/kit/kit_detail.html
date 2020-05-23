@@ -74,6 +74,10 @@
 $(document).ready(function() {
 	// $('#product-table').DataTable();
 
+	$('#dropdownnumberrecords').change(function() {
+		window.location.href = "?paginate_by="+$(this).val();
+	});
+
 	$('a.js-btn-product-uncomplete').on('click', function(e) {
 		/*
 			This solution doesnt work at the moment because after the uncomplete successds
@@ -232,16 +236,15 @@ $(document).ready(function() {
 				</span>
 				<input type="hidden" id="datepicker_product_completion" data-href="{{ kit.get_change_completion_date_url }}">
 			</div>
-			<div>
-				<div class="dropdown d-inline">
-					<button class="btn btn-sm btn-outline-info dropdown-toggle" id="dropdownnumberrecords" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"># Records</button>
-					<div class="dropdown-menu" aria-labelledby="dropdownnumberrecords">
-						<a class="dropdown-item" href="?paginate_by=10">10</a>
-						<a class="dropdown-item" href="?paginate_by=25">25</a>
-						<a class="dropdown-item" href="?paginate_by=50">50</a>
-						<a class="dropdown-item" href="?paginate_by=100">100</a>
-					</div>
-				</div>
+			<div style="color: #333;">
+				Show
+				<select class="custom-select custom-select-sm form-control form-control-sm w-auto" id="dropdownnumberrecords">
+					<option value="10">10</option>
+					<option value="25">25</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+				</select>
+				entries
 			</div>
 		</div>
 		<table class="table table-sm table-hover table-striped text-center" id="product-table">
