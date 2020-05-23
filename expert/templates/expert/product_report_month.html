@@ -16,16 +16,33 @@
 					borderColor: 'rgb(0,123,255)',
 					data: {{ chart_data.product_completed|safe }},
 					fill: false,
+					datalabels: {
+						color: '#0000ff',
+					},
 				}, {
 					label: 'Returned',
 					backgroundColor: 'rgb(220,53,69)',
 					borderColor: 'rgb(220,53,69)',
 					data: {{ chart_data.product_returned|safe }},
 					fill: false,
+					datalabels: {
+						color: '#ff0000',
+					},
 				}]
 			},
 			options: {
 				responsive: true,
+				plugins: {
+					datalabels: {
+						display: (context) => {
+							value = context.dataset.data[context.dataIndex]
+							return value > 0;
+						},
+						anchor: 'end',
+						align: 'top',
+						rotation: '270',
+					},
+				},
 				tooltips: {
 					mode: 'index',
 					intersect: false,
