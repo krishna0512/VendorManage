@@ -156,7 +156,7 @@ LOGIN_REDIRECT_URL = 'expert:index'
 
 django_heroku.settings(locals())
 
-# STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -171,16 +171,16 @@ AWS_USER_NAME = 'django-expert'
 AWS_STORAGE_BUCKET_NAME = 'aws-ktsoft-expert'
 AWS_S3_REGION_NAME = 'us-east-2'
 AWS_DEFAULT_ACL = None
-AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
-AWS_LOCATION = 'static'
+# AWS_S3_CUSTOM_DOMAIN = '{}.s3.amazonaws.com'.format(AWS_STORAGE_BUCKET_NAME)
+# AWS_LOCATION = 'static'
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 
 # STATIC_URL = 'https://{}/{}/'.format(AWS_CUSTOM_DOMAIN, AWS_LOCATION)
-STATIC_URL = 'https://{}.s3.{}.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME)
-STATICFILES_LOCATION = 'static'
-STATICFILES_STORAGE = 'storage_backends.StaticStorage'
+# STATIC_URL = 'https://{}.s3.{}.amazonaws.com/'.format(AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME)
+# STATICFILES_LOCATION = 'static'
+# STATICFILES_STORAGE = 'storage_backends.StaticStorage'
 
 # MEDIA_URL = 'https://{}.s3.{}.amazonaws.com/media/'.format(AWS_STORAGE_BUCKET_NAME, AWS_S3_REGION_NAME)
 MEDIAFILES_LOCATION = 'media'
