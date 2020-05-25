@@ -4,6 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from datetime import date
 
+def challan_image_path(instance, filename):
+    # return 'Kit_{}/Images/{}'.format(instance.number, filename)
+    return 'Challan/{}/Images/{}'.format(instance.pk, filename)
+
 class Challan(models.Model):
     """Container for model that represents Delivery Challan"""
     number = models.IntegerField(
@@ -17,6 +21,13 @@ class Challan(models.Model):
         blank=False,
         verbose_name=_('Date of Dispatch'),
         help_text=_('Date at which this challan is dispatched')
+    )
+    jobwork_gatepass_processed = models.ImageField(
+        upload_to=challan_image_path,
+        null=True,
+        blank=True,
+        verbose_name=_('Jobwork GatePass (Processed)'),
+        help_text=_('The field for storing the gate pass after it is processed')
     )
     invoice = models.ForeignKey(
         'invoice.Invoice',

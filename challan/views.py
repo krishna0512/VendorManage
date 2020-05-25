@@ -128,9 +128,12 @@ def challan_gatepass(request, pk):
     # out_image_path = os.path.join(tmp_dir.name, 'gatepass_processed.jpg')
     # cv.imwrite(out_image_path, img)
     # f = open(out_image_path, 'rb')
-    f = open(img, 'rb')
-    kit = challan.products.all().first().kit
-    kit.jobwork_gatepass_processed.save('gatepass_processed.jpg', File(f))
-    kit.save()
-    f.close()
-    return redirect(kit.jobwork_gatepass_processed.url)
+    with open(img, 'rb') as f:
+        challan.jobwork_gatepass_processed.save('gatepass_processed_{}.jpg', File(f))
+        challan.save()
+    # f = open(img, 'rb')
+    # kit = challan.products.all().first().kit
+    # kit.jobwork_gatepass_processed.save('gatepass_processed.jpg', File(f))
+    # kit.save()
+    # f.close()
+    return redirect(challan.jobwork_gatepass_processed.url)
