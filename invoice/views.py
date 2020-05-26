@@ -34,12 +34,10 @@ class InvoiceListView(PermissionRequiredMixin, ListView):
     ordering = ['-number']
     permission_required = ('invoice.view_invoice')
 
-    def get(self, *args, **kwargs):
-        return super().get(*args, **kwargs)
-
 class InvoiceDetailView(PermissionRequiredMixin, DetailView):
     model = Invoice
     slug_field = 'number'
+    navigation = 'invoice'
     permission_required = ('invoice.view_invoice','challan.view_challan')
 
     def get_context_data(self, **kwargs):
@@ -77,7 +75,7 @@ class InvoicePrintableView(PermissionRequiredMixin, DetailView):
     template_name_suffix = '_detail_printable'
     permission_required = ('invoice.view_invoice','challan.view_challan')
 
-    def get_context_date(self, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['challan_list'] = self.object.challans.order_by('number')
         return context
@@ -89,11 +87,3 @@ class InvoiceUpdateView(PermissionRequiredMixin, UpdateView):
     template_name_suffix = '_update_form'
     slug_field = 'number'
     permission_required = ('invoice.view_invoice','invoice.change_invoice')
-
-    def form_valid(self, form):
-        print(form.instance.number)
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        print('form is invalid')
-        return super().form_invalid(form)

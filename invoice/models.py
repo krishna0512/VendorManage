@@ -40,17 +40,27 @@ class Invoice(models.Model):
         """
         # TODO: check for the condition if new challan added
         # should have the same customer as the already added challans
+        if not challan.customer:
+            return False
+        if self.challans.exists() and self.challans.all().first().customer != challan.customer:
+            return False
         challan.invoice = self
         challan.save()
         self.save()
+        return True
 
     def remove_challan(self, challan):
         """ function to remove the given challan from invoice 
         return False if challan is not present in this invoice.
         """
+        if not self.challans.exists():
+            return False
+        if challan not in self.challans.all():
+            return False
         challan.invoice = None
         challan.save()
         self.save()
+        return True
 
     def get_total_quantity(self):
         return sum([i.get_total_quantity() for i in self.challans.all()])
@@ -111,7 +121,7 @@ class Invoice(models.Model):
         return reverse('invoice:create')
 
     def __str__(self):
-        return self.number
+        return str(self.number)
 
     def __repr__(self):
         return '<Invoice: {}>'.format(self.number)

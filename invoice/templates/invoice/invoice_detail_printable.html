@@ -174,7 +174,7 @@
                 </thead>
                 <tbody>
                     
-                    {% for challan in invoice.challans.all %}
+                    {% for challan in challan_list %}
                         <tr>
                             <td>{{ challan.number }}</td>
                             <td>{{ challan.date_sent|date:"d.m.y" }}</td>

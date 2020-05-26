@@ -47,6 +47,9 @@ class Challan(models.Model):
         help_text=_('The customer for against whom challan is drawn'),
     )
 
+    class Meta:
+        ordering = ('-number',)
+
     @staticmethod
     def get_all():
         return Challan.objects.all()
