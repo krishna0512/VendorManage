@@ -80,7 +80,7 @@ class ChallanDeleteView(PermissionRequiredMixin, DeleteView):
 
 class ChallanCreateRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
     model = Kit
-    permission_required = ('expert.view_kit','expert.view_product','challan.view_challan','challan.add_challan', 'expert.change_product')
+    permission_required = ('kit.view_kit','expert.view_product','challan.view_challan','challan.add_challan', 'expert.change_product')
 
     def _get_challan_number(self):
         if not Challan.objects.all().exists():

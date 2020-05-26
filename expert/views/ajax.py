@@ -59,7 +59,7 @@ def email_invoice(request, pk):
 class ProductUncompleteView(PermissionRequiredMixin, SingleObjectMixin, View):
     model = Product
     permission_required = (
-        'expert.view_kit', 'expert.view_product', 
+        'kit.view_kit', 'expert.view_product', 
         'expert.change_product',
     )
 
@@ -77,7 +77,7 @@ class ProductUncompleteView(PermissionRequiredMixin, SingleObjectMixin, View):
 @method_decorator(csrf_exempt, name='dispatch')
 class ProductCompleteView(PermissionRequiredMixin, SingleObjectMixin, View):
     model = Product
-    permission_required = ('expert.view_kit','expert.view_product','expert.complete_product',)
+    permission_required = ('kit.view_kit','expert.view_product','expert.complete_product',)
 
     def post(self, *args, **kwargs):
         if self.get_object().complete():
@@ -95,7 +95,7 @@ class ProductAssignView(PermissionRequiredMixin, SingleObjectMixin, View):
     model = Product
     http_method_names = ['get', 'post']
     pk_url_kwarg = 'product_pk'
-    permission_required = ('expert.view_kit','expert.view_product','expert.assign_product',)
+    permission_required = ('kit.view_kit','expert.view_product','expert.assign_product',)
 
     def get(self, *args, **kwargs):
         product = self.get_object()

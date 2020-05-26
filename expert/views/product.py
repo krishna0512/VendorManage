@@ -57,7 +57,7 @@ class ProductCreateView(PermissionRequiredMixin, CreateView):
 
 class ProductDeleteView(PermissionRequiredMixin, DeleteView):
     model = Product
-    permission_required = ('expert.view_kit','expert.view_product','expert.delete_product')
+    permission_required = ('kit.view_kit','expert.view_product','expert.delete_product')
 
     def delete(self, request, *args, **kwargs):
         # self.kit_number = self.get_object().kit.number
@@ -76,7 +76,7 @@ class ProductDetailView(PermissionRequiredMixin, DetailView):
 
 class ProductReturnRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
     model = Product
-    permission_required = ('expert.view_kit','expert.view_product','expert.change_product',)
+    permission_required = ('kit.view_kit','expert.view_product','expert.change_product',)
 
     def get_redirect_url(self, *args, **kwargs):
         product = self.get_object()
@@ -87,7 +87,7 @@ class ProductReturnRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redi
 class ProductSplitRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
     model = Product
     permission_required = (
-        'expert.view_kit', 'expert.view_product',
+        'kit.view_kit', 'expert.view_product',
         'expert.change_product'
     )
 

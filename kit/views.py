@@ -16,20 +16,19 @@ from datetime import datetime, date
 from expert.models import Product
 from .models import Kit
 from worker.models import Worker
-from expert.forms import *
 
 class KitListView(PermissionRequiredMixin, ListView):
     model = Kit
     # for navigation active display
     navigation = 'kit'
     ordering = ['-number']
-    permission_required = ('expert.view_kit')
+    permission_required = ('kit.view_kit')
 
 class KitCreateView(PermissionRequiredMixin, CreateView):
     model = Kit
     fields = '__all__'
     template_name_suffix = '_create_form'
-    permission_required = ('expert.view_kit','expert.add_kit')
+    permission_required = ('kit.view_kit','kit.add_kit')
 
     def get_initial(self, *args, **kwargs):
         initial = super().get_initial(*args, **kwargs)
@@ -113,13 +112,13 @@ class KitUpdateView(PermissionRequiredMixin, UpdateView):
         'jobwork_gatepass'
     ]
     template_name_suffix = '_update_form'
-    permission_required = ('expert.view_kit','expert.change_kit')
+    permission_required = ('kit.view_kit','kit.change_kit')
 
 class KitDetailView(PermissionRequiredMixin, DetailView, MultipleObjectMixin):
     model = Kit
     slug_field = 'number'
     paginate_by = 10
-    permission_required = ('expert.view_kit','expert.view_product')
+    permission_required = ('kit.view_kit','expert.view_product')
 
     def get(self, *args, **kwargs):
         self.paginate_by = self.request.GET.get('paginate_by', 10) or 10
@@ -175,15 +174,15 @@ class KitDetailView(PermissionRequiredMixin, DetailView, MultipleObjectMixin):
 class KitDeleteView(PermissionRequiredMixin, DeleteView):
     model = Kit
     slug_field = 'number'
-    success_url = reverse_lazy('expert:kit-list')
-    permission_required = ('expert.view_kit','expert.delete_kit')
+    success_url = reverse_lazy('kit:list')
+    permission_required = ('kit.view_kit','kit.delete_kit')
 
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
 class KitUncompleteRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
     model = Kit
-    permission_required = ('expert.view_kit','expert.view_product','expert.change_product',)
+    permission_required = ('kit.view_kit','expert.view_product','expert.change_product',)
 
     def get_redirect_url(self, *args, **kwargs):
         kit = self.get_object()
@@ -195,7 +194,7 @@ class KitUncompleteRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redi
 class KitChangeCompletionDate(PermissionRequiredMixin, SingleObjectMixin, View):
     model = Kit
     http_method_names = ['post']
-    permission_required = ('expert.view_kit','expert.view_product','expert.change_kit',)
+    permission_required = ('kit.view_kit','expert.view_product','kit.change_kit',)
 
     def post(self, *args, **kwargs):
         kit = self.get_object()
