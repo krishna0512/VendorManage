@@ -11,23 +11,23 @@ class ProductQuerySet(models.QuerySet):
             end_date = start_date + timedelta(months=1) - timedelta(days=1)
         return self.filter(date_completed__lte=end_date, date_completed__gte=start_date)
 
-    def pending(self):
-        return self.filter(status='pending')
+    def pending(self, **kwargs):
+        return self.filter(status='pending').filter(**kwargs)
 
-    def assigned(self):
-        return self.filter(status='assigned')
+    def assigned(self, **kwargs):
+        return self.filter(status='assigned').filter(**kwargs)
 
-    def completed(self):
-        return self.filter(status='completed')
+    def completed(self, **kwargs):
+        return self.filter(status='completed').filter(**kwargs)
 
     def returned(self, **kwargs):
         return self.filter(status='returned').filter(**kwargs)
 
-    def dispatched(self):
-        return self.filter(dispatched=True)
+    def dispatched(self, **kwargs):
+        return self.filter(dispatched=True).filter(**kwargs)
 
-    def remaining(self):
-        return self.filter(dispatched=False)
+    def remaining(self, **kwargs):
+        return self.filter(dispatched=False).filter(**kwargs)
 
     @property
     def quantity(self):
