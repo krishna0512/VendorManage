@@ -6,6 +6,10 @@
 <script>
 	//TODO: change the method with which the data is transfered b/w django and js
 	$(document).ready(function() {
+		$('#card-product-returned').on('click', function() {
+			$('#returnedmodal').modal('show');
+		});
+
 		var ctx = document.getElementById('report-monthly-chart').getContext('2d');
 		var config = {
 			type: 'bar',
@@ -75,6 +79,18 @@
 </script>
 {% endblock %}
 
+{% block custom_css %}
+<style>
+	.card-hover {
+		transition: all .2s ease-in-out;
+		cursor: pointer;
+	}
+	.card-hover:hover {
+		transform: scale(1.2);
+	}
+</style>
+{% endblock %}
+
 {% block main_content %}
 <div class="container pt-3">
 	<div class="header-cards" style="font-size: 1.1em;">
@@ -104,7 +120,7 @@
 					<p class="card-text">{{ average_qty_product|floatformat:2 }} Sq.ft / Piece</p>
 				</div>
 			</div>
-			<div class="card border border-warning shadow">
+			<div class="card border border-success shadow">
 				<div class="card-header bg-success text-light">
 					Products Completed ({{ product_completed_percent }}%)
 				</div>
@@ -112,7 +128,7 @@
 					<p class="card-text">{{ total_product_completed|floatformat:2|intcomma }} Sq.Ft.</p>
 				</div>
 			</div>
-			<div class="card border border-danger shadow">
+			<div class="card border border-danger shadow card-hover" id="card-product-returned">
 				<div class="card-header bg-danger text-light">
 					Products Returned ({{ product_returned_percent }}%)
 				</div>
@@ -194,6 +210,57 @@
 					{% endfor %}
 				</tbody>
 			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block custom_modal %}
+<div class="modal fade" id="returnedmodal" tabindex="-1" role="dialog" aria-labelledby="returnedmodaltitle" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="w-100 text-center modal-title" id="returnedmodaltitle">Details of Returned Products</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped text-center">
+						<thead>
+							<tr>
+								<th>Order #</th>
+								<th>Lot #</th>
+								<th>Pcs</th>
+								<th>Sq.Ft.</th>
+								<th>Via Challan #</th>
+								<th>Date</th>
+								<th>Return type</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for p in kit_list.products.dispatched.returned %}
+							<tr>
+								<td>
+									<a href="{{ p.get_absolute_url }}">{{ p.order_number }}</a>
+								</td>
+								<td>
+									<a href="{{ p.kit.get_absolute_url }}">{{ p.kit.number }}</a>
+								</td>
+								<td>{{ p.quantity }}</td>
+								<td>{{ p.size }}</td>
+								<td>
+									<a href="{{ p.challan.get_absolute_url }}">{{ p.challan.number }}</a>
+								</td>
+								<td>{{ p.challan.date_sent }}</td>
+								<td>{{ p.get_return_remark_display }}</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
