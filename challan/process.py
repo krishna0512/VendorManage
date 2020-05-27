@@ -34,7 +34,9 @@ def main(input_image_url, data=None):
             'tuff_qty': 15,
             'max_size': 1125,
             'tuff_size': 2231,
-            'date': '04/11/2020'
+            'date': '04/11/2020',
+            'returned_max_size': 0,
+            'returned_tuff_size': 0,
         }
     # image = cv.imread('test2.jpg')
     image = requests.get(input_image_url)
@@ -91,8 +93,11 @@ def main(input_image_url, data=None):
     # x = l+(r-l)//5
     # y = b-(b-t)//3
     # test = cv.putText(test, 'Returned: 0', (x,y), cv.FONT_HERSHEY_SIMPLEX, 3, (0,0,0), 4, cv.LINE_AA)
-    y = int((y_return[0]+20) * ratio)
-    test = cv.putText(test, 'Returned: 0', (x,y), cv.FONT_HERSHEY_SIMPLEX, 3, (0,0,0), 4, cv.LINE_AA)
+    y1 = int((y_return[0]+13) * ratio)
+    y2 = int((y_return[0]+23) * ratio)
+    # test = cv.putText(test, 'Returned: 0', (x,y), cv.FONT_HERSHEY_SIMPLEX, 3, (0,0,0), 4, cv.LINE_AA)
+    test = cv.putText(test, 'Max-380 : {} Sq.Ft.'.format(data['returned_max_size']), (x,y1), cv.FONT_HERSHEY_SIMPLEX, 2, (0,0,0), 4, cv.LINE_AA)
+    test = cv.putText(test, 'Tuff-480 : {} Sq.Ft.'.format(data['returned_tuff_size']), (x,y2), cv.FONT_HERSHEY_SIMPLEX, 2, (0,0,0), 4, cv.LINE_AA)
 
     # l,t,r,b = get_last_box(binary[:b+10], right)
     # # test = cv.rectangle(test, (l, t), (r, b), (0, 0, 255), 5)

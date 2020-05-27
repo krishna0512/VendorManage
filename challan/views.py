@@ -32,7 +32,8 @@ class ChallanUpdateView(PermissionRequiredMixin, UpdateView):
     model = Challan
     template_name_suffix = '_update_form'
     fields = [
-        'number','date_sent','customer'
+        'number','date_sent','customer',
+        'jobwork_gatepass_processed'
     ]
     permission_required = (
         'challan.view_challan', 'challan.change_challan',
@@ -121,6 +122,8 @@ def challan_gatepass(request, pk):
         'tuff_size': str(challan.get_total_size_by_fabric()['tuff']),
         'max_qty': sum([i.quantity for i in challan.products.filter(fabric='max', return_remark='')]),
         'tuff_qty': sum([i.quantity for i in challan.products.filter(fabric='tuff', return_remark='')]),
+        'returned_max_size': challan.products.all().returned(fabric='max').size,
+        'returned_tuff_size': challan.products.all().returned(fabric='tuff').size,
     }
     _, img = process.main(img, data=data)
     print('Processed gatepass stored @ {}'.format(img))

@@ -20,8 +20,8 @@ class ProductQuerySet(models.QuerySet):
     def completed(self):
         return self.filter(status='completed')
 
-    def returned(self):
-        return self.filter(status='returned')
+    def returned(self, **kwargs):
+        return self.filter(status='returned').filter(**kwargs)
 
     def dispatched(self):
         return self.filter(dispatched=True)
