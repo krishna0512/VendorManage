@@ -1,7 +1,8 @@
 from datetime import date
 from django.shortcuts import redirect
+from django.http import JsonResponse
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
@@ -43,6 +44,35 @@ class WorkerDetailView(PermissionRequiredMixin, DetailView):
             '-kit__number', '-date_completed'
         )
         return super().get_context_data(**kwargs)
+
+class WorkerReportView(PermissionRequiredMixin, View):
+    permission_required = ('worker.view_worker')
+
+    def has_permission(self):
+        ret = super().has_permission()
+        return ret or self.request.user.worker.pk == self.kwargs['pk']
+
+    def get(self, *args, **kwargs):
+        worker = Worker.objects.get(pk=self.kwargs['pk'])
+        date_from = date.fromisoformat(self.request.GET.get('date_from', str(worker.date_joined)))
+        date_to = date.fromisoformat(self.request.GET.get('date_to', str(date.today())))
+        ptype = self.request.GET.get('type', 'all')
+        print(date_from, date_to)
+        data = []
+        plist = worker.products_completed.get_date_completed_range(date_from, date_to)
+        if ptype == 'completed':
+            plist = plist.completed()
+        elif ptype == 'returned':
+            plist = plist.returned()
+        for i in plist:
+            data.append([
+                i.kit.number,
+                i.order_number,
+                i.date_completed.strftime('%b %d, %Y'),
+                i.quantity,
+                i.size,
+            ])
+        return JsonResponse({'data': data})
 
 class WorkerUpdateView(PermissionRequiredMixin, UpdateView):
     model = Worker

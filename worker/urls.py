@@ -9,4 +9,6 @@ urlpatterns = [
     path('<int:pk>/view/', views.WorkerDetailView.as_view(), name='detail'),
     path('<int:pk>/update/', views.WorkerUpdateView.as_view(), name='update'),
     path('<int:pk>/delete/', views.WorkerDeleteView.as_view(), name='delete'),
+] + [
+    path('api/<int:pk>/report/', views.WorkerReportView.as_view(), name='api-report')
 ]

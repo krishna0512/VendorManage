@@ -7,6 +7,8 @@ from dateutil.relativedelta import relativedelta as timedelta
 
 class ProductQuerySet(models.QuerySet):
     def get_date_completed_range(self, start_date, end_date=None):
+        if isinstance(start_date, str) or isinstance(end_date, str):
+            raise TypeError('start_date and end_date should be of type datetime.date object')
         if end_date is None:
             end_date = start_date + timedelta(months=1) - timedelta(days=1)
         return self.filter(date_completed__lte=end_date, date_completed__gte=start_date)
