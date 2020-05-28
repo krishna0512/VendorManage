@@ -160,8 +160,7 @@ class KitDetailView(PermissionRequiredMixin, DetailView, MultipleObjectMixin):
             worker_list = Worker.objects.filter(id__in=[self.request.user.worker.id])
             # a BaseWorker can only view the products that are pending, and the products that
             # are completedby or assignedto the particular worker.
-            # q = Q(status='pending') | Q(assignedto=self.request.user.worker) | Q(completedby=self.request.user.worker)
-            q = Q(assignedto=self.request.user.worker) | Q(completedby=self.request.user.worker)
+            q = Q(status='pending') | Q(assignedto=self.request.user.worker) | Q(completedby=self.request.user.worker)
             object_list = object_list.filter(filterq & q)
         tpq = object_list.quantity
         tps = object_list.size
