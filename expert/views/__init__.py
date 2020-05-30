@@ -127,12 +127,10 @@ class ProductDayArchiveView(DayArchiveView):
         context['worker_list'] = Worker.objects.all()
         return context
 
-class ProductMonthArchiveView(PermissionRequiredMixin, MonthArchiveView):
+class ReportView(PermissionRequiredMixin, ListView):
     model = Product
-    date_field = 'date_completed'
-    allow_empty = True
-    allow_future = True
     permission_required = ('only_superuser')
+    navigation = 'report'
     template_name_suffix = '_report_month'
 
     def has_permission(self):
@@ -167,16 +165,17 @@ class ProductMonthArchiveView(PermissionRequiredMixin, MonthArchiveView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        start_date = context['month']
-        end_date = context['next_month'] - timedelta(days=1)
+        start_date = self.request.GET.get('date_start', '2020-01-01')
+        start_date = date.fromisoformat(start_date)
+        end_date = self.request.GET.get('date_end', '2020-05-29')
+        end_date = date.fromisoformat(end_date)
         dl = []
         d = start_date
         while d <= end_date:
             dl.append(d)
             d += timedelta(days=1)
-        dl = [str(i.day) for i in dl]
-        for i in range(9):
-            dl[i] = '0{}'.format(dl[i])
+        dl = ['{}-{}'.format(i.day, i.month) for i in dl]
+        dl = ['0{}'.format(i) if int(i.split('-')[0])<10 else i for i in dl]
         chart_data = {}
         chart_data['date_list'] = str(dl)
         chart_data['product_completed'] = str(self.get_product_completed(start_date, end_date))
@@ -189,13 +188,15 @@ class ProductMonthArchiveView(PermissionRequiredMixin, MonthArchiveView):
         context['total_product_returned'] = kit_list.products().dispatched().returned().size
         context['total_product_received'] = kit_list.products().size
         context['total_product_dispatched'] = kit_list.products().dispatched().size
-        context['average_qty_product'] = round(kit_list.products().size / kit_list.products().count(), 2)
         try:
+            # TODO: confirm weather the division should be with product.count or product.quantity
+            context['average_qty_product'] = round(kit_list.products().size / kit_list.products().count(), 2)
             context['product_completed_percent'] = context['total_product_completed']*100 // context['total_product_received']
             context['product_returned_percent'] = context['total_product_returned']*100 // context['total_product_received']
         except ZeroDivisionError:
             context['product_completed_percent'] = 100
             context['product_returned_percent'] = 0
+            context['average_qty_product'] = 0
         worker_list = Worker.objects.active().order_by('_username')
         a = []
         for worker in worker_list:
@@ -206,4 +207,6 @@ class ProductMonthArchiveView(PermissionRequiredMixin, MonthArchiveView):
             })
         context['worker_list'] = a
         context['chart_data'] = chart_data
+        context['start_date'] = start_date
+        context['end_date'] = end_date
         return context

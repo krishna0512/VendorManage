@@ -18,6 +18,6 @@ urlpatterns = [
     path('product/', include('expert.urls.product')),
 
     path('report/<int:year>/<str:month>/<int:day>/', views.ProductDayArchiveView.as_view(), name='report-daily'),
-    path('report/<int:year>/<str:month>/', views.ProductMonthArchiveView.as_view(), name='report-monthly'),
+    path('report/', views.ReportView.as_view(), name='report'),
 
 ]

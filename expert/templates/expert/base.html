@@ -249,6 +249,42 @@
 		{% block custom_js %}{% endblock %}
 	</head>
 	<body>
+		<div class="modal fade" id="reportmodal" tabindex="-1" role="dialog" aria-labelledby="reportmodaltitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="reportmodaltitle">Select Report Time</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div>
+							<form method="GET" action="{% url 'expert:report' %}" class="form-inline">
+								<input type="text" class="form-control" id="id_date_start" name="date_start" placeholder="Enter the Starting Date" autocomplete="off">
+								<input type="text" class="form-control mx-3" id="id_date_end" name="date_end" placeholder="Enter the End Date" autocomplete="off">
+								<button type="submit" class="btn btn-sm btn-success">Submit</button>
+							</form>
+						</div>
+						<hr>
+						<div>
+							<div class="dropdown">
+								<button class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown" id="reportmonthdropdown" aria-haspopup="true" aria-expanded="false">Select Month</button>
+								<div class="dropdown-menu" aria-labelledby="reportmonthdropdown">
+									<a class="btn btn-outline-info dropdown-item" href="{% url 'expert:report' %}?date_start=2019-12-01&date_end=2019-12-31">Dec 2019</a>
+									<a class="btn btn-outline-info dropdown-item" href="{% url 'expert:report' %}?date_start=2020-01-01&date_end=2020-01-31">Jan 2020</a>
+									<a class="btn btn-outline-info dropdown-item" href="{% url 'expert:report' %}?date_start=2020-02-01&date_end=2020-02-29">Feb 2020</a>
+									<a class="btn btn-outline-info dropdown-item" href="{% url 'expert:report' %}?date_start=2020-03-01&date_end=2020-03-31">Mar 2020</a>
+									<a class="btn btn-outline-info dropdown-item" href="{% url 'expert:report' %}?date_start=2020-04-01&date_end=2020-04-30">Apr 2020</a>
+									<a class="btn btn-outline-info dropdown-item" href="{% url 'expert:report' %}?date_start=2020-05-01&date_end=2020-05-31">May 2020</a>
+									<a class="btn btn-outline-info dropdown-item" href="{% url 'expert:report' %}?date_start=2020-06-01&date_end=2020-06-30">Jun 2020</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="modal fade" id="complaintmodal" tabindex="-1" role="dialog" aria-labelledby="complaintmodaltitle" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 				<div class="modal-content">
@@ -348,9 +384,6 @@
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'worker' %}active{% endif %}" href="{{ Worker.get_list_url }}">StitchMen</a>
 							</li>
-							<!-- <li class="nav-item">
-								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'salary' %}active{% endif %}" href="{{ Salary.get_list_url }}">Salary</a>
-							</li> -->
 							<li class="nav-item">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'customer' %}active{% endif %}" href="{{ Customer.get_list_url }}">Customer</a>
 							</li>
@@ -360,31 +393,9 @@
 							<li class="nav-item active">
 								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'invoice' %}active{% endif %}" href="{{ Invoice.get_list_url }}">Invoice</a>
 							</li>
-							<li class="nav-item dropdown">
-								<a class="mx-2 nav-link dropdown-toggle" id="sidebarreportdropdown" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown">
-									Reports
-								</a>
+							<li class="nav-item active">
+								<a class="u-hover--sparkle mx-2 nav-link {% if view.navigation == 'report' %}active{% endif %}" data-toggle="modal" data-target="#reportmodal">Reports</a>
 							</li>
-							<div class="custom-dropdown py-1" style="display: none; background-color: #f0f0f0;">
-								<li class="nav-item">
-									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2019 month='Dec' %}">Dec 2019</a>
-								</li>
-								<li class="nav-item">
-									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Jan' %}">Jan 2020</a>
-								</li>
-								<li class="nav-item">
-									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Feb' %}">Feb 2020</a>
-								</li>
-								<li class="nav-item">
-									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Mar' %}">Mar 2020</a>
-								</li>
-								<li class="nav-item">
-									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='Apr' %}">Apr 2020</a>
-								</li>
-								<li class="nav-item">
-									<a class="u-hover--sparkle mx-2 nav-link" href="{% url 'expert:report-monthly' year=2020 month='May' %}">May 2020</a>
-								</li>
-							</div>
 						</ul>
 					</div>
 				</nav>
