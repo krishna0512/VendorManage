@@ -42,6 +42,7 @@
 						total_size += data[i][4];
 					}
 					$('#worker-detail-table tfoot .quantity').html(total_qty);
+					total_size = Math.round((total_size + Number.EPSILON)*100) / 100;
 					$('#worker-detail-table tfoot .size').html(total_size);
 				}
 			},
