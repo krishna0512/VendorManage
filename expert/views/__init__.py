@@ -16,7 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.conf import settings
 
-from expert.models import Product, Challan
+from expert.models import Product
+from challan.models import Challan
 from kit.models import Kit
 from worker.models import Worker
 from invoice.models import Invoice
@@ -123,17 +124,6 @@ class ProductDayArchiveView(DayArchiveView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        # worker_list = []
-        # for worker in Worker.objects.all():
-        #     p = Product.objects.filter(completedby=worker).filter(date_completed=context['day'])
-        #     ret = {}
-        #     ret['name'] = worker.get_fullname()
-        #     if p.exists():
-        #         ret['daily_work'] = sum([i.size for i in p])
-        #     else:
-        #         ret['daily_work'] = 0.0
-        #     worker_list.append(ret)
-        # context['worker_list'] = worker_list
         context['worker_list'] = Worker.objects.all()
         return context
 
@@ -150,9 +140,6 @@ class ProductMonthArchiveView(PermissionRequiredMixin, MonthArchiveView):
         return self.request.user.is_superuser or self.request.user.username=='demo'
 
     def get_product_completed(self, start_date, end_date):
-        # ret = Product.objects.get_date_completed_range(start_date, end_date)
-        # ret = ret.filter(status__in=['completed','dispatched'])
-        # return ret
         d = start_date
         ret = []
         while d <= end_date:
@@ -166,8 +153,6 @@ class ProductMonthArchiveView(PermissionRequiredMixin, MonthArchiveView):
         return ret
     
     def get_product_returned(self, start_date, end_date):
-        # ret = Product.objects.get_date_completed_range(start_date, end_date).exclude(return_remark='')
-        # return ret
         d = start_date
         ret = []
         while d <= end_date:
@@ -184,7 +169,6 @@ class ProductMonthArchiveView(PermissionRequiredMixin, MonthArchiveView):
         context = super().get_context_data(*args, **kwargs)
         start_date = context['month']
         end_date = context['next_month'] - timedelta(days=1)
-        # print(list(range(start_date, end_date, timedelta(days=1))))
         dl = []
         d = start_date
         while d <= end_date:

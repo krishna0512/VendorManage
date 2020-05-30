@@ -51,6 +51,12 @@ class Worker(models.Model):
         verbose_name=_('Joined since'),
         help_text=_('Date of joining.'),
     )
+    date_left = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name=_('Date Left'),
+        help_text=_('Date at which this worker was fired'),
+    )
     # TODO: check if you can retrieve the image of aadhar from aadhar number
     aadhar_number = models.CharField(
         default='',
