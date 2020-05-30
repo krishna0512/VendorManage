@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
 from datetime import datetime, date
+import logging
+logger = logging.getLogger(__name__)
 
 from expert.models import Product
 from kit.models import Kit

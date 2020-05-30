@@ -7,6 +7,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from expert.models import Product
 from kit.models import Kit
+from worker.models import Worker
 from expert.forms import *
 
 class ProductUpdateView(PermissionRequiredMixin, UpdateView):
@@ -64,15 +65,21 @@ class ProductDeleteView(PermissionRequiredMixin, DeleteView):
         self.success_url = self.get_object().kit.get_absolute_url()
         return super().delete(request, *args, **kwargs)
 
-    # def get_success_url(self):
-    #     return Kit.objects.filter(number=self.kit_number).first().get_absolute_url()
-
     def get(self, *args, **kwargs):
         return self.post(*args, **kwargs)
 
 class ProductDetailView(PermissionRequiredMixin, DetailView):
     model = Product
     permission_required = ('expert.view_product')
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        if self.request.user.is_superuser:
+            worker_list = Worker.objects.active().order_by('first_name')
+        else:
+            worker_list = Worker.objects.filter(id=self.request.user.worker.id)
+        context['worker_list'] = worker_list
+        return context
 
 class ProductReturnRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
     model = Product

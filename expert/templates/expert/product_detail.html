@@ -6,6 +6,113 @@
 <li class="nav-item"><a class="nav-link btn btn-outline-secondary btn-sm mr-1" type="button" href="{{ product.kit.get_absolute_url }}"><i class="fa fa-arrow-left"></i> Back</a></li>
 {% endblock %}
 
+{% block custom_js %}
+<script>
+    $(document).ready(function() {
+    	$('a.js-btn-product-uncomplete').on('click', function(e) {
+    		e.preventDefault();
+    		// $(this).children().first().removeClass('fa-ban').addClass('fa-spinner fa-pulse fa-fw');
+    		let $this = $(this);
+    		$.ajax({
+    			type: "POST",
+    			url: $(this).attr('href'),
+    			async: true,
+    			data: {},
+    			success: function(result) {
+                    location.reload(true);
+    				// $this.closest('td').prev().html('Assigned');
+    				// $this.closest('td').prev().removeClass('bg-success text-light').addClass('bg-warning');
+    				// $this.closest('td').prev().prev().html('None');
+    				// $this.closest('td').prev().prev().prev().html('');
+    				// $this.removeClass('js-btn-product-uncomplete btn-outline-warning');
+    				// $this.addClass('js-btn-product-complete btn-outline-success');
+    				// $this.attr('href', result['complete_url'])
+    				// //remove the spinner and re-add the check icon
+    				// $this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-check');
+    			},
+    			statusCode: {
+    				403: function() {
+    					// $this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-ban');
+    					alert('You dont have permission to UnComplete this Product.');
+    				},
+    				400: function() {
+    					// $this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-ban');
+    					alert('Server was not able to UnComplete this product.')
+    				}
+    			}
+    		})
+    	});
+    	$('a.js-btn-product-assign').on('click', function(e) {
+    		e.preventDefault();
+    		let $this = $(this);
+    		$.ajax({
+    			type: "POST",
+    			url: $(this).attr('href'),
+    			async: true,
+    			data: {},
+    			success: function(result) {
+                    location.reload(true);
+    				// $this.closest('tr').addClass('bg-warning');
+    				// $this.closest('tr').children('.js-td-status').addClass('bg-warning').html('Assigned');
+    				// $this.closest('tr').find('a.js-btn-product-complete').removeClass('disabled');
+    				// $this.closest('div.dropdown').children('button').html(result['assignedto'])
+    			},
+    			statusCode: {
+    				403: function() {
+    					alert('You dont have permission to Assign this Product.');
+    				}
+    			}
+    		});
+    	});
+    	$('a.js-btn-product-complete').on('click', function(e) {
+    		e.preventDefault();
+    		//add the spinner to button
+    		// $(this).children().first().removeClass('fa-check').addClass('fa-spinner fa-pulse fa-fw');
+    		let $this = $(this);
+    		$.ajax({
+    			type: "POST",
+    			url: $(this).attr('href'),
+    			async: true,
+    			data: {},
+    			success: function(result) {
+                    location.reload(true);
+    				// $this.closest('td').prev().html('Completed');
+    				// $this.closest('td').prev().removeClass('bg-warning').addClass('bg-success text-light');
+    				// $this.closest('td').prev().prev().html(result['date_completed']);
+    				// $this.closest('td').prev().prev().prev().html(result['completedby']);
+    				// // change the icon to uncomplete
+    				// $this.removeClass('js-btn-product-complete btn-outline-success')
+    				// $this.addClass('js-btn-product-uncomplete btn-outline-warning');
+    				// $this.attr('href', result['uncomplete_url']);
+    				// //remove the spinner and re-add the check icon
+    				// $this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-ban');
+    			},
+    			statusCode: {
+    				403: function() {
+    					$this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-check');
+    					alert('You dont have permission to Complete this Product.');
+    				},
+    				400: function() {
+    					$this.children().first().removeClass('fa-spinner fa-pulse fa-fw').addClass('fa-check');
+    					alert('Server was not able to Complete this product.')
+    				}
+    			}
+    		});
+    	});
+    });
+</script>
+{% endblock %}
+
+{% block custom_css %}
+<style>
+	.scrollable-dropdown-menu {
+		height: auto;
+		max-height: 250px;
+		overflow-x: hidden;
+	}
+</style>
+{% endblock %}
+
 {% block main_content %}
 <div class="container col-lg-8">
     <center class="mt-4 h4">Overview of Product</center>
@@ -63,6 +170,41 @@
                     <td><a href="{{ product.challan.get_absolute_url }}">{{ product.challan.number }}</a></td>
                 </tr>
                 {% endif %}
+                <tr>
+                    <td>Actions</td>
+                    <td>
+                        {% if product.is_pending or product.is_assigned %}
+						<div class="dropdown d-inline">
+							<button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ product.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								{% if product.is_pending %}
+								Assign To
+								{% else %}
+								{{ product.assignedto.username }}
+								{% endif %}
+							</button>
+							<div class="dropdown-menu scrollable-dropdown-menu" aria-labelledby="dropdownMenuButton-{{ product.id }}">
+								{% if product.is_assigned %}
+								<a class="dropdown-item" href="{% url 'expert:product-assign' product_pk=product.pk worker_pk=0 %}">---</a>
+								{% endif %}
+								{% for worker in worker_list %}
+								<a class="dropdown-item js-btn-product-assign" href="{% url 'expert:product-assign' product_pk=product.id worker_pk=worker.id %}">{{ worker.username }}</a>
+								{% endfor %}
+							</div>
+                        </div>
+                        {% if product.is_assigned %}
+						<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-sm btn-outline-success js-btn-product-complete"><i class="fa fa-check fa-lg"></i> Complete</a>
+                        {% endif %}
+                        {% elif product.is_dispatched %}
+                        --
+                        {% elif product.is_completed %}
+						<a href="{% url 'expert:product-uncomplete' product.id %}" class="btn btn-outline-warning btn-sm js-btn-product-uncomplete" title="UnComplete the Product"><i class="fa fa-ban fa-lg"></i> UnComplete</a>
+                        {% elif product.is_returned %}
+                        --
+                        {% else %}
+                        --
+                        {% endif %}
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
