@@ -162,7 +162,7 @@ $(document).ready(function() {
 			data: {},
 			success: function(result) {
 				// $this.closest('tr').addClass('bg-warning');
-				$this.closest('tr').children('.js-td-status').addClass('bg-warning').html('Assigned');
+				$this.closest('tr').children('.js-td-status').removeClass('bg-danger').addClass('bg-warning').html('Assigned');
 				$this.closest('tr').find('a.js-btn-product-complete').removeClass('disabled');
 				$this.closest('div.dropdown').children('button').html(result['assignedto'])
 			},
