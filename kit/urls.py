@@ -1,9 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 
 app_name = 'kit'
 urlpatterns = [
+    path('api/', include('kit.api.urls')),
+
     path('', views.KitListView.as_view(), name='list'),
     path('create/', views.KitCreateView.as_view(), name='create'),
     path('<slug:slug>/update/', views.KitUpdateView.as_view(), name='update'),

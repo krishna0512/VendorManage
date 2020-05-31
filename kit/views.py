@@ -1,4 +1,3 @@
-from datetime import date
 from django.db.models import Q
 from django.http import JsonResponse
 from django.urls import reverse_lazy
