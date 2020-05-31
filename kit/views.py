@@ -77,6 +77,14 @@ class KitCreateView(PermissionRequiredMixin, CreateView):
                 else:
                     return col
 
+        def _get_date(date, year_string='%Y'):
+            ret = None
+            try:
+                ret = datetime.strptime(date, '%d-%b-{}'.format(year_string)).date()
+            except:
+                ret = datetime.strptime(date, '%d-%B-{}'.format(year_string)).date()
+            return ret
+
         data = data.strip().split('\n')
         date_received = date_return = None
         for row in data:
@@ -84,7 +92,7 @@ class KitCreateView(PermissionRequiredMixin, CreateView):
             r = [i.strip() for i in r]
             Product.objects.create(
                 order_number=r[0].upper(),
-                date_shipped=datetime.strptime(r[2], '%d-%b-%y').date(),
+                date_shipped=_get_date(r[2], year_string='%y'),
                 name=r[3],
                 quantity=int(r[4]),
                 size=float(r[5]),
@@ -92,8 +100,8 @@ class KitCreateView(PermissionRequiredMixin, CreateView):
                 color=_select_color(r[7]),
                 kit=self.object,
             )
-            date_received = datetime.strptime(r[8], '%d-%b-%Y').date()
-            date_return = datetime.strptime(r[9], '%d-%b-%Y').date()
+            date_received = _get_date(r[8])
+            date_return = _get_date(r[9])
         self.object.date_received = date_received
         self.object.date_return = date_return
         self.object.save()
