@@ -6,3 +6,7 @@ from .serializers import KitSerializer
 class KitListAPIView(generics.ListAPIView):
     queryset = Kit.objects.all()
     serializer_class = KitSerializer
+
+class KitDetailAPIView(generics.RetrieveAPIView):
+    queryset = Kit.objects.all()
+    serializer_class = KitSerializer

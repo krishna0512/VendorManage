@@ -1,8 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 
 from expert.views import product as views
 
 urlpatterns = [
+    path('api/', include('product.api.urls')),
+
     path('<int:pk>/update/', views.ProductUpdateView.as_view(), name='product-update'),
     path('create/<int:kit_number>/', views.ProductCreateView.as_view(), name='product-create'),
     path('<int:pk>/delete/', views.ProductDeleteView.as_view(), name='product-delete'),
