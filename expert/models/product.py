@@ -365,3 +365,9 @@ class Product(models.Model):
 
     def get_uncomplete_url(self):
         return reverse('expert:product-uncomplete', kwargs={'pk': self.pk})
+
+    def get_return_url(self):
+        return reverse('expert:product-return', kwargs={'pk': self.pk})
+
+    def get_api_url(self):
+        return reverse('expert:api-detail', kwargs={'pk': self.pk})

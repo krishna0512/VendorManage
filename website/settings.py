@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'challan.apps.ChallanConfig',
     'salary.apps.SalaryConfig',
     'kit.apps.KitConfig',
+    'product.apps.ProductConfig',
     'expert.apps.ExpertConfig',
     'django_extensions',
     'rest_framework',

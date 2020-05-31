@@ -1,0 +1,294 @@
+{% extends 'expert/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load url_replace %}
+
+{% block custom_css %}
+<style>
+	.product-fabric {
+		text-transform: capitalize;
+	}
+	.dot {
+		width:17px;
+		height: 17px;
+		background-color: black;
+		border-radius: 50%;
+		display: inline-block;
+	}
+	.product-color {
+		text-align: left;
+		text-transform: capitalize;
+		padding-left: 1.5rem !important;
+	}
+	.product-color > span {
+		margin-right: .25rem;
+	}
+	.color-gray {background-color: gray;}
+    .color-black {background-color: black;}
+    .color-beige {background-color: #E1C699;}
+    .color-blue {background-color: blue;}
+    .color-white {background-color: white;}
+    .color-brown {background-color: brown;}
+    .color-green {background-color: green;}
+    .color-sand {background-color: yellow;}
+    .color-gray {background-color: gray;}
+    .color-olive_green {background-color: #556b2f;}
+    .color-light_sand {background-color: #c2b280;}
+    .color-light_gray {background-color: lightgray;}
+    .color-coffee_brown {background-color: #4a2c2a;}
+    .color-burgundy {background-color: #800020;}
+	.color-clear {background-color: clear;}
+
+	#product-table tbody td {
+		vertical-align: middle;
+	}
+	#product-table thead .dropdown-toggle::after {
+		content: none;
+	}
+
+	#returndropdownbutton:after, #splitdropdownbutton:after {
+		content: none;
+	}
+
+	.scrollable-dropdown-menu {
+		height: auto;
+		max-height: 250px;
+		overflow-x: hidden;
+	}
+
+	@media print {
+		main {
+			font-size: 17px;
+		}
+		#btn-sidebar-collapse, #btn-sidebar-expand,
+		#product-table tbody tr td:last-child, 
+		#product-table thead tr th:last-child,
+		.table-header > div {
+			display: none;
+		}
+		#product-table tbody td.status {
+			background-color: transparent;
+			color: black!important;
+		}
+		#product-table td.assignedto button {
+			border: none;
+		}
+		#product-table td.assignedto button::after {
+			content: none;
+		}
+	}
+</style>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+$(document).ready(function() {
+
+});
+</script>
+<script type="text/babel" src="{% static 'kit/js/react_kit_detail.js' %}"></script>
+{% endblock %}
+
+{% block custom_navbar %}
+<li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm mr-1" type="button" href="{{ kit.get_update_url }}"><i class="fa fa-pencil"></i> Edit</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-danger btn-sm mr-1" type="button" href="{{ kit.get_delete_url }}"><i class="fa fa-trash"></i> Delete</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-info btn-sm mr-1" type="button" href="{% url 'expert:product-create' kit_number=kit.number %}"><i class="fa fa-plus"></i> Add New</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-success btn-sm mr-1" type="button" href="{% url 'challan:create' pk=kit.id %}">Make Challan</a></li>
+<li class="nav-item"><a class="nav-link btn btn-outline-warning btn-sm mr-1" {% if kit.get_completed_quantity == 0 %}disbaled{% endif %} type="button" href="{{ kit.get_uncomplete_url }}"><i class="fa fa-ban"></i> Uncomplete</a></li>
+{% endblock %}
+
+{% block main_content %}
+<div class="container-fluid">
+	<div id="root" data-url="{% url 'kit:api-detail' pk=kit.pk %}"></div>
+</div>
+{% endblock %}
+<div class="container-fluid">
+	<div class="heading text-center h3 mt-1 mb-0 pb-0">Overview of LOT {{ kit.number }}</div>
+	<div class="text-center small">{{ kit.date_received }} ({{ kit.date_return }})</div>
+	<div class="table-responsive">
+		<div class="d-flex table-header">
+			<div class="mr-auto text-muted">
+				Product Completion Date -
+				<span class="font-weight-bold">
+					{% if kit.date_product_completion %}
+					{{ kit.date_product_completion }}
+					{% else %}
+					{% now "N j, Y" %}
+					{% endif %}
+				</span>
+				<input type="hidden" id="datepicker_product_completion" data-href="{{ kit.get_change_completion_date_url }}">
+			</div>
+			<div style="color: #333;">
+				Show
+				<select class="custom-select custom-select-sm form-control form-control-sm w-auto" id="dropdownnumberrecords">
+					<option value="10">10</option>
+					<option value="25">25</option>
+					<option value="50">50</option>
+					<option value="100">100</option>
+				</select>
+				entries
+			</div>
+		</div>
+		<table class="table table-sm table-hover table-striped text-center" id="product-table">
+			<thead class="bg-dark text-light font-weight-bold">
+				<tr>
+					<th class="text-left">Order #</th>
+					<th>Qty</th>
+					<th>Sq.Ft.</th>
+					<th>
+						<div class="dropdown d-inline">
+							<button class="p-0 m-0 ml-1 dropdown-toggle bg-transparent border-0 text-light font-weight-bold" type="button" id="dropdownstatussort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Fabric<i class="fa fa-filter ml-2"></i>
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownstatussort">
+								<a class="dropdown-item" href="?{% url_replace filters='' page=1 %}">All</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:max' page=1 %}">Max</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:tuff' page=1 %}">Tuff</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:fab' page=1 %}">Fab</a>
+								<a class="dropdown-item" href="?{% url_replace filters='fabric:clear' page=1 %}">Clear</a>
+							</div>
+						</div>
+					</th>
+					<th class="text-left pl-5">Color</th>
+					<th>Assigned To</th>
+					<th>Completed By</th>
+					<th>Completion Date</th>
+					<th>
+						<div class="dropdown d-inline">
+							<button class="p-0 m-0 ml-1 dropdown-toggle bg-transparent border-0 text-light font-weight-bold" type="button" id="dropdownstatussort" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Status<i class="fa fa-filter ml-2"></i>
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownstatussort">
+								<a class="dropdown-item" href="?{% url_replace filters='' page=1 %}">All</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:pending' page=1 %}">Pending</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:assigned' page=1 %}">Assigned</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:completed' page=1 %}">Completed</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:dispatched' page=1 %}">Dispatched</a>
+								<a class="dropdown-item" href="?{% url_replace filters='status:returned' page=1 %}">Returned</a>
+							</div>
+						</div>
+					</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for product in product_list %}
+				<tr class="">
+					<td class="text-left font-italic"><a href="{{ product.get_absolute_url }}">{{ product.order_number }}</a></td>
+					<td>{{ product.quantity }}</td>
+					<td>{{ product.size }}</td>
+					<td>{{ product.get_fabric_display }}</td>
+					<td class="text-left pl-4"><span class="dot color-{{ product.color }} align-middle"></span> {{ product.get_color_display }}</td>
+					<td class="assignedto">
+						<div class="dropdown">
+							<button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton-{{ product.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								{% if product.is_pending %}
+								Assign To
+								{% else %}
+								{{ product.assignedto.username }}
+								{% endif %}
+							</button>
+							<div class="dropdown-menu scrollable-dropdown-menu" aria-labelledby="dropdownMenuButton-{{ product.id }}">
+								{% if product.is_assigned %}
+								<a class="dropdown-item" href="{% url 'expert:product-assign' product_pk=product.pk worker_pk=0 %}">---</a>
+								{% endif %}
+								{% for worker in worker_list %}
+								<a class="dropdown-item js-btn-product-assign" href="{% url 'expert:product-assign' product_pk=product.id worker_pk=worker.id %}">{{ worker.username }}</a>
+								{% endfor %}
+							</div>
+						</div>
+					</td>
+					<td>{{ product.completedby.username }}</td>
+					<td>{{ product.date_completed }}</td>
+					<td class="
+					js-td-status
+					status
+					{% if product.is_assigned %}bg-warning
+					{% elif product.is_dispatched %}bg-dark text-light
+					{% elif product.is_completed %}bg-success text-light
+					{% elif product.is_returned %}bg-danger{% endif %}
+					">{{ product.get_status_display }}</td>
+					<td class="text-right">
+						{% if product.is_assigned %}
+						<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-outline-success btn-sm js-btn-product-complete"><i class="fa fa-check fa-lg"></i></a>
+						{% elif product.is_completed and not product.is_dispatched %}
+						<a href="{% url 'expert:product-uncomplete' product.id %}" class="btn btn-outline-warning btn-sm js-btn-product-uncomplete" title="UnComplete the Product"><i class="fa fa-ban fa-lg"></i></a>
+						{% else %}
+						<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-outline-success btn-sm js-btn-product-complete disabled"><i class="fa fa-check fa-lg"></i></a>
+						{% endif %}
+            			<div class="dropdown d-inline">
+            			    <button class="btn btn-sm btn-outline-info dropdown-toggle {% if product.quantity <= 1 or not product.is_pending %}disabled{% endif %}" type="button" id="splitdropdownbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Split Product"><i class="fa fa-columns"></i></button>
+            			    <div class="dropdown-menu dropdown-menu-right scrollable-dropdown-menu" aria-labelledby="splitdropdownbutton">
+								<h6 class="dropdown-header">Split this Product into:</h6>
+								<div class="dropdown-divider"></div>
+								{% for f in product.split_factors %}
+								<a class="dropdown-item" href="{% url 'expert:product-split' pk=product.id %}?factor={{ f }}">{{ f }} parts</a>
+								{% endfor %}
+            			    </div>
+            			</div>
+            			<div class="dropdown d-inline">
+            			    <button class="btn btn-sm btn-outline-danger dropdown-toggle" type="button" id="returndropdownbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Return Product"><i class="fa fa-recycle"></i></button>
+            			    <div class="dropdown-menu" aria-labelledby="returndropdownbutton">
+								{% if product.is_dispatched %}
+								<a class="dropdown-item {% if product.is_returned %}disabled{% endif %}" href="{% url 'expert:product-return' pk=product.id %}?rr=fault">Fault</a>
+								{% else %}
+            			        <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=unprocessed">UnProcessed</a>
+            			        <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=semiprocessed">Semi-Processed</a>
+								<a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=mistake">Cutting Mistake</a>
+								<a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=damaged">Damaged Goods</a>
+								{% endif %}
+            			    </div>
+            			</div>
+						<a href="{% url 'expert:product-delete' product.id %}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash fa-lg"></i></a>
+					</td>
+
+				</tr>
+				{% empty %}
+				<tr>
+					<td colspan="10" class="text-center h5">No Data to display, Please select appropriate filters</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+			<tfoot>
+				<tr>
+					<th></th>
+					<th class="border border-success">{{ total_product_quantity }}</th>
+					<th class="border border-success">{{ total_product_size|intcomma }} SqFt.</th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</tfoot>
+		</table>
+		{% block pagination %}
+		{% if is_paginated %}
+		<nav aria-label="Pagination Nav">
+			<ul class="pagination justify-content-end">
+				{% if page_obj.has_previous %}
+				<li class="page-item"><a class="page-link" href="?{% url_replace page=page_obj.previous_page_number %}">&laquo;</a></li>
+				{% else %}
+				<li class="page-item disabled"><a href="" class="page-link">&laquo;</a></li>
+				{% endif %}
+				{% for i in paginator.page_range %}
+				{% if page_obj.number == i %}
+				<li class="page-item active"><a href="" class="page-link">{{ i }}</a></li>
+				{% else %}
+				<li class="page-item"><a class="page-link" href="?{% url_replace page=i %}">{{ i }}</a></li>
+				{% endif %}
+				{% endfor %}
+				{% if page_obj.has_next %}
+				<li class="page-item"><a class="page-link" href="?{% url_replace page=page_obj.next_page_number %}">&raquo;</a></li>
+				{% else %}
+				<li class="page-item disabled"><a href="" class="page-link">&raquo;</a></li>
+				{% endif %}
+			</ul>
+		</nav>
+		{% endif %}
+		{% endblock %}
+		<div class="my-4">&nbsp;</div>
+	</div>
+</div>

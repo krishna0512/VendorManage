@@ -125,6 +125,7 @@ class KitDetailView(PermissionRequiredMixin, DetailView, MultipleObjectMixin):
     model = Kit
     slug_field = 'number'
     paginate_by = 10
+    # template_name_suffix = '_detail_react'
     permission_required = ('kit.view_kit','expert.view_product')
 
     def get(self, *args, **kwargs):
