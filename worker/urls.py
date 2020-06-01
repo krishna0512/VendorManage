@@ -1,9 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 
 app_name = 'worker'
 urlpatterns = [
+    path('api/', include('worker.api.urls')),
+
     path('', views.WorkerListView.as_view(), name='list'),
     path('create/', views.WorkerCreateView.as_view(), name='create'),
     path('<int:pk>/view/', views.WorkerDetailView.as_view(), name='detail'),

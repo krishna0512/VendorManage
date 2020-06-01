@@ -8,6 +8,7 @@ class ProductSerializer(serializers.ModelSerializer):
     uncomplete_url = serializers.URLField(source='get_uncomplete_url')
     return_url = serializers.URLField(source='get_return_url')
     api_url = serializers.URLField(source='get_api_url')
+    assignedto = serializers.HyperlinkedRelatedField(view_name='worker:api-detail', read_only=True)
 
     # def get_api_url(self, obj):
     #     return str(obj.get_api_url())
