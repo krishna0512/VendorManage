@@ -360,6 +360,9 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('expert:product-detail', kwargs={'pk':self.pk})
 
+    def get_assign_url(self):
+        return reverse('expert:api-assign', kwargs={'pk': self.pk})
+
     def get_complete_url(self):
         return reverse('expert:product-complete', kwargs={'pk': self.pk})
 

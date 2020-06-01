@@ -1,14 +1,17 @@
 from rest_framework import serializers
 from django.urls import reverse
 from expert.models import Product
+from worker.api.serializers import WorkerSerializer
 
 class ProductSerializer(serializers.ModelSerializer):
     absolute_url = serializers.URLField(source='get_absolute_url')
+    assign_url = serializers.URLField(source='get_assign_url')
     complete_url = serializers.URLField(source='get_complete_url')
     uncomplete_url = serializers.URLField(source='get_uncomplete_url')
     return_url = serializers.URLField(source='get_return_url')
     api_url = serializers.URLField(source='get_api_url')
-    assignedto = serializers.HyperlinkedRelatedField(view_name='worker:api-detail', read_only=True)
+    assignedto = WorkerSerializer()
+    completedby = WorkerSerializer()
 
     # def get_api_url(self, obj):
     #     return str(obj.get_api_url())
@@ -42,6 +45,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'return_remark',
             'remark',
             'absolute_url',
+            'assign_url',
             'complete_url',
             'uncomplete_url',
             'return_url',
