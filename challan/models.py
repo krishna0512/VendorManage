@@ -82,6 +82,9 @@ class Challan(models.Model):
     def get_absolute_url(self):
         return reverse('challan:detail', kwargs={'slug': self.number})
 
+    def get_excel_url(self):
+        return reverse('challan:excel', kwargs={'pk': self.pk})
+
     def get_printable_url(self):
         return reverse('challan:printable', kwargs={'slug': self.number})
 

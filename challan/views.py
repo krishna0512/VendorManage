@@ -15,6 +15,7 @@ from kit.models import Kit
 from .models import Challan
 from customer.models import Customer
 from . import process
+from . import excel
 
 class ChallanListView(PermissionRequiredMixin, ListView):
     model = Challan
@@ -127,16 +128,14 @@ def challan_gatepass(request, pk):
     }
     _, img = process.main(img, data=data)
     print('Processed gatepass stored @ {}'.format(img))
-    # tmp_dir = TemporaryDirectory(prefix='images')
-    # out_image_path = os.path.join(tmp_dir.name, 'gatepass_processed.jpg')
-    # cv.imwrite(out_image_path, img)
-    # f = open(out_image_path, 'rb')
     with open(img, 'rb') as f:
         challan.jobwork_gatepass_processed.save('gatepass_processed_{}.jpg', File(f))
         challan.save()
-    # f = open(img, 'rb')
-    # kit = challan.products.all().first().kit
-    # kit.jobwork_gatepass_processed.save('gatepass_processed.jpg', File(f))
-    # kit.save()
-    # f.close()
     return redirect(challan.jobwork_gatepass_processed.url)
+
+def challan_excel(request, pk):
+    challan = Challan.objects.get(pk=pk)
+    from django.http import FileResponse
+    d, f = excel.main(challan)
+    f = open(f, 'rb')
+    return FileResponse(f, as_attachment=True, filename='challan_{}_excel.xlsx'.format(challan.number))

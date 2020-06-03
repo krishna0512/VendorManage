@@ -12,4 +12,5 @@ urlpatterns = [
     path('<int:pk>/update/', views.ChallanUpdateView.as_view(), name='update'),
     # url loading the gatepass 
     path('<int:pk>/gatepass/', views.challan_gatepass, name='gatepass'),
+    path('<int:pk>/excel/', views.challan_excel, name='excel'),
 ]
