@@ -202,8 +202,8 @@ class ReportView(PermissionRequiredMixin, ListView):
         for worker in worker_list:
             a.append({
                 'worker': worker,
-                'completed': worker.get_date_completed_product_range(start_date, end_date).completed().dispatched().size,
-                'returned': worker.get_date_completed_product_range(start_date, end_date).returned().dispatched().size,
+                'completed': worker.get_date_completed_product_range(start_date, end_date).completed().size,
+                'returned': worker.get_date_completed_product_range(start_date, end_date).returned().size,
             })
         context['worker_list'] = a
         context['chart_data'] = chart_data
