@@ -60,7 +60,11 @@ class WorkerReportView(PermissionRequiredMixin, View):
         print(date_from, date_to)
         data = []
         plist = worker.products_completed.get_date_completed_range(date_from, date_to)
-        if ptype == 'completed':
+        if ptype == 'dispatched':
+            plist = plist.dispatched()
+        elif ptype == 'remaining':
+            plist = plist.remaining()
+        elif ptype == 'completed':
             plist = plist.completed()
         elif ptype == 'returned':
             plist = plist.returned()
