@@ -1,7 +1,6 @@
 from django import forms
 
-from expert.models import Invoice
-# Add custom forms
+from .models import Invoice
 
 class InvoiceUpdateForm(forms.ModelForm):
     class Meta:

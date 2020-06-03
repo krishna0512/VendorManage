@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework import generics
 
-from expert.models import Product
+from ..models import Product
 from worker.models import Worker
 from .serializers import ProductSerializer
 

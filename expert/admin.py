@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import reverse_lazy
 
-from expert.models import *
+from product.models import Product
 from worker.models import Worker
 
 # Register your models here.

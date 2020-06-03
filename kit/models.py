@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from datetime import date
 from dateutil.relativedelta import relativedelta as timedelta
 
-from expert.models import Product
+from product.models import Product
 
 def kit_image_path(instance, filename):
     # return 'Kit_{}/Images/{}'.format(instance.number, filename)

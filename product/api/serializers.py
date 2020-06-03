@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.urls import reverse
-from expert.models import Product
+from product.models import Product
 from worker.api.serializers import WorkerSerializer
 
 class ProductSerializer(serializers.ModelSerializer):

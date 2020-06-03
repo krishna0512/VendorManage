@@ -14,8 +14,7 @@ from django.views.generic.edit import DeleteView, UpdateView
 from kit.models import Kit
 from .models import Challan
 from customer.models import Customer
-from . import process
-from . import excel
+from . import process, excel
 
 class ChallanListView(PermissionRequiredMixin, ListView):
     model = Challan

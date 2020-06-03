@@ -1,4 +1,4 @@
-from expert.models import Challan
+from .models import Challan
 
 def model(request):
     return {'Challan': Challan}

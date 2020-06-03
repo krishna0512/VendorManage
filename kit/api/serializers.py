@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator
 from rest_framework import serializers, pagination
 from ..models import Kit
-from expert.models import Product
+from product.models import Product
 # from product.api.serializers import ProductSerializer
 
 class KitSerializer(serializers.ModelSerializer):

@@ -5,7 +5,6 @@ from django.utils.translation import ugettext_lazy as _
 from datetime import date
 
 def challan_image_path(instance, filename):
-    # return 'Kit_{}/Images/{}'.format(instance.number, filename)
     return 'Challan/{}/Images/{}'.format(instance.pk, filename)
 
 class Challan(models.Model):

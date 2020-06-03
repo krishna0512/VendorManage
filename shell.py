@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.db.models.signals import post_save
 
-from expert.models import *
 # from benchmark.forms import *
 # import requests
 import os

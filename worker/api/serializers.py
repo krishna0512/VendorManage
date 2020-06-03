@@ -1,8 +1,6 @@
 from django.core.paginator import Paginator
 from rest_framework import serializers, pagination
 from ..models import Worker
-# from expert.models import Product
-# from product.api.serializers import ProductSerializer
 
 class WorkerSerializer(serializers.ModelSerializer):
     class Meta:
