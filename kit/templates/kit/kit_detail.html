@@ -327,7 +327,13 @@ $(document).ready(function() {
 					{% elif product.is_dispatched %}bg-dark text-light
 					{% elif product.is_completed %}bg-success text-light
 					{% elif product.is_returned %}bg-danger{% endif %}
-					">{{ product.get_status_display }}</td>
+					">
+						{% if product.is_returned %}
+						{{ product.get_return_remark_display }}
+						{% else %}
+						{{ product.get_status_display }}
+						{% endif %}
+					</td>
 					<td class="text-right">
 						{% if product.is_assigned %}
 						<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-outline-success btn-sm js-btn-product-complete"><i class="fa fa-check fa-lg"></i></a>
