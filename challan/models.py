@@ -4,8 +4,26 @@ from django.utils.translation import ugettext_lazy as _
 
 from datetime import date
 
+from product.models import Product
+
 def challan_image_path(instance, filename):
     return 'Challan/{}/Images/{}'.format(instance.pk, filename)
+
+class ChallanQuerySet(models.QuerySet):
+    def products(self):
+        return Product.objects.filter(challan__in=self.all())
+
+    @property
+    def quantity(self):
+        return sum([i.quantity for i in self.all()])
+
+    @property
+    def size(self):
+        return round(sum([i.size for i in self.all()]), 2)
+
+    @property
+    def value(self):
+        return round(sum([i.value for i in self.all()]), 2)
 
 class Challan(models.Model):
     """Container for model that represents Delivery Challan"""
@@ -46,6 +64,8 @@ class Challan(models.Model):
         help_text=_('The customer for against whom challan is drawn'),
     )
 
+    objects = ChallanQuerySet.as_manager()
+
     class Meta:
         ordering = ('-number',)
 
@@ -53,30 +73,56 @@ class Challan(models.Model):
     def get_all():
         return Challan.objects.all()
 
-    def get_total_quantity(self):
-        return sum([i.quantity for i in self.products.filter(return_remark='')])
+    @property
+    def quantity(self):
+        return self.products.all().completed().quantity
 
-    def get_total_size(self):
-        # BUG: exclude the returned products from sum DONE
-        return round(sum([i.size for i in self.products.filter(return_remark='')]),2)
+    @property
+    def size(self):
+        return self.products.all().completed().size
+
+    @property
+    def value(self):
+        return round(self.size * 3.5, 2)
+
+    @property
+    def return_quantity(self):
+        return self.products.all().returned().quantity
+
+    @property
+    def return_size(self):
+        return self.products.all().returned().size
+
+    # def get_total_quantity(self):
+    #     return sum([i.quantity for i in self.products.filter(return_remark='')])
+
+    # def get_total_size(self):
+    #     # BUG: exclude the returned products from sum DONE
+    #     return round(sum([i.size for i in self.products.filter(return_remark='')]),2)
 
     def get_total_size_by_fabric(self):
-        ret = {}
-        ret['max'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='max')]),2)
-        ret['tuff'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='tuff')]),2)
-        ret['fab'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='fab')]),2)
-        ret['clear'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='clear')]),2)
+        # ret = {}
+        ret = {
+            'max': self.products.completed(fabric='max').size,
+            'tuff': self.products.completed(fabric='tuff').size,
+            'fab': self.products.completed(fabric='fab').size,
+            'clear': self.products.completed(fabric='clear').size,
+        }
+        # ret['max'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='max')]),2)
+        # ret['tuff'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='tuff')]),2)
+        # ret['fab'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='fab')]),2)
+        # ret['clear'] = round(sum([i.size for i in self.products.filter(return_remark='', fabric='clear')]),2)
         return ret
 
-    def get_total_value(self):
-        return round(self.get_total_size() * 3.5, 2)
+    # def get_total_value(self):
+    #     return round(self.size * 3.5, 2)
 
-    def get_return_quantity(self):
-        return sum([i.quantity for i in self.products.exclude(return_remark='')])
+    # def get_return_quantity(self):
+    #     return sum([i.quantity for i in self.products.exclude(return_remark='')])
 
-    def get_return_size(self):
-        # BUG: exclude the returned products from sum DONE
-        return str(round(sum([i.size for i in self.products.exclude(return_remark='')]),2))
+    # def get_return_size(self):
+    #     # BUG: exclude the returned products from sum DONE
+    #     return str(round(sum([i.size for i in self.products.exclude(return_remark='')]),2))
 
     def get_absolute_url(self):
         return reverse('challan:detail', kwargs={'slug': self.number})

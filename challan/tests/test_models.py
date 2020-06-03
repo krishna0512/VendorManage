@@ -75,3 +75,4 @@ class ChallanModelTest(TestCase):
         self.assertEqual(self.challan.get_printable_url(), '/challan/10/view/printable/')
         self.assertEqual(self.challan.get_update_url(), '/challan/1/update/')
         self.assertEqual(self.challan.get_delete_url(), '/challan/10/delete/')
+        self.assertEqual(self.challan.get_excel_url(), '/challan/1/excel/')

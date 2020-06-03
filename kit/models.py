@@ -148,44 +148,34 @@ class Kit(models.Model):
     def quantity(self):
         return self.products.all().quantity
 
-    @property
-    def quantity_detail(self):
-        # pending = sum([i.quantity for i in self.products.pending()])
-        # completed = sum([i.quantity for i in self.products.completed()])
-        # assigned = sum([i.quantity for i in self.products.assigned()])
-        # returned = sum([i.quantity for i in self.products.returned()])
-        # dispatched = sum([i.quantity for i in self.products.dispatched()])
-        ret = {
-            'pending': self.products.pending().quantity,
-            'assigned': self.products.assigned().quantity,
-            'completed': self.products.completed().dispatched().quantity,
-            'returned': self.products.returned().dispatched().quantity,
-            'dispatched': self.products.dispatched().quantity,
-        }
-        return ret
+    # @property
+    # def quantity_detail(self):
+    #     # pending = sum([i.quantity for i in self.products.pending()])
+    #     # completed = sum([i.quantity for i in self.products.completed()])
+    #     # assigned = sum([i.quantity for i in self.products.assigned()])
+    #     # returned = sum([i.quantity for i in self.products.returned()])
+    #     # dispatched = sum([i.quantity for i in self.products.dispatched()])
+    #     ret = {
+    #         'pending': self.products.pending().quantity,
+    #         'assigned': self.products.assigned().quantity,
+    #         'completed': self.products.completed().dispatched().quantity,
+    #         'returned': self.products.returned().dispatched().quantity,
+    #         'dispatched': self.products.dispatched().quantity,
+    #     }
+    #     return ret
 
-    @property
-    def size_detail(self):
-        # pending = sum([i.size for i in self.products.pending()])
-        # completed = sum([i.size for i in self.products.completed()])
-        # assigned = sum([i.size for i in self.products.assigned()])
-        # returned = sum([i.size for i in self.products.returned()])
-        # dispatched = sum([i.size for i in self.products.dispatched()])
-        ret = {
-            'pending': self.products.pending().size,
-            'assigned': self.products.assigned().size,
-            'completed': self.products.completed().dispatched().size,
-            'returned': self.products.returned().dispatched().size,
-            'dispatched': self.products.dispatched().size,
-        }
-        return ret
-
-    def cleanup(self):
-        if self.original_kit_summary:
-            self.original_kit_summary.delete(False)
-        if self.jobwork_challan:
-            self.jobwork_challan.delete(False)
-        if self.jobwork_gatepass:
-            self.jobwork_gatepass.delete(False)
-        if self.ewaybill:
-            self.ewaybill.delete(False)
+    # @property
+    # def size_detail(self):
+    #     # pending = sum([i.size for i in self.products.pending()])
+    #     # completed = sum([i.size for i in self.products.completed()])
+    #     # assigned = sum([i.size for i in self.products.assigned()])
+    #     # returned = sum([i.size for i in self.products.returned()])
+    #     # dispatched = sum([i.size for i in self.products.dispatched()])
+    #     ret = {
+    #         'pending': self.products.pending().size,
+    #         'assigned': self.products.assigned().size,
+    #         'completed': self.products.completed().dispatched().size,
+    #         'returned': self.products.returned().dispatched().size,
+    #         'dispatched': self.products.dispatched().size,
+    #     }
+    #     return ret

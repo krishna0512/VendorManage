@@ -124,6 +124,7 @@ class Worker(models.Model):
             self.user.username = value.lower()
             self.user.save()
         self._username = value.lower()
+        self.save()
 
     def get_date_completed_product_range(self, start_date, end_date=None):
         """Get all the products completed by the worker between these dates."""

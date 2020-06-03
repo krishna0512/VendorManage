@@ -129,8 +129,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for product in challan.products.all %}
-                    {% if not product.return_remark %}
+                    {% for product in challan.products.completed %}
                     <tr class="text-center">
                         <td>{{ forloop.counter }}</td>
                         <td>{{ product.order_number }}</td>
@@ -144,7 +143,6 @@
                         <td>{{ product.kit.date_received }}</td>
                         <td>{{ product.kit.date_return }}</td>
                     </tr>
-                    {% endif %}
                     {% endfor %}
                     <tr>
                         <th></th>
@@ -152,29 +150,14 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th class="border text-center"><b>{{ challan.get_total_quantity }}</b></th>
-                        <th class="border text-center"><b>{{ challan.get_total_size }}</b></th>
+                        <th class="border text-center"><b>{{ challan.quantity }}</b></th>
+                        <th class="border text-center"><b>{{ challan.size|intcomma }}</b></th>
                         <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
                     </tr>
                 </tbody>
-                <!-- <tfoot>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th class="border text-center"><b>{{ challan.get_total_quantity }}</b></th>
-                        <th class="border text-center"><b>{{ challan.get_total_size }}</b></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </tfoot> -->
             </table>
         </div>
     </div>
@@ -204,8 +187,8 @@
                 </tr>
                 <tr>
                     <th>Total</th>
-                    <td><b>{{ challan.get_total_quantity }}</b></td>
-                    <td><b>{{ challan.get_total_size|intcomma }}</b></td>
+                    <td><b>{{ challan.quantity }}</b></td>
+                    <td><b>{{ challan.size|intcomma }}</b></td>
                 </tr>
             </table>
         </div>
@@ -231,8 +214,8 @@
                 <tfoot>
                     <tr>
                         <td></td>
-                        <th>{{ challan.get_return_quantity }}</th>
-                        <th>{{ challan.get_return_size|intcomma }}</th>
+                        <th>{{ challan.return_quantity }}</th>
+                        <th>{{ challan.return_size|intcomma }}</th>
                         <td></td>
                         <td></td>
                         <td></td>

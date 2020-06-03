@@ -179,14 +179,14 @@
                             <td>{{ challan.number }}</td>
                             <td>{{ challan.date_sent|date:"d.m.y" }}</td>
                             <td>998822</td>
-                            <td>{{ challan.get_total_quantity }}</td>
+                            <td>{{ challan.quantity }}</td>
                             <td>{{ challan.get_total_size_by_fabric.max }}</td>
                             <td>{{ challan.get_total_size_by_fabric.tuff }}</td>
                             <td>{{ challan.get_total_size_by_fabric.fab }}</td>
                             <td>{{ challan.get_total_size_by_fabric.clear }}</td>
-                            <td>{{ challan.get_total_size }}</td>
+                            <td>{{ challan.size|intcomma }}</td>
                             <td>3.5</td>
-                            <td>{{ challan.get_total_value }}</td>
+                            <td>{{ challan.value|intcomma }}</td>
                         </tr>
                     {% endfor %}
                     <tr>
@@ -208,14 +208,14 @@
                         <td></td>
                         <td>Total</td>
                         <td></td>
-                        <td>{{ invoice.get_total_quantity }}</td>
+                        <td>{{ invoice.quantity }}</td>
                         <td>{{ invoice.get_total_size_by_fabric.max|intcomma }}</td>
                         <td>{{ invoice.get_total_size_by_fabric.tuff|intcomma }}</td>
                         <td>{{ invoice.get_total_size_by_fabric.fab|intcomma }}</td>
                         <td>{{ invoice.get_total_size_by_fabric.clear|intcomma }}</td>
-                        <td>{{ invoice.get_total_size|intcomma }}</td>
+                        <td>{{ invoice.size|intcomma }}</td>
                         <td></td>
-                        <td>{{ invoice.get_total_value|intcomma }}</td>
+                        <td>{{ invoice.value|intcomma }}</td>
                     </tr>
                     <tr>
                         <td></td>
@@ -277,7 +277,7 @@
                 </tr>
                 <tr>
                     <td>998822</td>
-                    <td>{{ invoice.get_total_value|intcomma }}</td>
+                    <td>{{ invoice.value|intcomma }}</td>
                     <td>6%</td>
                     <td>{{ invoice.get_total_tax.cgst|intcomma }}</td>
                     <td>6%</td>
@@ -286,7 +286,7 @@
                 </tr>
                 <tr class="font-weight-bold">
                     <td>Total</td>
-                    <td>{{ invoice.get_total_value|intcomma }}</td>
+                    <td>{{ invoice.value|intcomma }}</td>
                     <td></td>
                     <td>{{ invoice.get_total_tax.cgst|intcomma }}</td>
                     <td></td>

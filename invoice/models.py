@@ -62,21 +62,33 @@ class Invoice(models.Model):
         self.save()
         return True
 
-    def get_total_quantity(self):
-        return sum([i.get_total_quantity() for i in self.challans.all()])
+    @property
+    def quantity(self):
+        return self.challans.all().quantity
 
-    def get_total_size(self):
-        return round(sum([i.get_total_size() for i in self.challans.all()]),2)
+    @property
+    def size(self):
+        return self.challans.all().size
 
-    def get_total_value(self):
-        return round(self.get_total_size() * 3.5,2)
+    @property
+    def value(self):
+        return self.challans.all().value
+
+    # def get_total_quantity(self):
+    #     return sum([i.get_total_quantity() for i in self.challans.all()])
+
+    # def get_total_size(self):
+    #     return round(sum([i.get_total_size() for i in self.challans.all()]),2)
+
+    # def get_total_value(self):
+    #     return round(self.size * 3.5,2)
 
     def get_total_tax(self):
         ret = {}
-        ret['cgst'] = round(self.get_total_value() * 0.06, 2)
+        ret['cgst'] = round(self.value * 0.06, 2)
         ret['sgst'] = ret['cgst']
         ret['total'] = ret['cgst'] + ret['sgst']
-        t = ret['total'] + self.get_total_value()
+        t = ret['total'] + self.value
         x = t*100//1%100
         if x<50:
             x = round(x/100, 2)
@@ -90,7 +102,7 @@ class Invoice(models.Model):
 
     def get_total_amount(self):
         ret = {}
-        ret['amount'] = int(self.get_total_tax()['total'] + self.get_total_tax()['roundoff'] + self.get_total_value())
+        ret['amount'] = int(self.get_total_tax()['total'] + self.get_total_tax()['roundoff'] + self.value)
         ret['words'] = num2words(ret['amount'], lang='en_IN')
         return ret
 
