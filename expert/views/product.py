@@ -89,7 +89,7 @@ class ProductReturnRedirectView(PermissionRequiredMixin, SingleObjectMixin, Redi
         product = self.get_object()
         rr = self.request.GET.get('rr', '')
         product.return_product(rr)
-        return product.kit.get_absolute_url()
+        return product.get_absolute_url()
 
 class ProductSplitRedirectView(PermissionRequiredMixin, SingleObjectMixin, RedirectView):
     model = Product
