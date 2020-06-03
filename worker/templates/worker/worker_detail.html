@@ -46,9 +46,47 @@
 					$('#worker-detail-table tfoot .size').html(total_size);
 				}
 			},
+			'createdRow': function(row, data, index) {
+				// made the first col of the table (kit number)
+				// clickable and pointing to the kit detail view
+				$('td', row).eq(0).addClass('clickable');
+				$('td', row).eq(0).on('click', function(e) {
+					location.href = "/kit/"+data[0]+"/view/";
+				});
+				// the 5th col is the status col
+				if (data[5] == "Completed") {
+					$('td', row).eq(5).addClass('completed');
+				}
+				else {
+					$('td', row).eq(5).addClass('returned');
+				}
+			}
 		});
 	});
 </script>
+{% endblock %}
+
+{% block custom_css %}
+<style>
+	td.clickable {
+		cursor: pointer;
+	}
+	td.clickable:hover {
+		font-weight: bold;
+		font-size: 1.1em;
+		background-color: whitesmoke;
+	}
+	td.completed, td.returned {
+		color: white;
+		text-align: center;
+	}
+	td.completed {
+		background-color: green;
+	}
+	td.returned {
+		background-color: red;
+	}
+</style>
 {% endblock %}
 
 {% block main_content %}
@@ -107,6 +145,8 @@
 							<th>Date</th>
 							<th>Qty</th>
 							<th>Sq.Ft.</th>
+							<th>Status</th>
+							<th>Remark</th>
 						</tr>
 					</thead>
 					<tfoot>
@@ -116,6 +156,8 @@
 							<th>Date</th>
 							<th class="quantity">Qty</th>
 							<th class="size">Sq.Ft.</th>
+							<th class="status">Status</th>
+							<th class="remark">Remark</th>
 						</tr>
 					</tfoot>
 				</table>

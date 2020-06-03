@@ -90,8 +90,6 @@ class Product(models.Model):
         ('pending','Pending'),
         ('assigned','Assigned'),
         ('completed','Completed'),
-        # This status is for when product is added to challan and dispatched.
-        # ('dispatched','Dispatched'),
         ('returned','Returned'),
     ]
     RETURN_REMARK_CHOICES = [
@@ -100,6 +98,8 @@ class Product(models.Model):
         ('semiprocessed', 'Semi-Processed'),
         ('mistake', 'Cutting Mistake'),
         ('damaged', 'Damaged Goods'),
+        ('reject','Rejected'),
+        ('rework', 'Re-Worked'),
         ('fault', 'Fault'),
     ]
 
@@ -283,13 +283,16 @@ class Product(models.Model):
         self.save()
         return True
 
-    def return_product(self, rr=None):
-        if rr is None or rr not in ['unprocessed','semiprocessed','mistake','damaged','fault']:
+    def return_product(self, rr=None) -> bool:
+        if rr is None or rr not in [i[0] for i in self.RETURN_REMARK_CHOICES]:
+            # checking if the input value of rr is valid
             return False
-        if self.is_dispatched and rr != 'fault' or self.is_returned and rr=='fault':
+        if self.is_dispatched and rr not in ['reject','rework']:
             # you cannot return a product with un/semi/mistake if product is already dispatched
             return False
-        if rr != 'fault':
+        if rr in ['unprocessed','semiprocessed','mistake','damaged']:
+            # these return categories are worker independent (i.e. we dnt need the worker
+            # infor for these categores) so we uncomplete the product.
             self.uncomplete()
         self.return_remark = rr
         self.status = 'returned'

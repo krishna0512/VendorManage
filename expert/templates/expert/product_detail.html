@@ -165,7 +165,13 @@
 						<a href="{% url 'expert:product-complete' product.id %}" class="btn btn-sm btn-outline-success js-btn-product-complete"><i class="fa fa-check fa-lg"></i> Complete</a>
                         {% endif %}
                         {% elif product.is_dispatched %}
-                        --
+            			<div class="dropdown d-inline">
+            			    <button class="btn btn-sm btn-outline-danger dropdown-toggle" type="button" id="returndropdownbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Return Product"><i class="fa fa-recycle"></i> Return</button>
+            			    <div class="dropdown-menu" aria-labelledby="returndropdownbutton">
+								<a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=reject">Rejected</a>
+								<a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=rework">Re-Workered</a>
+            			    </div>
+            			</div>
                         {% elif product.is_completed %}
 						<a href="{% url 'expert:product-uncomplete' product.id %}" class="btn btn-outline-warning btn-sm js-btn-product-uncomplete" title="UnComplete the Product"><i class="fa fa-ban fa-lg"></i> UnComplete</a>
                         {% elif product.is_returned %}

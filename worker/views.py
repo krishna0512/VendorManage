@@ -71,6 +71,8 @@ class WorkerReportView(PermissionRequiredMixin, View):
                 i.date_completed.strftime('%b %d, %Y'),
                 i.quantity,
                 i.size,
+                i.get_return_remark_display() if i.is_returned else i.get_status_display(),
+                i.remark
             ])
         return JsonResponse({'data': data})
 

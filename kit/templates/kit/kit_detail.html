@@ -292,7 +292,7 @@ $(document).ready(function() {
 			<tbody>
 				{% for product in product_list %}
 				<tr class="">
-					<td class="text-left font-italic"><a href="{{ product.get_absolute_url }}">{{ product.order_number }}</a></td>
+					<td class="text-left font-italic" style="font-size: large;"><a href="{{ product.get_absolute_url }}">{{ product.order_number }}</a></td>
 					<td>{{ product.quantity }}</td>
 					<td>{{ product.size }}</td>
 					<td>{{ product.get_fabric_display }}</td>
@@ -322,6 +322,8 @@ $(document).ready(function() {
 					js-td-status
 					status
 					{% if product.is_assigned %}bg-warning
+                    {% elif product.is_dispatched and product.is_returned %}bg-dark text-danger
+					{% elif product.is_dispatched and product.is_completed %}bg-dark text-success
 					{% elif product.is_dispatched %}bg-dark text-light
 					{% elif product.is_completed %}bg-success text-light
 					{% elif product.is_returned %}bg-danger{% endif %}
@@ -348,7 +350,8 @@ $(document).ready(function() {
             			    <button class="btn btn-sm btn-outline-danger dropdown-toggle" type="button" id="returndropdownbutton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Return Product"><i class="fa fa-recycle"></i></button>
             			    <div class="dropdown-menu" aria-labelledby="returndropdownbutton">
 								{% if product.is_dispatched %}
-								<a class="dropdown-item {% if product.is_returned %}disabled{% endif %}" href="{% url 'expert:product-return' pk=product.id %}?rr=fault">Fault</a>
+								<a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=reject">Rejected</a>
+								<a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=rework">Re-Workered</a>
 								{% else %}
             			        <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=unprocessed">UnProcessed</a>
             			        <a class="dropdown-item" href="{% url 'expert:product-return' pk=product.id %}?rr=semiprocessed">Semi-Processed</a>
