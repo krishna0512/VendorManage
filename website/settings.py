@@ -96,7 +96,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'expert.context_processors.model',
+                'product.context_processors.model',
                 'customer.context_processors.model',
                 'invoice.context_processors.model',
                 'worker.context_processors.model',

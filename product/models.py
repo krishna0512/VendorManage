@@ -361,10 +361,13 @@ class Product(models.Model):
         return self.dispatched
 
     def get_absolute_url(self):
-        return reverse('expert:product-detail', kwargs={'pk':self.pk})
+        return reverse('product:detail', kwargs={'pk':self.pk})
 
-    def get_assign_url(self):
-        return reverse('expert:api-assign', kwargs={'pk': self.pk})
+    def get_update_url(self):
+        return reverse('product:update', kwargs={'pk': self.pk})
+
+    def get_delete_url(self):
+        return reverse('product:delete', kwargs={'pk': self.pk})
 
     def get_complete_url(self):
         return reverse('expert:product-complete', kwargs={'pk': self.pk})
@@ -373,7 +376,13 @@ class Product(models.Model):
         return reverse('expert:product-uncomplete', kwargs={'pk': self.pk})
 
     def get_return_url(self):
-        return reverse('expert:product-return', kwargs={'pk': self.pk})
+        return reverse('product:return', kwargs={'pk': self.pk})
+
+    def get_split_url(self):
+        return reverse('product:split', kwargs={'pk': self.pk})
 
     def get_api_url(self):
-        return reverse('expert:api-detail', kwargs={'pk': self.pk})
+        return reverse('product:api-detail', kwargs={'pk': self.pk})
+
+    def get_assign_url(self):
+        return reverse('product:api-assign', kwargs={'pk': self.pk})

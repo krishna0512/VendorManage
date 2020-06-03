@@ -10,11 +10,10 @@ from datetime import datetime, date
 import logging
 logger = logging.getLogger(__name__)
 
-from expert.models import Product
+from product.models import Product
 from kit.models import Kit
 from worker.models import Worker
 from invoice.models import Invoice
-from expert.forms import *
 
 def search(request):
     print('Hello')

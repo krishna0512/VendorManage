@@ -1,4 +1,4 @@
-from expert.models import Product
+from .models import Product
 
 def model(request):
     return {

@@ -7,7 +7,6 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import Worker
-from expert.forms import *
 
 import logging
 logger = logging.getLogger(__name__)

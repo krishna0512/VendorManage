@@ -16,12 +16,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.conf import settings
 
-from expert.models import Product
+from product.models import Product
 from challan.models import Challan
 from kit.models import Kit
 from worker.models import Worker
 from invoice.models import Invoice
-from expert.forms import *
 from helper.mail import Mail
 
 import sendgrid
